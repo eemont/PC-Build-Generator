@@ -17,6 +17,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/" element={<Home />} />
       <Route path="/build" element={<GenerateBuild />} />
       <Route path="/saved" element={<SavedBuilds />}/>
+      <Route path="/Auth" element={<App />} />
     </Routes>
   </BrowserRouter>,
 )
