@@ -1,0 +1,115 @@
+.video-bg {
+    position: fixed;
+    top: 0;
+    object-fit: cover;
+}
+
+.home-page {
+    position: absolute;
+    top: 0;
+    margin-inline: auto;
+    width: 100%;
+}
+
+.welcome-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.welcome-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    width: 50%;
+    padding-block: 40px;
+}
+
+.welcome-content p {
+    margin-block: 20px 30px;
+}
+
+.call-to-action button {
+    margin-inline: 10px;
+    color: var(--primary-purple)
+}
+
+.call-to-action button:hover {
+    background: var(--primary-purple);
+    color: white;
+    transition: translate 0.2s ease;
+    translate: 0 -2px;
+}
+
+.call-to-action #start-building {
+    background: var(--primary-purple);
+    color: white;
+}
+
+.call-to-action #start-building:hover {
+    color: black;
+}
+
+.how-it-works {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 20px;
+    width: 90%;
+    margin: 0 auto;
+    padding-block: 80px;
+    margin-bottom: 20px;
+}
+
+.how-it-works p {
+    margin-block: 20px 30px;
+}
+
+.how-it-works .step-cards {
+    width: 70%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+}
+
+.how-it-works .step {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid rgb(50, 50, 50);
+    border-radius: 10px;
+    padding: 20px 10px;
+    text-align: center;
+}
+.how-it-works .step:hover {
+    transition: translate 0.2s ease;
+    translate: 0 -3px;
+}
+.how-it-works .step * {
+    pointer-events: none;
+}
+
+.how-it-works .step p {
+    margin-block: 10px 0;
+}
+
+.how-it-works .step .step-number {
+    background: var(--primary-purple);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    color: black;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+

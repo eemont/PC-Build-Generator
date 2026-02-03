@@ -1,0 +1,64 @@
+.navbar {
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 100;
+    background: black;
+
+    display: flex;
+    justify-content: space-between;
+    
+    box-shadow: 0 1px 8px var(--primary-purple);
+}
+
+.navbar * {
+    display: flex;
+    align-items: center;
+}
+
+.navbar .brand {
+    margin-left: 20px;
+}
+.navbar .img {
+    width: 25px;
+    height: 25px;
+    background: var(--link-color);
+}
+
+.navbar .brand .img#pc {   
+    margin-right: 10px;
+    mask: url('src/assets/pc-tower.webp') center/contain;
+}
+
+.navbar .links {
+    gap: 30px;
+    margin-right: 20px;
+}
+.navbar .links .img {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}
+.navbar .links .img#home {
+    mask: url('src/assets/home.webp') center/contain;
+}
+.navbar .links .img#build {
+    mask: url('src/assets/build.webp') center/contain;
+}
+.navbar .links .img#save { 
+    mask: url('src/assets/save.webp') center/contain;
+}
+.navbar .links .img#join {
+    background: black;
+    mask: url('src/assets/join.webp') center/contain;
+}
+
+.navbar .links .join-now {
+    color: black;
+    background: var(--primary-purple);
+}
+
+.navbar .links a:hover {
+    color: var(--primary-purple);
+}

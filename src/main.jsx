@@ -1,9 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import './index.css'
+import App from './App.jsx'
+import Nav from './components/Nav/Nav.jsx'
+import Home from "./pages/Home/Home";
+import GenerateBuild from "./pages/GenerateBuild/GenerateBuild";
+import SavedBuilds from "./pages/SavedBuilds/SavedBuilds";
+
+createRoot(document.getElementById('root')).render(
+  <BrowserRouter>
+    <Nav />
+
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/build" element={<GenerateBuild />} />
+      <Route path="/saved" element={<SavedBuilds />}/>
+    </Routes>
+  </BrowserRouter>,
+)
