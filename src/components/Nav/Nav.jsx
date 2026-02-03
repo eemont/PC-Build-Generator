@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 import "./Nav.css";
 
 
 export default function Nav() {
-
-    const { selectedTab, setSelectedTab } = useState('home');
 
     useEffect(() => {
         const links = document.querySelectorAll(".navbar .links a");
