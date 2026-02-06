@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabaseClient";
 import Auth from "./Auth";
+import Reset from "./reset";
 
 export default function App() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const isResetRoute = window.location.pathname === "/reset";
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -19,6 +22,8 @@ export default function App() {
 
     return () => sub.subscription.unsubscribe();
   }, []);
+
+  if (isResetRoute) return <Reset />;
 
   if (loading) return <div style={{ padding: 24 }}>Loading...</div>;
   if (!session) return <Auth />;

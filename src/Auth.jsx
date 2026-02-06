@@ -38,6 +38,29 @@ export default function Auth() {
     }
   }
 
+  async function handleResetPassword() {
+    setMessage("");
+
+    if (!email) {
+      setMessage("Enter your email first, then click 'Forgot password?'.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/reset",
+      });
+      if (error) throw error;
+
+      setMessage("Password reset email sent! Check your inbox (and spam).");
+    } catch (err) {
+      setMessage(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}>
       <div style={{ width: "100%", maxWidth: 420, border: "1px solid #ddd", borderRadius: 12, padding: 20 }}>
@@ -81,19 +104,29 @@ export default function Auth() {
               cursor: "pointer",
             }}
           >
-            {loading
-              ? "Please wait..."
-              : mode === "signup"
-              ? "Sign up"
-              : "Sign in"}
+            {loading ? "Please wait..." : mode === "signup" ? "Sign up" : "Sign in"}
           </button>
+
+          {/* Reset password button (only show on sign-in mode) */}
+          {mode === "signin" && (
+            <button
+              type="button"
+              onClick={handleResetPassword}
+              disabled={loading}
+              style={{
+                padding: 10,
+                borderRadius: 8,
+                border: "1px solid #ccc",
+                background: "transparent",
+                cursor: "pointer",
+              }}
+            >
+              Forgot password?
+            </button>
+          )}
         </form>
 
-        {message && (
-          <p style={{ marginTop: 12 }}>
-            {message}
-          </p>
-        )}
+        {message && <p style={{ marginTop: 12 }}>{message}</p>}
 
         <hr style={{ margin: "16px 0" }} />
 
