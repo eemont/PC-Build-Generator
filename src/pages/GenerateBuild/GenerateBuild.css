@@ -1,0 +1,35 @@
+.generate-build-content {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.generate-build-content p {
+    margin-block: 15px;
+    color: rgb(200, 200, 200);
+}
+
+.generate-build-form {
+    display: flex;
+    justify-content: center;
+}
+.generate-build-form input {
+    width: 25%;
+    max-width: 1500px;
+}
+.generate-build-form input::placeholder {
+    color: rgb(170, 170, 170);
+}
+
+.inline {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+.inline * {
+    margin-inline: 5px;
+}
+
+p.error-message {
+    color: red;
+}
