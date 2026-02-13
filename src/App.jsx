@@ -3,11 +3,26 @@ import { supabase } from "./lib/supabaseClient";
 import Auth from "./Auth";
 import Reset from "./reset";
 
+import { findParts } from "./utils/getParts";
+import { mockCPUs } from "./data/mockCPUs";
+
 export default function App() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [parts, setParts] = useState({});
+
   const isResetRoute = window.location.pathname === "/reset";
+
+  useEffect(() => {
+    (async function getParts() {
+      const parts = await findParts('cpu', 5, true);
+      setParts(parts);      
+    })();
+  }, []);
+  console.log('"fetched" parts', parts);
+  console.log('mock cpu fully populated:', mockCPUs[0]);
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
