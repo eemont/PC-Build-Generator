@@ -61,4 +61,16 @@ export const mockCPUCoolers = [
         sockets: ['am2', 'am2+', 'am3', 'am3+', 'am4', 'am5', 'fm1', 'fm2', 'fm2+', 'lga775', 'lga1150', 'lga1151', 'lga1155', 'lga1156', 'lga1200', 'lga1366', 'lga1700', 'lga1851'],
         weight: 58,
     }),
+    new CPUCooler({
+        brand: 'amd',
+        model: 'wraith stealth',
+        price: 0,
+        imageUrl: undefined,
+        productUrl: undefined,
+        rpmRange: null,
+        noiseRange: null,
+        radiatorSize: null,
+        sockets: ['am4', 'am5'],
+        weight: null,
+    }),
 ]

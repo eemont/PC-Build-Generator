@@ -26,6 +26,18 @@ export const mockStorage = [
         nvme: false,
     }),
     new Storage({
+        brand: undefined,
+        model: '500gb nvme ssd gen4',
+        price: 75,
+        img: undefined,
+        link: undefined,
+        type: 'ssd',
+        capacity: 500,
+        formFactor: undefined,
+        connectionType: undefined,
+        nvme: true,
+    }),
+    new Storage({
         brand: 'seagate',
         model: 'firecuda',
         price: 52,

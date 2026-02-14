@@ -6,6 +6,7 @@ import App from './App.jsx'
 import Nav from './components/Nav/Nav.jsx'
 import Home from "./pages/Home/Home";
 import GenerateBuild from "./pages/GenerateBuild/GenerateBuild";
+import CustomBuild from "./pages/CustomBuild/CustomBuild";
 import SavedBuilds from "./pages/SavedBuilds/SavedBuilds";
 import Reset from "./reset";
 
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')).render(
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/build" element={<GenerateBuild />} />
+      <Route path="/custom-build" element={<CustomBuild />} />
       <Route path="/saved" element={<SavedBuilds />}/>
       <Route path="/Auth" element={<App />} />
       <Route path="/reset" element={<Reset />} />

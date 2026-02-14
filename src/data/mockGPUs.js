@@ -145,5 +145,21 @@ export const mockGPUs = [
         slotWidth: 1,
         externalPower: 'none',
         tdp: 19
-    })
+    }),
+    new GPU({
+        brand: 'nvidia',
+        model: 'rtx 5060',
+        price: 389,
+        img: undefined,
+        link: undefined,
+        chipset: 'geforce rtx 5060',
+        vram: 8,
+        coreClock: undefined,
+        boostClock: undefined,
+        length: undefined,
+        _interface: 'pcie x16',
+        slotWidth: undefined,
+        externalPower: undefined,
+        tdp: undefined,
+    }),
 ];

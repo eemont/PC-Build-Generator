@@ -144,5 +144,133 @@ export const mockCPUs = [
         multithreading: true,
         sockets: 'am4',
         memoryType: 'ddr4',
-    })
+    }),
+    // ─────────────────────────────────────────────
+    // Entry / Mid AM5 CPUs
+    // ─────────────────────────────────────────────
+
+    new CPU({
+        brand: 'amd',
+        model: 'ryzen 5 7500f',
+        price: undefined,
+        img: undefined,
+        link: undefined,
+        cores: 6,
+        tdp: 65,
+        integratedGraphics: '',
+        multithreading: true,
+        sockets: 'am5',
+        memoryType: 'ddr5',
+    }),
+
+    new CPU({
+        brand: 'amd',
+        model: 'ryzen 7 7700x',
+        price: undefined,
+        img: undefined,
+        link: undefined,
+        cores: 8,
+        tdp: 105,
+        integratedGraphics: 'radeon graphics',
+        multithreading: true,
+        sockets: 'am5',
+        memoryType: 'ddr5',
+    }),
+
+    new CPU({
+        brand: 'amd',
+        model: 'ryzen 9 7900x',
+        price: undefined,
+        img: undefined,
+        link: undefined,
+        cores: 12,
+        tdp: 170,
+        integratedGraphics: 'radeon graphics',
+        multithreading: true,
+        sockets: 'am5',
+        memoryType: 'ddr5',
+    }),
+
+    // ─────────────────────────────────────────────
+    // High-End / Enthusiast AM5
+    // ─────────────────────────────────────────────
+
+    new CPU({
+        brand: 'amd',
+        model: 'ryzen 9 9950x',
+        price: undefined,
+        img: undefined,
+        link: undefined,
+        cores: 16,
+        tdp: 170,
+        integratedGraphics: 'radeon graphics',
+        multithreading: true,
+        sockets: 'am5',
+        memoryType: 'ddr5',
+    }),
+
+    new CPU({
+        brand: 'amd',
+        model: 'ryzen 9 9850x3d',
+        price: undefined,
+        img: undefined,
+        link: undefined,
+        cores: 16,
+        tdp: 120,
+        integratedGraphics: 'radeon graphics',
+        multithreading: true,
+        sockets: 'am5',
+        memoryType: 'ddr5',
+    }),
+
+    // ─────────────────────────────────────────────
+    // Intel Xeon (Workstation / Server)
+    // ─────────────────────────────────────────────
+
+    new CPU({
+        brand: 'intel',
+        model: 'xeon e-2436',
+        price: undefined,
+        img: undefined,
+        link: undefined,
+        cores: 6,
+        tdp: 80,
+        integratedGraphics: 'uhd graphics p750',
+        multithreading: true,
+        sockets: 'lga1700',
+        memoryType: 'ddr5 ecc',
+    }),
+
+    // ─────────────────────────────────────────────
+    // AMD EPYC (Server Grade)
+    // ─────────────────────────────────────────────
+
+    new CPU({
+        brand: 'amd',
+        model: 'epyc 4364p',
+        price: undefined,
+        img: undefined,
+        link: undefined,
+        cores: 16,
+        tdp: 170,
+        integratedGraphics: '',
+        multithreading: true,
+        sockets: 'sp6',
+        memoryType: 'ddr5 ecc',
+    }),
+
+    new CPU({
+        brand: 'amd',
+        model: 'epyc 4584px',
+        price: undefined,
+        img: undefined,
+        link: undefined,
+        cores: 24,
+        tdp: 200,
+        integratedGraphics: '',
+        multithreading: true,
+        sockets: 'sp6',
+        memoryType: 'ddr5 ecc',
+    }),
+
 ]
