@@ -35,6 +35,17 @@ export const mockMemory = [
         formFactor: '288-pin dimm (ddr4)',
     }),
     new Memory({
+        brand: undefined,
+        model: '16gb ddr5-5600 (2x8gb)',
+        price: 149,
+        img: undefined,
+        link: undefined,
+        memoryType: 'ddr5',
+        capacityGB: 16,
+        errorCorrection: 'non-ecc / unbuffered',
+        formFactor: '288-pin dimm (ddr5)',
+    }),
+    new Memory({
         brand: 'corsair',
         model: 'vengeance lpx 16 gb',
         price: 67.99,

@@ -55,5 +55,16 @@ export const mockCases = [
         driveBays: 2,
         compatibleFormFactors: [ 'atx', 'eatx', 'micro atx', 'mini itx' ],
         width: 370,
-    })
+    }),
+    new Case({
+        brand: 'thermaltake',
+        model: 's100 tg',
+        price: 65,
+        imageUrl: undefined,
+        productUrl: undefined,
+        type: 'micro atx tower',
+        driveBays: undefined,
+        compatibleFormFactors: ['micro atx', 'mini itx'],
+        width: undefined,
+    }),
 ];

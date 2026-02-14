@@ -26,6 +26,18 @@ export const mockPowerSupplies = [
         connectors: { eps8: 2, pcie8: 0, pcie6_2: 4, pcie16: 0 },
     }),
     new PowerSupply({
+        brand: undefined,
+        model: '550w 80+ bronze',
+        price: 50,
+        img: undefined,
+        link: undefined,
+        formfactor: 'atx',
+        efficiencyRating: '80+ bronze',
+        wattage: 550,
+        length: undefined,
+        connectors: undefined,
+    }),
+    new PowerSupply({
         brand: 'evga',
         model: 'g3',
         price: 129.99,
