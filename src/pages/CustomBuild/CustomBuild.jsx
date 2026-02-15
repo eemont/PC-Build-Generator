@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { findParts } from "../../utils/getParts";
 import "./CustomBuild.css";
 
@@ -67,12 +67,19 @@ function formatPartSpecs(part, slotKey) {
 }
 
 export default function CustomBuild() {
+    const location = useLocation();
+    const editBuild = location.state?.editBuild || null;
 
-    const [selectedParts, setSelectedParts] = useState({});
+    // Loads custom builds with the saved build data for editing
+    // If none exist, default to empty
+    const [selectedParts, setSelectedParts] = useState(editBuild ? editBuild.parts : {});
+    const [buildName, setBuildName] = useState(editBuild ? editBuild.name : "");
+    const [editId, setEditId] = useState(editBuild ? editBuild.id : null);
+    
     const [pickerOpen, setPickerOpen] = useState(null);       // slot key or null
     const [availableParts, setAvailableParts] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [buildName, setBuildName] = useState("");
+    
     const navigate = useNavigate();
 
     // Fetch parts when picker opens
@@ -129,20 +136,24 @@ export default function CustomBuild() {
         }
 
         const newBuild = {
-            id: crypto.randomUUID(), // Generate a unique ID
+            id: editId || crypto.randomUUID(), // Keeps the old ID if editing
             name: buildName,
             totalPrice: totalPrice,
             parts: selectedParts,
-            dateSaved: new Date().toLocaleDateString()
+            dateSaved: new Date().toLocaleDateString() // Updates the date modified
         };
 
-        // Get existing builds from local storage or start a new array
         const existingBuilds = JSON.parse(localStorage.getItem("savedBuilds") || "[]");
         
-        // Add the new build and save back to local storage
-        localStorage.setItem("savedBuilds", JSON.stringify([...existingBuilds, newBuild]));
+        let updatedBuilds;
+        // Finds the existing build and replaces it, otherwise create a new one
+        if (editId) {
+            updatedBuilds = existingBuilds.map(b => b.id === editId ? newBuild : b);
+        } else {
+            updatedBuilds = [...existingBuilds, newBuild];
+        }
         
-        // Redirect to the Saved Builds page
+        localStorage.setItem("savedBuilds", JSON.stringify(updatedBuilds));
         navigate("/saved");
     };
     

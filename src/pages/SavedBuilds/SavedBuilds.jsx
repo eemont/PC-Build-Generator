@@ -1,12 +1,29 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./SavedBuilds.css";
 
 export default function SavedBuilds() {
-    const [savedBuilds] = useState(() => {
+    const [savedBuilds, setSavedBuilds] = useState(() => {
         const saved = localStorage.getItem("savedBuilds");
         return saved ? JSON.parse(saved) : [];
     });
+
+    const navigate = useNavigate();
+
+    const handleDelete = (id) => {
+        if (window.confirm("Are you sure you want to delete this build?")) {
+            const updatedBuilds = savedBuilds.filter(build => build.id !== id);
+            setSavedBuilds(updatedBuilds); 
+            
+            // Updates the browser's storage
+            localStorage.setItem("savedBuilds", JSON.stringify(updatedBuilds));
+        }
+    };
+
+    const handleEdit = (build) => {
+        // Navigate to the custom build page and pass the build data via state
+        navigate("/custom-build", { state: { editBuild: build } });
+    };
 
     const partLabels = {
         cpu: 'CPU',
@@ -54,6 +71,12 @@ export default function SavedBuilds() {
                                         <span className="part-price">${part.price?.toFixed(2)}</span>
                                     </div>
                                 ))}
+                            </div>
+                            
+                            {/* Action Buttons */}
+                            <div className="saved-card-actions">
+                                <button className="btn-edit" onClick={() => handleEdit(build)}>Edit</button>
+                                <button className="btn-delete" onClick={() => handleDelete(build.id)}>Delete</button>
                             </div>
                         </div>
                     ))}
