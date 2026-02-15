@@ -74,7 +74,7 @@ export default function CustomBuild() {
     // If none exist, default to empty
     const [selectedParts, setSelectedParts] = useState(editBuild ? editBuild.parts : {});
     const [buildName, setBuildName] = useState(editBuild ? editBuild.name : "");
-    const [editId, setEditId] = useState(editBuild ? editBuild.id : null);
+    const editId = editBuild ? editBuild.id : null;
     
     const [pickerOpen, setPickerOpen] = useState(null);       // slot key or null
     const [availableParts, setAvailableParts] = useState([]);
