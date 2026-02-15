@@ -1,15 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./SavedBuilds.css";
 
 export default function SavedBuilds() {
-    const [savedBuilds, setSavedBuilds] = useState([]);
-
-    useEffect(() => {
-        // Load builds from local storage when the page loads
-        const builds = JSON.parse(localStorage.getItem("savedBuilds") || "[]");
-        setSavedBuilds(builds);
-    }, []);
+    const [savedBuilds, setSavedBuilds] = useState(() => {
+        const saved = localStorage.getItem("savedBuilds");
+        return saved ? JSON.parse(saved) : [];
+    });
 
     const partLabels = {
         cpu: 'CPU',
