@@ -1,67 +1,59 @@
-import { caseResults } from "../data/results/caseResults.js";
-import { cpuCoolerResults } from "../data/results/cpuCoolerResults.js";
-import { cpuResults } from "../data/results/cpuResults.js";
-import { gpuResults } from "../data/results/gpuResults.js";
-import { memoryResults } from "../data/results/memoryResults.js";
-import { motherboardResults } from "../data/results/motherboardResults.js";
-import { powerSupplyResults } from "../data/results/powerSupplyResults.js";
-import { storageResults } from "../data/results/storageResults.js";
-
-import { partClasses } from "../domain/partClasses.js";
+import { mockCases } from "../data/mockCases.js";
+import { mockCPUCoolers } from "../data/mockCPUCoolers.js";
+import { mockCPUs } from "../data/mockCPUs.js";
+import { mockMemory } from "../data/mockMemory.js";
+import { mockMotherBoards } from "../data/mockMotherBoards.js";
+import { mockPowerSupplies } from "../data/mockPowerSupplies.js";
+import { mockStorage } from "../data/mockStorage.js";
+import { mockGPUs } from "../data/mockGPUs.js";
 
 const resultsMap = {
-    'case': caseResults,
-    'cpu': cpuResults,
-    'cpu-cooler': cpuCoolerResults,
-    'video-card': gpuResults,
-    'memory': memoryResults,
-    'motherboard': motherboardResults,
-    'power-supply': powerSupplyResults,
-    'internal-hard-drive': storageResults
+  'case': mockCases,
+  'cpu': mockCPUs,
+  'cpu-cooler': mockCPUCoolers,
+  'video-card': mockGPUs,
+  'memory': mockMemory,
+  'motherboard': mockMotherBoards,
+  'power-supply': mockPowerSupplies,
+  'internal-hard-drive': mockStorage
 };
 
 async function fetchParts(partName) {
-    // api call --> python script to get all parts based on name
-    console.log(`Retrieving ${[partName]}s...`)
-    const normalized = partName.toLowerCase().trim();
-    const results = resultsMap[normalized];
-
-    if (!results) {
-        throw new Error("Invalid part name");
-    }
-
-    const parsed = JSON.parse(results);
-
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(parsed);
-        }, 1000)
-    });
+  console.log(`Retrieving ${partName}s...`);
+  const normalized = partName.toLowerCase().trim();
+  const results = resultsMap[normalized];
+  
+  if (!results) {
+    throw new Error("Invalid part name");
+  }
+  
+  // No JSON.parse needed - data is already instantiated objects
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(results);
+    }, 1000);
+  });
 }
 
 export async function findParts(partName, max = 5, random = false) {
-    try {
-        const results = await fetchParts(partName);
-
-        const partClass = partClasses[partName];
-        const partsClassed = results.map(part => {
-            return partClass.decode(part);
-        })
-        .filter(part => {
-            return part.price <= 200
-        });
-
-        let maxResults;
-        if (random) {
-            const length = partsClassed.length;
-            maxResults = new Array(max).fill(0).map(() => partsClassed[Math.floor(Math.random()*length)]);
-            
-        } else {
-            maxResults = partsClassed.slice(0, max);
-        }
-
-        return maxResults;
-    } catch(err) {
-        return err;
+  try {
+    const results = await fetchParts(partName);
+    
+    // No need to decode - objects are already class instances
+    const partsFiltered = results.filter(part => part.price <= 200);
+    
+    let maxResults;
+    if (random) {
+      const length = partsFiltered.length;
+      maxResults = new Array(max).fill(0).map(() => 
+        partsFiltered[Math.floor(Math.random() * length)]
+      );
+    } else {
+      maxResults = partsFiltered.slice(0, max);
     }
+    
+    return maxResults;
+  } catch (err) {
+    return err;
+  }
 }

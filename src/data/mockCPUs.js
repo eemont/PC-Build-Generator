@@ -152,9 +152,9 @@ export const mockCPUs = [
     new CPU({
         brand: 'amd',
         model: 'ryzen 5 7500f',
-        price: undefined,
-        img: undefined,
-        link: undefined,
+        price: 169.99,
+        img: 'https://pcpartpicker.com/product/ms4Zxr/amd-ryzen-5-7500f-37-ghz-6-core-oemtray-processor-100-000000597#',
+        link: 'https://pcpartpicker.com/product/ms4Zxr/amd-ryzen-5-7500f-37-ghz-6-core-oemtray-processor-100-000000597',
         cores: 6,
         tdp: 65,
         integratedGraphics: '',
