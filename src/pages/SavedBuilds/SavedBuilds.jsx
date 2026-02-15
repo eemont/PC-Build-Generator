@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./SavedBuilds.css";
 
 export default function SavedBuilds() {
-    const [savedBuilds, setSavedBuilds] = useState(() => {
+    const [savedBuilds] = useState(() => {
         const saved = localStorage.getItem("savedBuilds");
         return saved ? JSON.parse(saved) : [];
     });
