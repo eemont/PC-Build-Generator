@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { findParts } from "../../utils/getParts";
 import "./CustomBuild.css";
 
@@ -71,6 +72,8 @@ export default function CustomBuild() {
     const [pickerOpen, setPickerOpen] = useState(null);       // slot key or null
     const [availableParts, setAvailableParts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [buildName, setBuildName] = useState("");
+    const navigate = useNavigate();
 
     // Fetch parts when picker opens
     const openPicker = useCallback(async (slot) => {
@@ -115,6 +118,34 @@ export default function CustomBuild() {
         return () => window.removeEventListener('keydown', handleKey);
     }, []);
 
+    const handleSaveBuild = () => {
+        if (!buildName.trim()) {
+            alert("Please provide a name for your build.");
+            return;
+        }
+        if (partsCount === 0) {
+            alert("Please add at least one part before saving.");
+            return;
+        }
+
+        const newBuild = {
+            id: crypto.randomUUID(), // Generate a unique ID
+            name: buildName,
+            totalPrice: totalPrice,
+            parts: selectedParts,
+            dateSaved: new Date().toLocaleDateString()
+        };
+
+        // Get existing builds from local storage or start a new array
+        const existingBuilds = JSON.parse(localStorage.getItem("savedBuilds") || "[]");
+        
+        // Add the new build and save back to local storage
+        localStorage.setItem("savedBuilds", JSON.stringify([...existingBuilds, newBuild]));
+        
+        // Redirect to the Saved Builds page
+        navigate("/saved");
+    };
+    
     return (
         <div className="custom-build-page">
 
@@ -210,6 +241,19 @@ export default function CustomBuild() {
                     <span className="totals-label">Estimated Total</span>
                     <span className="totals-value">${totalPrice.toFixed(2)}</span>
                 </div>
+            </div>
+
+            <div className="save-build-section">
+                <input
+                    type="text"
+                    className="build-name-input"
+                    placeholder="Name your custom build..."
+                    value={buildName}
+                    onChange={(e) => setBuildName(e.target.value)}
+                />
+                <button className="btn-save-build" onClick={handleSaveBuild}>
+                    Save Build
+                </button>
             </div>
 
             {pickerOpen && (

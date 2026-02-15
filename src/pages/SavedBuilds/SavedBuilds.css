@@ -1,0 +1,151 @@
+.saved-builds-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 24px 100px;
+}
+
+.saved-builds-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.saved-builds-header h1 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.saved-subtitle {
+    margin-top: 10px;
+    color: rgb(150, 150, 150);
+    font-size: 1rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: rgb(150, 150, 150);
+}
+
+.btn-create-new {
+    margin-top: 20px;
+    padding: 12px 32px;
+    background: transparent;
+    border: 1px solid var(--primary-purple);
+    border-radius: 8px;
+    color: var(--primary-purple);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-create-new:hover {
+    background: var(--primary-purple);
+    color: #fff;
+    translate: 0 -2px;
+}
+
+.saved-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+}
+
+.saved-card {
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.25s;
+}
+
+.saved-card:hover {
+    border-color: rgba(160, 85, 255, 0.3);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.saved-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.saved-build-name {
+    font-size: 1.25rem;
+    font-weight: 650;
+    color: #fff;
+    margin: 0;
+    word-break: break-word;
+}
+
+.saved-build-date {
+    font-size: 0.75rem;
+    color: rgb(120, 120, 120);
+    white-space: nowrap;
+    margin-left: 12px;
+    margin-top: 4px;
+}
+
+.saved-build-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-purple);
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.saved-parts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.saved-part-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.saved-part-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.part-category {
+    color: rgb(100, 100, 100);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+}
+
+.part-name {
+    color: rgb(210, 210, 210);
+    font-weight: 500;
+}
+
+.saved-part-row > .part-price {
+    color: rgb(160, 160, 160);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .saved-grid {
+        grid-template-columns: 1fr;
+    }
+}
