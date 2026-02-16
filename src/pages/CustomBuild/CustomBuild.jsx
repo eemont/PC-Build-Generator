@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { findParts } from "../../utils/getParts";
 import "./CustomBuild.css";
 
@@ -66,11 +67,20 @@ function formatPartSpecs(part, slotKey) {
 }
 
 export default function CustomBuild() {
+    const location = useLocation();
+    const editBuild = location.state?.editBuild || null;
 
-    const [selectedParts, setSelectedParts] = useState({});
+    // Loads custom builds with the saved build data for editing
+    // If none exist, default to empty
+    const [selectedParts, setSelectedParts] = useState(editBuild ? editBuild.parts : {});
+    const [buildName, setBuildName] = useState(editBuild ? editBuild.name : "");
+    const editId = editBuild ? editBuild.id : null;
+    
     const [pickerOpen, setPickerOpen] = useState(null);       // slot key or null
     const [availableParts, setAvailableParts] = useState([]);
     const [loading, setLoading] = useState(false);
+    
+    const navigate = useNavigate();
 
     // Fetch parts when picker opens
     const openPicker = useCallback(async (slot) => {
@@ -115,6 +125,38 @@ export default function CustomBuild() {
         return () => window.removeEventListener('keydown', handleKey);
     }, []);
 
+    const handleSaveBuild = () => {
+        if (!buildName.trim()) {
+            alert("Please provide a name for your build.");
+            return;
+        }
+        if (partsCount === 0) {
+            alert("Please add at least one part before saving.");
+            return;
+        }
+
+        const newBuild = {
+            id: editId || crypto.randomUUID(), // Keeps the old ID if editing
+            name: buildName,
+            totalPrice: totalPrice,
+            parts: selectedParts,
+            dateSaved: new Date().toLocaleDateString() // Updates the date modified
+        };
+
+        const existingBuilds = JSON.parse(localStorage.getItem("savedBuilds") || "[]");
+        
+        let updatedBuilds;
+        // Finds the existing build and replaces it, otherwise create a new one
+        if (editId) {
+            updatedBuilds = existingBuilds.map(b => b.id === editId ? newBuild : b);
+        } else {
+            updatedBuilds = [...existingBuilds, newBuild];
+        }
+        
+        localStorage.setItem("savedBuilds", JSON.stringify(updatedBuilds));
+        navigate("/saved");
+    };
+    
     return (
         <div className="custom-build-page">
 
@@ -210,6 +252,19 @@ export default function CustomBuild() {
                     <span className="totals-label">Estimated Total</span>
                     <span className="totals-value">${totalPrice.toFixed(2)}</span>
                 </div>
+            </div>
+
+            <div className="save-build-section">
+                <input
+                    type="text"
+                    className="build-name-input"
+                    placeholder="Name your custom build..."
+                    value={buildName}
+                    onChange={(e) => setBuildName(e.target.value)}
+                />
+                <button className="btn-save-build" onClick={handleSaveBuild}>
+                    Save Build
+                </button>
             </div>
 
             {pickerOpen && (
