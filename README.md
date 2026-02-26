@@ -1,16 +1,36 @@
-# React + Vite
+# PC Build Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## How to Run
 
-Currently, two official plugins are available:
+In your terminal, run:
+```
+npm install
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```
+npm run dev
+```
 
-## React Compiler
+You're output should look something like the following:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```
+PS C:\Users\User\Desktop\PC-Build-Generator> npm run dev
 
-## Expanding the ESLint configuration
+> pc-build-generator@0.0.0 dev
+> vite
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+  VITE v7.3.1  ready in 784 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+```
+
+Paste this into your browser: ```http://localhost:5173/```
+
+## Technologies Used
+
+<li>Frameworks: React + Vite</li>
+<li>Database + Authentication: Supabase</li>
+<li>Deployment: Vercel</li>
