@@ -1,6 +1,8 @@
 # PC Build Generator
 
-## How to Run
+https://pc-bg.vercel.app/
+
+## How to run locally
 
 In your terminal, run:
 ```
