@@ -19,20 +19,6 @@ export class CPU extends PCPart {
         this.memoryType = memoryType;
     }
 
-    static decode(partObj) {
-        const attrs = super.decode(partObj);
-
-        return new CPU({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            cores: partObj?.cores,
-            tdp: partObj?.tdp,
-            integratedGraphics: partObj?.integrated_graphics?.toLowerCase(),
-            multithreading: partObj?.multithreading
-        });
-    }
-
     static fromRow(row) {
         const attrs = super.fromRow(row);
 

@@ -26,21 +26,6 @@ export class GPU extends PCPart {
         this.tdp = tdp;
     }
 
-    static decode(partObj) {
-        const attrs = super.decode(partObj);
-
-        return new GPU({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            chipset: partObj.chipset?.toLowerCase(),
-            vram: (partObj.vram?.total || 0) / 1000000000,
-            coreClock: (partObj.core_clock?.cycles || 0) / 1000000000,
-            boostClock: (partObj?.boost_clock?.cycles || 0) / 1000000000,
-            length: partObj.length
-        });
-    }
-
     static fromRow(row) {
         const attrs = super.fromRow(row);
 

@@ -28,19 +28,6 @@ export class PowerSupply extends PCPart {
         };
     }
 
-    static decode(partObj) {
-        const attrs = super.decode(partObj);
-
-        return new PowerSupply({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            formFactor: partObj.form_factor?.toLowerCase(),
-            efficiencyRating: partObj.efficiency_rating?.toLowerCase(),
-            wattage: partObj.wattage
-        });
-    }
-
     static fromRow(row) {
         const attrs = super.fromRow(row);
 

@@ -18,20 +18,6 @@ export class Storage extends PCPart {
         this.nvme = nvme;
     }
 
-    static decode(partObj) {
-        const attrs = super.decode(partObj);
-
-        return new Storage({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            type: partObj.storage_type?.toLowerCase(),
-            capacity: partObj.capacity.total / 1000000000,
-            formFactor: partObj.form_factor,
-            connectionType: partObj.interface?.toLowerCase()
-        });
-    }
-
     static fromRow(row) {
         const attrs = super.fromRow(row);
 

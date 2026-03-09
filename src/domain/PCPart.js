@@ -16,19 +16,6 @@ export class PCPart {
         this.link = link;
     }
 
-    // take json from api and convert to object
-    static decode(partObj) {
-        const price = parseFloat((Array.isArray(partObj.price) 
-            ? +partObj.price[1]
-            : partObj.price).toFixed(2));
-
-        return {
-            brand: partObj.brand.toLowerCase(),
-            model: partObj.model.toLowerCase(),
-            price,
-        };
-    }
-
     // take row from Supabase/Postgres and normalize shared fields
     static fromRow(row) {
         return {
@@ -38,10 +25,5 @@ export class PCPart {
             img: row.img || "",
             link: row.link || "",
         };
-    }
-
-    toSearchQuery() {
-        const formattedQuery = `${this.brand} ${this.model}`.trim().split(" ").join("+");
-        return "https://pcpartpicker.com/search/?q=" + formattedQuery;
     }
 }

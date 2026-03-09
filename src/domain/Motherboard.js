@@ -15,23 +15,6 @@ export class Motherboard extends PCPart {
     supportsECC = false;
     maxMemorySpeed = 0;
 
-    static decode(partObj) {
-        const attrs = super.decode(partObj);
-        const maxRamGB = typeof partObj?.max_ram == "object"
-            ? partObj.max_ram.total / 1000000000
-            : partObj.max_ram / 1000000000;
-
-        return new Motherboard({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            socket: partObj?.socket?.toLowerCase(),
-            formFactor: partObj?.form_factor?.toLowerCase(),
-            ramSlots: partObj?.ram_slots,
-            maxRam: maxRamGB
-        });
-    }
-
     constructor({ brand, model, price, img = "", link = "", socket, formFactor, ramSlots, maxRam, memoryTypes = null, chipsets = null, m2Slots = null, sataPorts = null, u2Ports = null, pcieX16Slots = null, supportsECC = false, maxMemorySpeed = null }) {
         super(brand, model, price, img, link);
         this.socket = socket;

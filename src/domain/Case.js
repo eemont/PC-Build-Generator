@@ -16,18 +16,6 @@ export class Case extends PCPart {
         this.maxGPULength = maxGPULength;
     }
 
-    static decode(partObj) {
-        const attrs = super.decode(partObj);
-
-        return new Case({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            type: partObj.form_factor?.toLowerCase(),
-            internalBays: partObj.internal_bays
-        }); 
-    }
-
     static fromRow(row) {
         const attrs = super.fromRow(row);
 
