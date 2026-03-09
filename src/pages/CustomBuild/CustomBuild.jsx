@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { findParts } from "../../utils/getParts";
+import { findParts } from "../../domain/partsApi";
 import "./CustomBuild.css";
 
 const COMPONENT_SLOTS = [
@@ -59,7 +59,7 @@ function formatPartSpecs(part, slotKey) {
             return [
                 part.wattage ? `${part.wattage}W` : null,
                 part.efficiencyRating || null,
-                part.formfactor?.toUpperCase() || null,
+                part.formFactor?.toUpperCase() || null,
             ].filter(Boolean).join(' · ');
         default:
             return '';
@@ -89,7 +89,7 @@ export default function CustomBuild() {
         setAvailableParts([]);
 
         try {
-            const parts = await findParts(slot.partKey, 50, false);
+            const parts = await findParts(slot.partKey, 100);
             if (Array.isArray(parts)) {
                 setAvailableParts(parts);
             }
