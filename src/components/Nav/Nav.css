@@ -49,10 +49,14 @@
 .navbar .links .img#save { 
     mask: url('src/assets/save.webp') center/contain;
 }
+.navbar .links .img#contact {
+    mask: url('src/assets/contact.png') center/contain;
+}
 .navbar .links .img#join {
     background: black;
     mask: url('src/assets/join.webp') center/contain;
 }
+
 
 .navbar .links .join-now {
     color: black;

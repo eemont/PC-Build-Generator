@@ -8,6 +8,7 @@ import Home from "./pages/Home/Home";
 import GenerateBuild from "./pages/GenerateBuild/GenerateBuild";
 import CustomBuild from "./pages/CustomBuild/CustomBuild";
 import SavedBuilds from "./pages/SavedBuilds/SavedBuilds";
+import Contact from "./pages/Contact/Contact";
 import Reset from "./reset";
 
 createRoot(document.getElementById('root')).render(
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/saved" element={<SavedBuilds />}/>
       <Route path="/Auth" element={<App />} />
       <Route path="/reset" element={<Reset />} />
+      <Route path="/contact" element={<Contact />} />
     </Routes>
   </BrowserRouter>,
 )

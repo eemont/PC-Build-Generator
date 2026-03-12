@@ -51,6 +51,10 @@ export default function Nav() {
                         <div className="img" id="save" />
                         <p>Saved Builds</p>
                     </Link>
+                    <Link to="/contact">
+                        <div className="img" id="contact" />
+                        <p>Contact Us</p>
+                    </Link>
                     <Link to="/Auth">
                         <button className='join-now'>
                             <div className="img" id="join" />
