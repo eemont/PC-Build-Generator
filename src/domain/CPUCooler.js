@@ -49,4 +49,25 @@ export class CPUCooler extends PCPart {
             height: row.height ?? 0
         });
     }
+
+    getCompatibilityFields(targetPartClass) {
+        const constraints = [];
+
+        switch(targetPartClass.name) {
+            case 'CPU':
+                if (this.sockets != []) constraints.push({ field: "sockets", op: "in", val: this.sockets})
+                break;
+            // needed but currently not supported, case table does not store height
+            // case Case:
+            //     if (this.height > 0) constraints.push({ field: 'height', op: 'gte', val: this.height });
+            //     break;
+            case 'Motherboard':
+                if (this.sockets != []) constraints.push({ field: "socket", op: "in", val: this.sockets })
+                break;
+            default:
+                return [];
+        }
+
+        return constraints;
+    }
 }

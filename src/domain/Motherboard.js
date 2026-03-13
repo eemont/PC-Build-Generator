@@ -41,8 +41,8 @@ export class Motherboard extends PCPart {
             price: attrs.price,
             img: attrs.img,
             link: attrs.link,
-            socket: row.socket?.toLowerCase?.() ?? row.socket ?? "",
-            formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? "",
+            socket: row.socket?.toLowerCase?.() ?? row.socket ?? null,
+            formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? null,
             ramSlots: row.ram_slots ?? 0,
             maxRam: row.max_ram ?? 0,
             memoryTypes: row.memory_types ?? null,
@@ -54,5 +54,37 @@ export class Motherboard extends PCPart {
             supportsECC: row.supports_ecc ?? false,
             maxMemorySpeed: row.max_memory_speed ?? 0
         });
+    }
+
+    getCompatibilityFields(targetPartClass) {
+        const constraints = []; 
+
+        switch(targetPartClass.name) {
+            case 'Case':
+                if (this.formFactor != null) constraints.push({ field: "form_factors", op: "contains", val: [this.formFactor]});
+                break;
+            case 'CPU':
+                if (this.socket != null) constraints.push({ field: "sockets", op: 'eq', val: this.socket });
+                break;
+            case 'CPUCooler':
+                if (this.socket != null) constraints.push({ field: "sockets", op: 'contains', val: [this.socket] });
+                break;
+            case 'Memory':
+                if (this.memoryTypes != null) constraints.push({ field: "memory_type", op: "eq", val: this.memoryTypes });
+                if (this.maxRam > 0) constraints.push({ field: "capacity_gb", op: "lte", val: this.maxRam});
+                break;
+            case 'Storage':
+                if (this.m2Slots == 0) {
+                    constraints.push({ field: 'connection_type', op: 'notContains', val: 'm.2' });
+                }
+                else if (this.sataPorts == 0) {
+                    constraints.push({ field: 'connection_type', op: 'notContains', val: 'msata' });
+                }
+                break;
+            default:
+                return [];
+        }
+
+        return constraints;
     }
 }

@@ -34,4 +34,25 @@ export class Storage extends PCPart {
             nvme: row.nvme ?? null
         });
     }
+
+    getCompatibilityFields(targetPartClass) {
+        const constraints = [];
+
+        switch(targetPartClass.name) {
+            case 'Motherboard':
+                if (this.connectionType != null) {
+                    if (this.connectionType.includes('m.2')) {
+                        constraints.push({ field: 'm2_slots', op: 'gte', val: 0 });
+                    }
+                    else if (this.connectionType.includes('msata')) {
+                        constraints.push({ field: 'sata_ports', op: 'gte', val: 0 });
+                    }
+                }
+                break;
+            default:
+                return [];
+        }
+
+        return constraints;
+    }
 }

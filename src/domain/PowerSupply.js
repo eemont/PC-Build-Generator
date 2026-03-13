@@ -49,4 +49,32 @@ export class PowerSupply extends PCPart {
             }
         });
     }
+
+    getCompatibilityFields(targetPartClass) {
+        const constraints = [];
+
+        switch(targetPartClass.name) {
+            case 'Case':
+                if (this.formFactor != null) constraints.push({ field: "form_factors", op: 'contains', val: this.formFactor });
+                break;
+            case 'GPU':
+                if (this.wattage != null) constraints.push({ field: 'tdp', op: 'lte', val: this.wattage });
+
+                // not best schema, will need to add columns pcie8, pcie6_2, pcie16 to GPU
+                if (this.connectors.pcie8 == 0) {
+                    constraints.push({ field: 'external_power', op: 'notContains', val: "8-pin" });
+                }   
+                if (this.connectors.pcie6_2 == 0) {
+                    constraints.push({ field: 'external_power', op: 'notContains', val: "pcie 6-pin" });
+                }
+                if (this.connectors.pcie16 ==  0) {
+                    constraints.push({ field: 'external_power', op: 'notContains', val: "16-pin" });
+                }
+                break;
+            default:
+                return [];
+        }
+
+        return constraints;
+    }
 }
