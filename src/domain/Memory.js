@@ -35,11 +35,17 @@ export class Memory extends PCPart {
     getCompatibilityFields(targetPartClass) {
         const constraints = [];
 
-        switch(targetPartClass.nam) {
+        switch(targetPartClass.name) {
             case 'Motherboard':
-                if (this.memoryType != null) constraints.push({ field: "memory_types", op: 'contains', val: this.memoryType });
+                if (this.memoryType != null) constraints.push({ field: "memory_types", op: 'eq', val: this.memoryType });
                 if (this.capacityGB > 0) constraints.push({ field: "max_ram", op: "gte", val: this.capacityGB});
-                if (this.errorCorrection != null) constraints.push({ field: "supports_ecc", op: 'eq', val: this.errorCorrection })
+                // if (this.errorCorrection != null) {
+                //     if (this.errorCorrection.indexOf("non") > 0) {
+                //         constraints.push({ field: "supports_ecc", op: 'eq', val: false })
+                //     } else {
+                //         constraints.push({ field: "supports_ecc", op: 'eq', val: true })
+                //     }
+                // }
                 break;
             default:
                 return [];

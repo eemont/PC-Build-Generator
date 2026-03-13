@@ -64,14 +64,20 @@ export class GPU extends PCPart {
 
                     pins.forEach(pin => {
                         const count = +(pin.substring(0, pin.indexOf(" ")));
-                        if (pin.indexOf("8-pin") > 0) {
+                        if (pin.indexOf("pcie 8") > 0) {
                             constraints.push({ field: 'pcie8', op: 'gte', val: count });
                         } 
+                        else if (pin.indexOf("eps 8") > 0) {
+                            constraints.push({ field: 'eps8', op: 'gte', val: count });
+                        }
                         else if (pin.indexOf("16-pin") > 0) {
                             constraints.push({ field: 'pcie16', op: 'gte', val: count });
                         } 
                         else if (pin.indexOf("6-pin") > 0) {
                             constraints.push({ field: 'pcie6_2', op: 'gte', val: count });
+                        } 
+                        else if (pin.indexOf("12-pin") > 0) {
+                            constraints.push({ field: 'pcie12', op: 'gte', val: count });
                         } else {
                             console.log('invalid/untracked pin type:', pin);
                         }

@@ -88,7 +88,12 @@ export default function CustomBuild() {
         setLoading(true);
         setAvailableParts([]);
         try {
-            const parts = await findParts(slot.partKey, selectedParts, ignoreCompatibility, 100);
+            const parts = await findParts({
+                partType: slot.partKey, 
+                selectedParts: selectedParts, 
+                ignoreCompatibility, 
+                limit: 100
+            });
             if (Array.isArray(parts)) {
                 setAvailableParts(parts);
             }
@@ -119,6 +124,7 @@ export default function CustomBuild() {
         setSelectedParts(prev => ({ ...prev, [slotKey]: part }));
         setPickerOpen(null);
     };
+    console.log(selectedParts);
 
     const removePart = (slotKey) => {
         setSelectedParts(prev => {

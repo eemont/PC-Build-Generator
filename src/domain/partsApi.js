@@ -26,7 +26,13 @@ const operatorHandler = {
   },
 };
 
-export async function findParts(partType, selectedParts, ignoreCompatibility, limit = null) {
+export async function findParts({
+  partType, 
+  selectedParts = {}, 
+  ignoreCompatibility = false, 
+  limit = null,
+  sortBy = []
+}) {
   const table = partMap[partType].table;
   const PartClass = partMap[partType].class;
 
@@ -42,11 +48,17 @@ export async function findParts(partType, selectedParts, ignoreCompatibility, li
     query.limit(limit);
   }
 
+  if (sortBy.length > 0) {
+    sortBy.forEach(sort => {
+      query.order(sort.col, { ascending: sort.ascending })
+    });
+  }
+
   // Handle queries added on for compatibility
   if (!ignoreCompatibility) {
-    for (const [partName, part] of Object.entries(selectedParts)) {
+    for (const [, part] of Object.entries(selectedParts)) {
       const constraints = part.getCompatibilityFields(PartClass);
-      console.log(`found constraints for ${partName}`, constraints);
+      // console.log(`found constraints for ${part.constructor.name}`, constraints);
 
       constraints.forEach(constraint => {
         const handler = operatorHandler[constraint.op];
@@ -57,7 +69,10 @@ export async function findParts(partType, selectedParts, ignoreCompatibility, li
 
   const { data, error } = await query;
 
-  if (error) throw error;
+  if (error) {
+    console.error(error)
+    throw error;
+  }
 
   return data.map((row) => PartClass.fromRow(row));
 }

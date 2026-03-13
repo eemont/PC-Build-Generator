@@ -10,7 +10,8 @@ export class PowerSupply extends PCPart {
         eps8: 0,
         pcie8: 0,
         pcie6_2: 0,
-        pcie16: 0
+        pcie16: 0,
+        pcie12: 0
     };
 
     constructor({ brand, model, price, img = "", link = "", formFactor, efficiencyRating, wattage, length = 0, connectors = null }) {
@@ -24,7 +25,8 @@ export class PowerSupply extends PCPart {
             eps8: 0,
             pcie8: 0,
             pcie6_2: 0,
-            pcie16: 0
+            pcie16: 0,
+            pcie12: 0
         };
     }
 
@@ -45,7 +47,8 @@ export class PowerSupply extends PCPart {
                 eps8: row.eps8 ?? 0,
                 pcie8: row.pcie8 ?? 0,
                 pcie6_2: row.pcie6_2 ?? 0,
-                pcie16: row.pcie16 ?? 0
+                pcie16: row.pcie16 ?? 0,
+                pcie12: row.pcie12 ?? 0
             }
         });
     }
@@ -55,20 +58,26 @@ export class PowerSupply extends PCPart {
 
         switch(targetPartClass.name) {
             case 'Case':
-                if (this.formFactor != null) constraints.push({ field: "form_factors", op: 'contains', val: this.formFactor });
+                if (this.formFactor != null) constraints.push({ field: "form_factors", op: 'contains', val: [this.formFactor] });
                 break;
             case 'GPU':
                 if (this.wattage != null) constraints.push({ field: 'tdp', op: 'lte', val: this.wattage });
 
                 // not best schema, will need to add columns pcie8, pcie6_2, pcie16 to GPU
                 if (this.connectors.pcie8 == 0) {
-                    constraints.push({ field: 'external_power', op: 'notContains', val: "8-pin" });
+                    constraints.push({ field: 'external_power', op: 'notContains', val: "pcie 8" });
                 }   
+                if (this.connectors.eps8 == 0) {
+                    constraints.push({ field: 'external_power', op: 'notContains', val: "eps 8" });
+                } 
                 if (this.connectors.pcie6_2 == 0) {
-                    constraints.push({ field: 'external_power', op: 'notContains', val: "pcie 6-pin" });
+                    constraints.push({ field: 'external_power', op: 'notContains', val: "pcie 6" });
                 }
                 if (this.connectors.pcie16 ==  0) {
                     constraints.push({ field: 'external_power', op: 'notContains', val: "16-pin" });
+                }
+                if (this.connectors.pcie12 ==  0) {
+                    constraints.push({ field: 'external_power', op: 'notContains', val: "12-pin" });
                 }
                 break;
             default:
