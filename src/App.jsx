@@ -14,7 +14,10 @@ export default function App() {
   useEffect(() => {
     async function loadParts() {
       try {
-        const fetchedParts = await findParts("cpu", 5);
+        const fetchedParts = await findParts({
+          partType: "cpu", 
+          limit: 5
+        });
         setParts(fetchedParts);
         console.log("Fetched Supabase parts:", fetchedParts);
       } catch (error) {

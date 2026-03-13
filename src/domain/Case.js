@@ -31,4 +31,22 @@ export class Case extends PCPart {
             maxGPULength: row.max_gpu_length ?? 0
         });
     }
+
+    getCompatibilityFields(targetPartClass) {
+        const constraints = [];
+
+        switch(targetPartClass.name) {
+            case 'Motherboard':
+            case 'PowerSupply':
+                if (this.formFactors != null) constraints.push({ field: "form_factor", op: 'in', val: this.formFactors });
+                break;
+            case 'GPU':
+                if (this.maxGPULength > 0) constraints.push({ field: 'length', op: 'lte', val: this.maxGPULength }); 
+                break;
+            default:
+                return [];
+        }
+
+        return constraints;
+    }
 }

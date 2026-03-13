@@ -31,4 +31,26 @@ export class Memory extends PCPart {
             formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? null
         });
     }
+
+    getCompatibilityFields(targetPartClass) {
+        const constraints = [];
+
+        switch(targetPartClass.name) {
+            case 'Motherboard':
+                if (this.memoryType != null) constraints.push({ field: "memory_types", op: 'eq', val: this.memoryType });
+                if (this.capacityGB > 0) constraints.push({ field: "max_ram", op: "gte", val: this.capacityGB});
+                // if (this.errorCorrection != null) {
+                //     if (this.errorCorrection.indexOf("non") > 0) {
+                //         constraints.push({ field: "supports_ecc", op: 'eq', val: false })
+                //     } else {
+                //         constraints.push({ field: "supports_ecc", op: 'eq', val: true })
+                //     }
+                // }
+                break;
+            default:
+                return [];
+        }
+
+        return constraints;
+    }
 }

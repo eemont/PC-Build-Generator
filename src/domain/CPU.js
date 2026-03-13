@@ -36,4 +36,21 @@ export class CPU extends PCPart {
             memoryType: row.memory_type?.toLowerCase?.() ?? row.memory_type ?? null
         });
     }
+
+    getCompatibilityFields(targetPartClass) {
+        const constraints = [];
+
+        switch(targetPartClass.name) {
+            case 'CPUCooler':
+                if (this.sockets != null) constraints.push({ field: "sockets", op: "contains", val: [this.sockets] })
+                break;
+            case 'Motherboard':
+                if (this.sockets != null) constraints.push({ field: "socket", op: "eq", val: this.sockets })
+                break;
+            default:
+                return [];
+        }
+        
+        return constraints;
+    }
 }

@@ -4,7 +4,7 @@ import { findParts } from "../../domain/partsApi";
 import "./CustomBuild.css";
 
 const COMPONENT_SLOTS = [
-    { key: 'cpu',       label: 'CPU',          partKey: 'cpu'                 },
+    { key: 'cpu',       label: 'CPU',           partKey: 'cpu'                 },
     { key: 'cooler',    label: 'CPU Cooler',    partKey: 'cpu-cooler'          },
     { key: 'mobo',      label: 'Motherboard',   partKey: 'motherboard'         },
     { key: 'memory',    label: 'Memory',        partKey: 'memory'              },
@@ -79,17 +79,21 @@ export default function CustomBuild() {
     const [pickerOpen, setPickerOpen] = useState(null);       // slot key or null
     const [availableParts, setAvailableParts] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const [ignoreCompatibility, setIgnoreCompatibility] = useState(false);
     
     const navigate = useNavigate();
 
-    // Fetch parts when picker opens
-    const openPicker = useCallback(async (slot) => {
-        setPickerOpen(slot.key);
+    const fetchParts = async (slot, ignoreCompatibility) => {
         setLoading(true);
         setAvailableParts([]);
-
         try {
-            const parts = await findParts(slot.partKey, 100);
+            const parts = await findParts({
+                partType: slot.partKey, 
+                selectedParts: selectedParts, 
+                ignoreCompatibility, 
+                limit: 100
+            });
             if (Array.isArray(parts)) {
                 setAvailableParts(parts);
             }
@@ -98,12 +102,29 @@ export default function CustomBuild() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    };
+
+    // Re-fetch parts when changing compatibility preference
+    const handleCheckboxChange = async () => {
+        const newIgnoreCompatibility = !ignoreCompatibility;
+        setIgnoreCompatibility(newIgnoreCompatibility);
+
+        const slotIndex = COMPONENT_SLOTS.findIndex(slot => slot.key == pickerOpen);
+        const slot = COMPONENT_SLOTS[slotIndex];
+        await fetchParts(slot, newIgnoreCompatibility);
+    };
+
+    // Fetch parts when picker opens
+    const openPicker = useCallback(async (slot) => {
+        setPickerOpen(slot.key);
+        await fetchParts(slot, ignoreCompatibility);        
+    }, [selectedParts, ignoreCompatibility]);
 
     const selectPart = (slotKey, part) => {
         setSelectedParts(prev => ({ ...prev, [slotKey]: part }));
         setPickerOpen(null);
     };
+    console.log(selectedParts);
 
     const removePart = (slotKey) => {
         setSelectedParts(prev => {
@@ -271,9 +292,20 @@ export default function CustomBuild() {
                 <div className="picker-overlay" onClick={() => setPickerOpen(null)}>
                     <div className="picker-modal" onClick={(e) => e.stopPropagation()}>
                         <div className="picker-header">
-                            <h2>
-                                Choose {COMPONENT_SLOTS.find(s => s.key === pickerOpen)?.label}
-                            </h2>
+                            <div className="left">
+                                <h2>
+                                    Choose {COMPONENT_SLOTS.find(s => s.key === pickerOpen)?.label}
+                                </h2>
+
+                                <label htmlFor="ignore-compatibility">Ignore Compatibility?</label>
+                                <input 
+                                    name="ignore-compatibility" 
+                                    type="checkbox" 
+                                    onChange={handleCheckboxChange} 
+                                    checked = {ignoreCompatibility}
+                                />
+                            </div>
+
                             <button className="picker-close" onClick={() => setPickerOpen(null)}>✕</button>
                         </div>
 
