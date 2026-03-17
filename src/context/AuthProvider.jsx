@@ -1,25 +1,15 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
-
-const AuthContext = createContext(null);
+import { AuthContext } from "./AuthContext";
 
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let mounted = true;
-
     async function loadSession() {
-      const { data, error } = await supabase.auth.getSession();
-
-      if (!mounted) return;
-
-      if (error) {
-        console.error("Error loading session:", error);
-      }
-
-      setSession(data?.session ?? null);
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
       setLoading(false);
     }
 
@@ -30,10 +20,7 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
-    return () => {
-      mounted = false;
-      sub?.subscription?.unsubscribe();
-    };
+    return () => sub.subscription.unsubscribe();
   }, []);
 
   return (
@@ -41,14 +28,4 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-
-  return context;
 }
