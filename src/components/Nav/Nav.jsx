@@ -1,63 +1,105 @@
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabaseClient";
 import "./Nav.css";
 
-
 export default function Nav() {
+  const [session, setSession] = useState(null);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const links = document.querySelectorAll(".navbar .links a");
+  useEffect(() => {
+    async function loadSession() {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
+    }
 
-        const joinButton = document.querySelector(".navbar .links #join")
-        let computedStyles = window.getComputedStyle(joinButton);
-        const primaryPurple = computedStyles.getPropertyValue("--primary-purple");
+    loadSession();
 
-        const h2 = document.querySelector(".navbar h2");
-        computedStyles = window.getComputedStyle(h2);
-        const grayText = computedStyles.getPropertyValue("color");
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+    });
 
-        links.forEach(link => {
-            link.addEventListener('mouseenter', (e) => {
-                const img = e.target.querySelector('.img');
-                img.style.background = primaryPurple;
-            });
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
-            link.addEventListener('mouseleave', (e) => {
-                const img = e.target.querySelector('.img');
-                img.style.background = grayText;
-            })
-        });
+  useEffect(() => {
+    const links = document.querySelectorAll(".navbar .links a, .navbar .links button");
+    const joinButton = document.querySelector(".navbar .links #join");
 
-    }, []);
+    if (!joinButton) return;
 
+    let computedStyles = window.getComputedStyle(joinButton);
+    const primaryPurple = computedStyles.getPropertyValue("--primary-purple");
 
-    return (
-            <nav className="navbar">
-                <Link to="/" className="brand">
-                    <div className="img" id="pc" />
-                    <h2>PC Build Generator</h2>
-                </Link>
-                <div className="links">
-                    <Link to="/">
-                        <div className="img" id="home" />
-                        <p>Home</p>
-                    </Link>
-                    <Link to="/build">
-                        <div className="img" id="build" />
-                        <p>Build Your PC</p>
-                    </Link>
-                    <Link to="/saved">
-                        <div className="img" id="save" />
-                        <p>Saved Builds</p>
-                    </Link>
-                    <Link to="/Auth">
-                        <button className='join-now'>
-                            <div className="img" id="join" />
-                            <p>Join Now</p>
-                        </button>
-                    </Link>
-                </div>
-            </nav>
-    )
+    const h2 = document.querySelector(".navbar h2");
+    computedStyles = window.getComputedStyle(h2);
+    const grayText = computedStyles.getPropertyValue("color");
+
+    links.forEach((link) => {
+      link.addEventListener("mouseenter", (e) => {
+        const img = e.currentTarget.querySelector(".img");
+        if (img) img.style.background = primaryPurple;
+      });
+
+      link.addEventListener("mouseleave", (e) => {
+        const img = e.currentTarget.querySelector(".img");
+        if (img) img.style.background = grayText;
+      });
+    });
+  }, [session]);
+
+  async function handleSignOut() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error signing out:", error);
+      return;
+    }
+
+    navigate("/");
+  }
+
+  return (
+    <div className="navbar">
+        <Link to="/" className="brand">
+        <div className="img" id="pc"></div>
+        <h2>PC Build Generator</h2>
+        </Link>
+
+      <div className="links">
+        <Link to="/">
+          <div className="img" id="home"></div>
+          <span>Home</span>
+        </Link>
+
+        <Link to="/build">
+          <div className="img" id="build"></div>
+          <span>Build Your PC</span>
+        </Link>
+
+        {session && (
+        <Link to="/saved">
+            <div className="img" id="save"></div>
+            <span>Saved Builds</span>
+        </Link>
+        )}
+
+        {session ? (
+            <button
+            id="join"
+            className="sign-out-btn"
+            type="button"
+            onClick={handleSignOut}
+            >
+            <div className="img" id="join"></div>
+            <span>Sign Out</span>
+            </button>
+        ) : (
+            <Link to="/login" id="join" className="join-now">
+            <div className="img" id="join"></div>
+            <span>Join Now</span>
+            </Link>
+        )}
+      </div>
+    </div>
+  );
 }
