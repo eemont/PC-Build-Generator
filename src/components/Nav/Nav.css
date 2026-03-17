@@ -54,9 +54,11 @@
     mask: url('src/assets/join.webp') center/contain;
 }
 
-.navbar .links .join-now {
-    color: black;
-    background: var(--primary-purple);
+.navbar .links button.join-now {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
 }
 
 .navbar .links a:hover {

@@ -54,11 +54,11 @@ export default function App() {
 
   return (
     <div style={{ padding: 24 }}>
-      <h1>PC Build Generator</h1>
+      {/* <h1>PC Build Generator</h1> */}
       <p>Signed in as: {session.user.email}</p>
-      <button onClick={() => supabase.auth.signOut()}>Sign out</button>
+      {/* <button onClick={() => supabase.auth.signOut()}>Sign out</button> */}
 
-      <h2 style={{ marginTop: 24 }}>Sample CPU Data from Supabase</h2>
+      {/* <h2 style={{ marginTop: 24 }}>Sample CPU Data from Supabase</h2>
       {parts.length === 0 ? (
         <p>No parts found.</p>
       ) : (
@@ -69,7 +69,7 @@ export default function App() {
             </li>
           ))}
         </ul>
-      )}
+      )} */}
     </div>
   );
 }
