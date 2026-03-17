@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { findParts } from "../../utils/getParts";
+import { useNavigate, useLocation } from "react-router-dom";
+import { findParts } from "../../domain/partsApi";
 import "./CustomBuild.css";
 
 const COMPONENT_SLOTS = [
@@ -58,7 +59,7 @@ function formatPartSpecs(part, slotKey) {
             return [
                 part.wattage ? `${part.wattage}W` : null,
                 part.efficiencyRating || null,
-                part.formfactor?.toUpperCase() || null,
+                part.formFactor?.toUpperCase() || null,
             ].filter(Boolean).join(' · ');
         default:
             return '';
@@ -66,8 +67,10 @@ function formatPartSpecs(part, slotKey) {
 }
 
 export default function CustomBuild() {
+    const location = useLocation();
+    const editBuild = location.state?.editBuild || null;
 
-    const [selectedParts, setSelectedParts] = useState(editBuild ? editBuild.parts : {});
+    const [selectedParts, setSelectedParts] = useState(editBuild ? editBuild.parts : {});    
     const [buildName, setBuildName] = useState(editBuild ? editBuild.name : "");
     const [buildNotes, setBuildNotes] = useState(editBuild ? (editBuild.notes || "") : "");
     const editId = editBuild ? editBuild.id : null;
@@ -84,7 +87,7 @@ export default function CustomBuild() {
         setAvailableParts([]);
 
         try {
-            const parts = await findParts(slot.partKey, 50, false);
+            const parts = await findParts(slot.partKey, 100);
             if (Array.isArray(parts)) {
                 setAvailableParts(parts);
             }

@@ -1,7 +1,6 @@
 import { PCPart } from "./PCPart.js";
 
 export class Storage extends PCPart {
-
     type = null;
     capacity = 0;
     formFactor = null;
@@ -9,7 +8,7 @@ export class Storage extends PCPart {
 
     nvme = null;
 
-    constructor({brand, model, price, img="", link="", type, capacity, formFactor, connectionType, nvme=null}) {
+    constructor({ brand, model, price, img = "", link = "", type, capacity, formFactor, connectionType, nvme = null }) {
         super(brand, model, price, img, link);
         this.type = type;
         this.capacity = capacity;
@@ -19,17 +18,20 @@ export class Storage extends PCPart {
         this.nvme = nvme;
     }
 
-    static decode(partObj) {
-        const attrs = super.decode(partObj);
+    static fromRow(row) {
+        const attrs = super.fromRow(row);
 
         return new Storage({
             brand: attrs.brand,
             model: attrs.model,
             price: attrs.price,
-            type: partObj.storage_type?.toLowerCase(),
-            capacity: partObj.capacity.total / 1000000000,  // b -> gb
-            formFactor: partObj.form_factor,
-            connectionType: partObj.interface?.toLowerCase()
+            img: attrs.img,
+            link: attrs.link,
+            type: row.type?.toLowerCase?.() ?? row.type ?? null,
+            capacity: row.capacity ?? 0,
+            formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? null,
+            connectionType: row.connection_type?.toLowerCase?.() ?? row.connection_type ?? null,
+            nvme: row.nvme ?? null
         });
     }
 }

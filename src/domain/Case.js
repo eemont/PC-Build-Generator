@@ -7,7 +7,7 @@ export class Case extends PCPart {
     formFactors = [];
     maxGPULength = 0;   // millimeters
 
-    constructor({brand, model, price, img="", link="", type, internalBays, formFactors=null, maxGPULength=null}) {
+    constructor({ brand, model, price, img = "", link = "", type, internalBays, formFactors = null, maxGPULength = null }) {
         super(brand, model, price, img, link);
         this.type = type;
         this.internalBays = internalBays;
@@ -16,15 +16,19 @@ export class Case extends PCPart {
         this.maxGPULength = maxGPULength;
     }
 
-    static decode(partObj) {
-        const attrs = super.decode(partObj);
+    static fromRow(row) {
+        const attrs = super.fromRow(row);
 
         return new Case({
             brand: attrs.brand,
             model: attrs.model,
             price: attrs.price,
-            type: partObj.form_factor?.toLowerCase(),    // api has type incorrectly marked as form_factor
-            internalBays: partObj.internal_bays
-        }); 
+            img: attrs.img,
+            link: attrs.link,
+            type: row.type?.toLowerCase?.() ?? row.type ?? null,
+            internalBays: row.internal_bays ?? 0,
+            formFactors: row.form_factors ?? null,
+            maxGPULength: row.max_gpu_length ?? 0
+        });
     }
 }

@@ -1,8 +1,3 @@
-<<<<<<< Updated upstream
-
-
-export default function SavedBuilds() {
-=======
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./SavedBuilds.css";
@@ -46,16 +41,11 @@ export default function SavedBuilds() {
         case: 'Case',
         psu: 'Power Supply',
     };
->>>>>>> Stashed changes
 
     const getTotalPrice = (parts) =>
         Object.values(parts).reduce((sum, p) => sum + (p.price || 0), 0);
 
     return (
-<<<<<<< Updated upstream
-        <div style={{ textAlign: 'center', marginBlock: '50px' }}>Saved Builds</div>
-    )
-=======
         <div className="saved-builds-page">
             <div className="saved-builds-header">
                 <h1>Your Saved Builds</h1>
@@ -175,5 +165,4 @@ export default function SavedBuilds() {
             )}
         </div>
     );
->>>>>>> Stashed changes
 }

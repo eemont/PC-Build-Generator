@@ -102,6 +102,9 @@ export default function Auth() {
               borderRadius: 8,
               border: "none",
               cursor: "pointer",
+              background: "rgb(160, 85, 255)",
+              color: "#fff",
+              fontWeight: "600",
             }}
           >
             {loading ? "Please wait..." : mode === "signup" ? "Sign up" : "Sign in"}
@@ -116,8 +119,9 @@ export default function Auth() {
               style={{
                 padding: 10,
                 borderRadius: 8,
-                border: "1px solid #ccc",
-                background: "transparent",
+                border: "none",
+                background: "rgb(160, 85, 255)",
+                color: "#fff",
                 cursor: "pointer",
               }}
             >
@@ -140,9 +144,10 @@ export default function Auth() {
             width: "100%",
             padding: 10,
             borderRadius: 8,
-            border: "1px solid #ccc",
-            background: "transparent",
+            border: "none",
+            background: "rgb(160, 85, 255)",
             cursor: "pointer",
+            color: "#fff"
           }}
         >
           {mode === "signup"

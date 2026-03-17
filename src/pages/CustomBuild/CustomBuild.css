@@ -479,8 +479,6 @@
         gap: 12px;
         text-align: center;
     }
-<<<<<<< Updated upstream
-=======
 }
 
 .save-build-section {
@@ -585,5 +583,4 @@
     outline: none;
     border-color: var(--primary-purple);
     background: rgba(160, 85, 255, 0.04);
->>>>>>> Stashed changes
 }
