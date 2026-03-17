@@ -67,12 +67,6 @@ function formatPartSpecs(part, slotKey) {
 
 export default function CustomBuild() {
 
-<<<<<<< Updated upstream
-    const [selectedParts, setSelectedParts] = useState({});
-    const [pickerOpen, setPickerOpen] = useState(null);       // slot key or null
-    const [availableParts, setAvailableParts] = useState([]);
-    const [loading, setLoading] = useState(false);
-=======
     const [selectedParts, setSelectedParts] = useState(editBuild ? editBuild.parts : {});
     const [buildName, setBuildName] = useState(editBuild ? editBuild.name : "");
     const [buildNotes, setBuildNotes] = useState(editBuild ? (editBuild.notes || "") : "");
@@ -83,7 +77,6 @@ export default function CustomBuild() {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
->>>>>>> Stashed changes
 
     const openPicker = useCallback(async (slot) => {
         setPickerOpen(slot.key);
@@ -126,8 +119,6 @@ export default function CustomBuild() {
         return () => window.removeEventListener('keydown', handleKey);
     }, []);
 
-<<<<<<< Updated upstream
-=======
     const handleSaveBuild = () => {
         if (!buildName.trim()) {
             alert("Please provide a name for your build.");
@@ -160,7 +151,6 @@ export default function CustomBuild() {
         navigate("/saved");
     };
 
->>>>>>> Stashed changes
     return (
         <div className="custom-build-page">
 
@@ -258,8 +248,6 @@ export default function CustomBuild() {
                 </div>
             </div>
 
-<<<<<<< Updated upstream
-=======
             {/* ── Notes + Save ── */}
             <div className="build-notes-section">
                 <label className="build-notes-label" htmlFor="build-notes">
@@ -289,7 +277,6 @@ export default function CustomBuild() {
                 </button>
             </div>
 
->>>>>>> Stashed changes
             {pickerOpen && (
                 <div className="picker-overlay" onClick={() => setPickerOpen(null)}>
                     <div className="picker-modal" onClick={(e) => e.stopPropagation()}>
