@@ -67,12 +67,24 @@ function formatPartSpecs(part, slotKey) {
 
 export default function CustomBuild() {
 
+<<<<<<< Updated upstream
     const [selectedParts, setSelectedParts] = useState({});
     const [pickerOpen, setPickerOpen] = useState(null);       // slot key or null
     const [availableParts, setAvailableParts] = useState([]);
     const [loading, setLoading] = useState(false);
+=======
+    const [selectedParts, setSelectedParts] = useState(editBuild ? editBuild.parts : {});
+    const [buildName, setBuildName] = useState(editBuild ? editBuild.name : "");
+    const [buildNotes, setBuildNotes] = useState(editBuild ? (editBuild.notes || "") : "");
+    const editId = editBuild ? editBuild.id : null;
 
-    // Fetch parts when picker opens
+    const [pickerOpen, setPickerOpen] = useState(null);
+    const [availableParts, setAvailableParts] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
+>>>>>>> Stashed changes
+
     const openPicker = useCallback(async (slot) => {
         setPickerOpen(slot.key);
         setLoading(true);
@@ -106,7 +118,6 @@ export default function CustomBuild() {
     const totalPrice = Object.values(selectedParts).reduce((sum, part) => sum + (part.price || 0), 0);
     const partsCount = Object.keys(selectedParts).length;
 
-    // Close picker on Escape
     useEffect(() => {
         const handleKey = (e) => {
             if (e.key === 'Escape') setPickerOpen(null);
@@ -115,6 +126,41 @@ export default function CustomBuild() {
         return () => window.removeEventListener('keydown', handleKey);
     }, []);
 
+<<<<<<< Updated upstream
+=======
+    const handleSaveBuild = () => {
+        if (!buildName.trim()) {
+            alert("Please provide a name for your build.");
+            return;
+        }
+        if (partsCount === 0) {
+            alert("Please add at least one part before saving.");
+            return;
+        }
+
+        const newBuild = {
+            id: editId || crypto.randomUUID(),
+            name: buildName,
+            notes: buildNotes.trim(),
+            totalPrice: totalPrice,
+            parts: selectedParts,
+            dateSaved: new Date().toLocaleDateString()
+        };
+
+        const existingBuilds = JSON.parse(localStorage.getItem("savedBuilds") || "[]");
+
+        let updatedBuilds;
+        if (editId) {
+            updatedBuilds = existingBuilds.map(b => b.id === editId ? newBuild : b);
+        } else {
+            updatedBuilds = [...existingBuilds, newBuild];
+        }
+
+        localStorage.setItem("savedBuilds", JSON.stringify(updatedBuilds));
+        navigate("/saved");
+    };
+
+>>>>>>> Stashed changes
     return (
         <div className="custom-build-page">
 
@@ -212,6 +258,38 @@ export default function CustomBuild() {
                 </div>
             </div>
 
+<<<<<<< Updated upstream
+=======
+            {/* ── Notes + Save ── */}
+            <div className="build-notes-section">
+                <label className="build-notes-label" htmlFor="build-notes">
+                    Build Notes
+                    <span className="build-notes-hint">Your reasoning, goals, or thoughts behind this build</span>
+                </label>
+                <textarea
+                    id="build-notes"
+                    className="build-notes-input"
+                    placeholder="e.g. Prioritised single-core performance for gaming at 1440p. Went with air cooling to stay under budget — the Peerless Assassin handles the 7700X with headroom to spare. Chose B650 over X670 since I don't need PCIe 5.0 storage yet..."
+                    value={buildNotes}
+                    onChange={(e) => setBuildNotes(e.target.value)}
+                    rows={4}
+                />
+            </div>
+
+            <div className="save-build-section">
+                <input
+                    type="text"
+                    className="build-name-input"
+                    placeholder="Name your custom build..."
+                    value={buildName}
+                    onChange={(e) => setBuildName(e.target.value)}
+                />
+                <button className="btn-save-build" onClick={handleSaveBuild}>
+                    Save Build
+                </button>
+            </div>
+
+>>>>>>> Stashed changes
             {pickerOpen && (
                 <div className="picker-overlay" onClick={() => setPickerOpen(null)}>
                     <div className="picker-modal" onClick={(e) => e.stopPropagation()}>

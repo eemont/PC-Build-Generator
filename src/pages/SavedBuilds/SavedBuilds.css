@@ -1,0 +1,459 @@
+<<<<<<< Updated upstream
+=======
+.saved-builds-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 24px 100px;
+}
+
+.saved-builds-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.saved-builds-header h1 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.saved-subtitle {
+    margin-top: 10px;
+    color: rgb(150, 150, 150);
+    font-size: 1rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: rgb(150, 150, 150);
+}
+
+.btn-create-new {
+    margin-top: 20px;
+    padding: 12px 32px;
+    background: transparent;
+    border: 1px solid var(--primary-purple);
+    border-radius: 8px;
+    color: var(--primary-purple);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-create-new:hover {
+    background: var(--primary-purple);
+    color: #fff;
+    translate: 0 -2px;
+}
+
+.saved-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+}
+
+.saved-card {
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.25s;
+}
+
+.saved-card:hover {
+    border-color: rgba(160, 85, 255, 0.3);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.saved-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.saved-build-name {
+    font-size: 1.25rem;
+    font-weight: 650;
+    color: #fff;
+    margin: 0;
+    word-break: break-word;
+}
+
+.saved-build-date {
+    font-size: 0.75rem;
+    color: rgb(120, 120, 120);
+    white-space: nowrap;
+    margin-left: 12px;
+    margin-top: 4px;
+}
+
+.saved-build-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-purple);
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.saved-parts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.saved-part-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.saved-part-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.part-category {
+    color: rgb(100, 100, 100);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+}
+
+.part-name {
+    color: rgb(210, 210, 210);
+    font-weight: 500;
+}
+
+.saved-part-row > .part-price {
+    color: rgb(160, 160, 160);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .saved-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Action Buttons ── */
+.saved-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-view,
+.btn-edit,
+.btn-delete {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.btn-view {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgb(200, 200, 200);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn-view:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.25);
+    translate: 0 -1px;
+}
+
+.btn-edit {
+    background: rgba(160, 85, 255, 0.1);
+    color: var(--primary-purple);
+    border: 1px solid rgba(160, 85, 255, 0.3);
+}
+
+.btn-edit:hover {
+    background: var(--primary-purple);
+    color: #fff;
+    translate: 0 -1px;
+}
+
+.btn-delete {
+    background: rgba(255, 85, 85, 0.08);
+    color: #ff5555;
+    border: 1px solid rgba(255, 85, 85, 0.25);
+}
+
+.btn-delete:hover {
+    background: #ff5555;
+    color: #fff;
+    border-color: #ff5555;
+    translate: 0 -1px;
+}
+
+/* ── View Build Modal ── */
+.view-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.view-modal {
+    width: 90%;
+    max-width: 680px;
+    max-height: 82vh;
+    background: rgb(18, 18, 24);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+    animation: slideUp 0.2s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(18px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Header */
+.view-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    flex-shrink: 0;
+}
+
+.view-modal-title h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.view-modal-date {
+    font-size: 0.75rem;
+    color: rgb(110, 110, 110);
+    margin-top: 4px;
+    display: block;
+}
+
+.view-modal-close {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: rgb(150, 150, 150);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.view-modal-close:hover {
+    border-color: #ff5555;
+    color: #ff5555;
+    background: rgba(255, 85, 85, 0.08);
+}
+
+/* Body — scrollable */
+.view-modal-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 8px 16px;
+}
+
+/* ── Build Notes block inside modal ── */
+.view-notes-block {
+    margin: 12px 8px 4px;
+    padding: 14px 16px;
+    background: rgba(160, 85, 255, 0.05);
+    border: 1px solid rgba(160, 85, 255, 0.18);
+    border-radius: 10px;
+}
+
+.view-notes-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--primary-purple);
+    margin-bottom: 8px;
+}
+
+.view-notes-text {
+    font-size: 0.88rem;
+    color: rgb(185, 185, 185);
+    line-height: 1.65;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+/* Parts table */
+.view-parts-table {
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+}
+
+.view-parts-head {
+    display: grid;
+    grid-template-columns: 120px 1fr 80px;
+    padding: 10px 8px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgb(90, 90, 90);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 4px;
+}
+
+.view-part-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 80px;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.15s;
+    border-radius: 6px;
+}
+
+.view-part-row:last-child {
+    border-bottom: none;
+}
+
+.view-part-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.view-part-category {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgb(100, 100, 100);
+}
+
+.view-part-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.view-part-thumb {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    flex-shrink: 0;
+}
+
+.view-part-name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: rgb(215, 215, 215);
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.view-part-price {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--primary-purple);
+    text-align: right;
+}
+
+/* Footer */
+.view-modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.02);
+    flex-shrink: 0;
+}
+
+.view-parts-count {
+    font-size: 0.82rem;
+    color: rgb(110, 110, 110);
+}
+
+.view-total {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.view-total-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgb(110, 110, 110);
+}
+
+.view-total-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-purple);
+}
+
+@media (max-width: 500px) {
+    .view-modal {
+        width: 96%;
+        max-height: 88vh;
+    }
+
+    .view-parts-head,
+    .view-part-row {
+        grid-template-columns: 90px 1fr 68px;
+    }
+}
+>>>>>>> Stashed changes

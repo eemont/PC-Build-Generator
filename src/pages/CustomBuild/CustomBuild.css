@@ -479,4 +479,111 @@
         gap: 12px;
         text-align: center;
     }
+<<<<<<< Updated upstream
+=======
+}
+
+.save-build-section {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.build-name-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #fff;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+    width: 300px;
+}
+
+.build-name-input::placeholder {
+    color: rgb(120, 120, 120);
+}
+
+.build-name-input:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+}
+
+.btn-save-build {
+    background: var(--primary-purple);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: opacity 0.2s, translate 0.2s;
+}
+
+.btn-save-build:hover {
+    opacity: 0.9;
+    translate: 0 -1px;
+}
+
+@media (max-width: 500px) {
+    .save-build-section {
+        flex-direction: column;
+        width: 100%;
+    }
+    .build-name-input, .btn-save-build {
+        width: 100%;
+    }
+}
+
+.build-notes-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 24px;
+}
+ 
+.build-notes-label {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: rgb(200, 200, 200);
+}
+ 
+.build-notes-hint {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: rgb(110, 110, 110);
+}
+ 
+.build-notes-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: #fff;
+    font-size: 0.92rem;
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+ 
+.build-notes-input::placeholder {
+    color: rgb(90, 90, 90);
+    font-style: italic;
+}
+ 
+.build-notes-input:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+    background: rgba(160, 85, 255, 0.04);
+>>>>>>> Stashed changes
 }
