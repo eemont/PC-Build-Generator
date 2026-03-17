@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react";
-import { supabase } from "./lib/supabaseClient";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthProvider";
+import ProtectedRoute from "./routes/ProtectedRoute";
+
 import Auth from "./Auth";
 import Reset from "./reset";
-import { findParts } from "./domain/partsApi";
+import Home from "./pages/Home/Home";
+import GenerateBuild from "./pages/GenerateBuild/GenerateBuild";
+import CustomBuild from "./pages/CustomBuild/CustomBuild";
+import SavedBuilds from "./pages/SavedBuilds/SavedBuilds";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -56,23 +61,25 @@ export default function App() {
   }
 
   return (
-    <div style={{ padding: 24 }}>
-      <h1>PC Build Generator</h1>
-      <p>Signed in as: {session.user.email}</p>
-      <button onClick={() => supabase.auth.signOut()}>Sign out</button>
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Auth />} />
+        <Route path="/reset" element={<Reset />} />
+        <Route path="/build" element={<GenerateBuild />} />
+        <Route path="/custom-build" element={<CustomBuild />} />
 
-      <h2 style={{ marginTop: 24 }}>Sample CPU Data from Supabase</h2>
-      {parts.length === 0 ? (
-        <p>No parts found.</p>
-      ) : (
-        <ul>
-          {parts.map((part, index) => (
-            <li key={index}>
-              {part.brand} {part.model} - ${part.price}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+        <Route
+          path="/saved"
+          element={
+            <ProtectedRoute>
+              <SavedBuilds />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AuthProvider>
   );
 }

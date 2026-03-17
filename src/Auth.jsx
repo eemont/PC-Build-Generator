@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "./lib/supabaseClient";
 
 export default function Auth() {
@@ -8,6 +9,11 @@ export default function Auth() {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const redirectTo = location.state?.from?.pathname || "/";
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -30,6 +36,7 @@ export default function Auth() {
         if (error) throw error;
 
         setMessage("Signed in!");
+        navigate(redirectTo, { replace: true });
       }
     } catch (err) {
       setMessage(err.message);
@@ -110,7 +117,6 @@ export default function Auth() {
             {loading ? "Please wait..." : mode === "signup" ? "Sign up" : "Sign in"}
           </button>
 
-          {/* Reset password button (only show on sign-in mode) */}
           {mode === "signin" && (
             <button
               type="button"

@@ -1,39 +1,69 @@
-import React from "react";
-import { describe, it, expect, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import App from "../App";
 
-import "./mocks/mockSupabaseModule";
-import { supabaseMock } from "./mocks/mockSupabaseModule";
+vi.mock("../lib/supabaseClient", () => {
+  return {
+    supabase: {
+      auth: {
+        getSession: vi.fn(),
+        onAuthStateChange: vi.fn(),
+      },
+    },
+  };
+});
 
-// Adjust to your App path:
-import App from "../App.jsx";
+import { supabase } from "../lib/supabaseClient";
 
 describe("Session handling", () => {
   beforeEach(() => {
-    supabaseMock.auth.getSession.mockReset();
+    vi.clearAllMocks();
+
+    supabase.auth.onAuthStateChange.mockReturnValue({
+      data: {
+        subscription: {
+          unsubscribe: vi.fn(),
+        },
+      },
+    });
   });
 
-  it("shows Auth when there is no session", async () => {
-    supabaseMock.auth.getSession.mockResolvedValue({
+  it("redirects to login when visiting a protected route without a session", async () => {
+    supabase.auth.getSession.mockResolvedValue({
       data: { session: null },
-      error: null,
     });
 
-    render(<App />);
+    render(
+      <MemoryRouter initialEntries={["/saved"]}>
+        <App />
+      </MemoryRouter>
+    );
 
-    // Adjust to your Auth UI:
-    expect(await screen.findByRole("heading", { name: /sign in/i })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: /sign in/i })
+      ).toBeInTheDocument();
+    });
   });
 
-  it("shows app content when a session exists", async () => {
-    supabaseMock.auth.getSession.mockResolvedValue({
-      data: { session: { user: { id: "user_1" } } },
-      error: null,
+  it("shows protected content when a session exists", async () => {
+    supabase.auth.getSession.mockResolvedValue({
+      data: {
+        session: {
+          user: { email: "user@example.com" },
+        },
+      },
     });
 
-    render(<App />);
+    render(
+      <MemoryRouter initialEntries={["/saved"]}>
+        <App />
+      </MemoryRouter>
+    );
 
-    // Adjust to something your app shows when logged in:
-    expect(await screen.findByRole("heading", { name: /pc build generator/i })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/saved builds/i)).toBeInTheDocument();
+    });
   });
 });

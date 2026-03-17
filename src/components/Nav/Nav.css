@@ -50,15 +50,40 @@
     mask: url('src/assets/save.webp') center/contain;
 }
 .navbar .links .img#join {
-    background: black;
+    background: rgb(255, 255, 255);
     mask: url('src/assets/join.webp') center/contain;
 }
 
-.navbar .links .join-now {
-    color: black;
-    background: var(--primary-purple);
+.navbar .links button.join-now {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
 }
 
 .navbar .links a:hover {
     color: var(--primary-purple);
+}
+
+.sign-out-btn {
+  background: linear-gradient(135deg, #ff4d4d, #ff6b6b);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.sign-out-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 0, 0, 0.3);
+}
+
+.sign-out-btn:active {
+  transform: translateY(0);
 }
