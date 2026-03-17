@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./SavedBuilds.css";
 
@@ -7,21 +7,27 @@ export default function SavedBuilds() {
         const saved = localStorage.getItem("savedBuilds");
         return saved ? JSON.parse(saved) : [];
     });
+    const [viewingBuild, setViewingBuild] = useState(null);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleKey = (e) => {
+            if (e.key === "Escape") setViewingBuild(null);
+        };
+        window.addEventListener("keydown", handleKey);
+        return () => window.removeEventListener("keydown", handleKey);
+    }, []);
 
     const handleDelete = (id) => {
         if (window.confirm("Are you sure you want to delete this build?")) {
             const updatedBuilds = savedBuilds.filter(build => build.id !== id);
-            setSavedBuilds(updatedBuilds); 
-            
-            // Updates the browser's storage
+            setSavedBuilds(updatedBuilds);
             localStorage.setItem("savedBuilds", JSON.stringify(updatedBuilds));
         }
     };
 
     const handleEdit = (build) => {
-        // Navigate to the custom build page and pass the build data via state
         navigate("/custom-build", { state: { editBuild: build } });
     };
 
@@ -35,6 +41,9 @@ export default function SavedBuilds() {
         case: 'Case',
         psu: 'Power Supply',
     };
+
+    const getTotalPrice = (parts) =>
+        Object.values(parts).reduce((sum, p) => sum + (p.price || 0), 0);
 
     return (
         <div className="saved-builds-page">
@@ -58,9 +67,9 @@ export default function SavedBuilds() {
                                 <h2 className="saved-build-name">{build.name}</h2>
                                 <span className="saved-build-date">{build.dateSaved}</span>
                             </div>
-                            
+
                             <div className="saved-build-price">${build.totalPrice.toFixed(2)}</div>
-                            
+
                             <div className="saved-parts-list">
                                 {Object.entries(build.parts).map(([slotKey, part]) => (
                                     <div key={slotKey} className="saved-part-row">
@@ -72,14 +81,86 @@ export default function SavedBuilds() {
                                     </div>
                                 ))}
                             </div>
-                            
-                            {/* Action Buttons */}
+
                             <div className="saved-card-actions">
+                                <button className="btn-view" onClick={() => setViewingBuild(build)}>View</button>
                                 <button className="btn-edit" onClick={() => handleEdit(build)}>Edit</button>
                                 <button className="btn-delete" onClick={() => handleDelete(build.id)}>Delete</button>
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {/* ── View Build Modal ── */}
+            {viewingBuild && (
+                <div className="view-overlay" onClick={() => setViewingBuild(null)}>
+                    <div className="view-modal" onClick={(e) => e.stopPropagation()}>
+
+                        <div className="view-modal-header">
+                            <div className="view-modal-title">
+                                <h2>{viewingBuild.name}</h2>
+                                <span className="view-modal-date">Saved on {viewingBuild.dateSaved}</span>
+                            </div>
+                            <button className="view-modal-close" onClick={() => setViewingBuild(null)}>✕</button>
+                        </div>
+
+                        <div className="view-modal-body">
+
+                            {/* Build notes — only rendered if the user wrote something */}
+                            {viewingBuild.notes && (
+                                <div className="view-notes-block">
+                                    <span className="view-notes-label">Build Notes</span>
+                                    <p className="view-notes-text">{viewingBuild.notes}</p>
+                                </div>
+                            )}
+
+                            <div className="view-parts-table">
+                                <div className="view-parts-head">
+                                    <span>Component</span>
+                                    <span>Part</span>
+                                    <span>Price</span>
+                                </div>
+
+                                {Object.entries(viewingBuild.parts).map(([slotKey, part]) => (
+                                    <div key={slotKey} className="view-part-row">
+                                        <span className="view-part-category">
+                                            {partLabels[slotKey] || slotKey}
+                                        </span>
+                                        <div className="view-part-info">
+                                            {part.img && (
+                                                <img
+                                                    className="view-part-thumb"
+                                                    src={part.img}
+                                                    alt={part.model}
+                                                    onError={(e) => e.target.style.display = "none"}
+                                                />
+                                            )}
+                                            <span className="view-part-name">
+                                                {part.brand} {part.model}
+                                            </span>
+                                        </div>
+                                        <span className="view-part-price">
+                                            ${part.price?.toFixed(2)}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="view-modal-footer">
+                            <span className="view-parts-count">
+                                {Object.keys(viewingBuild.parts).length} parts
+                            </span>
+                            <div className="view-total">
+                                <span className="view-total-label">Total</span>
+                                <span className="view-total-price">
+                                    ${getTotalPrice(viewingBuild.parts).toFixed(2)}
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             )}
         </div>
