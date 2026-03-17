@@ -76,26 +76,28 @@ export default function Nav() {
           <span>Build Your PC</span>
         </Link>
 
+        {session && (
         <Link to="/saved">
-          <div className="img" id="save"></div>
-          <span>Saved Builds</span>
+            <div className="img" id="save"></div>
+            <span>Saved Builds</span>
         </Link>
+        )}
 
         {session ? (
-          <button
+            <button
             id="join"
-            className="join-now"
+            className="sign-out-btn"
             type="button"
             onClick={handleSignOut}
-          >
+            >
             <div className="img" id="join"></div>
             <span>Sign Out</span>
-          </button>
+            </button>
         ) : (
-          <Link to="/Auth" id="join" className="join-now">
+            <Link to="/login" id="join" className="join-now">
             <div className="img" id="join"></div>
             <span>Join Now</span>
-          </Link>
+            </Link>
         )}
       </div>
     </div>
