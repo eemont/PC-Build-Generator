@@ -60,10 +60,10 @@ export default function Nav() {
 
   return (
     <div className="navbar">
-      <div className="brand">
+        <Link to="/" className="brand">
         <div className="img" id="pc"></div>
         <h2>PC Build Generator</h2>
-      </div>
+        </Link>
 
       <div className="links">
         <Link to="/">
