@@ -24,6 +24,10 @@ const operatorHandler = {
   lte(query, field, val) {
     return query.lte(field, val);
   },
+
+  order(query, field, val) {
+    return query.order(field, { ascending: val });
+  }
 };
 
 export async function findParts({
@@ -31,7 +35,7 @@ export async function findParts({
   selectedParts = {}, 
   ignoreCompatibility = false, 
   limit = null,
-  sortBy = []
+  additionalFilters = []
 }) {
   const table = partMap[partType].table;
   const PartClass = partMap[partType].class;
@@ -44,14 +48,13 @@ export async function findParts({
     .from(table)
     .select("*")
   
-  if (limit != null) {
-    query.limit(limit);
-  }
+  if (limit != null) query.limit(limit);
 
-  if (sortBy.length > 0) {
-    sortBy.forEach(sort => {
-      query.order(sort.col, { ascending: sort.ascending })
-    });
+  if (additionalFilters.length > 0) {
+    additionalFilters.forEach(filter => {
+      const handler = operatorHandler(filter.op);
+      query = handler(query, filter.field, filter.val);
+    })
   }
 
   // Handle queries added on for compatibility
