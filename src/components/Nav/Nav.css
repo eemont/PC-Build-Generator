@@ -1,57 +1,72 @@
 .navbar {
-    position: relative;
-    top: 0;
-    width: 100%;
-    height: 60px;
-    z-index: 100;
-    background: var(--dark-background);
+  position: relative;
+  top: 0;
+  width: 100%;
+  min-height: 60px;
+  z-index: 100;
+  background: var(--dark-background);
+  box-shadow: 0 1px 8px var(--primary-purple);
 
-    display: flex;
-    justify-content: space-between;
-    
-    box-shadow: 0 1px 8px var(--primary-purple);
-}
-
-.navbar * {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
 }
 
 .navbar .brand {
-    margin-left: 20px;
-}
-.navbar .img {
-    width: 25px;
-    height: 25px;
-    background: var(--link-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 0;
 }
 
-.navbar .brand .img#pc {   
-    margin-right: 10px;
-    mask: url('src/assets/pc-tower.webp') center/contain;
+.navbar .img {
+  width: 25px;
+  height: 25px;
+  background: var(--link-color);
+  flex-shrink: 0;
+}
+
+.navbar .brand .img#pc {
+  mask: url("src/assets/pc-tower.webp") center/contain no-repeat;
 }
 
 .navbar .links {
-    gap: 30px;
-    margin-right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-right: 0;
 }
+
+.navbar .links a,
+.navbar .links button.join-now,
+.sign-out-btn {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
 .navbar .links .img {
-    width: 18px;
-    height: 18px;
-    margin-right: 8px;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
 }
+
 .navbar .links .img#home {
-    mask: url('src/assets/home.webp') center/contain;
+  mask: url("src/assets/home.webp") center/contain no-repeat;
 }
+
 .navbar .links .img#build {
-    mask: url('src/assets/build.webp') center/contain;
+  mask: url("src/assets/build.webp") center/contain no-repeat;
 }
-.navbar .links .img#save { 
-    mask: url('src/assets/save.webp') center/contain;
+
+.navbar .links .img#save {
+  mask: url("src/assets/save.webp") center/contain no-repeat;
 }
+
 .navbar .links .img#join {
-    background: rgb(255, 255, 255);
-    mask: url('src/assets/join.webp') center/contain;
+  background: rgb(255, 255, 255);
+  mask: url("src/assets/join.webp") center/contain no-repeat;
 }
 
 .navbar .links button.join-now {
@@ -59,10 +74,12 @@
   cursor: pointer;
   font: inherit;
   padding: 0;
+  background: transparent;
+  color: inherit;
 }
 
 .navbar .links a:hover {
-    color: var(--primary-purple);
+  color: var(--primary-purple);
 }
 
 .sign-out-btn {
@@ -73,8 +90,6 @@
   padding: 8px 14px;
   font-weight: 600;
   cursor: pointer;
-  display: flex;
-  align-items: center;
   gap: 6px;
   transition: all 0.2s ease;
 }
@@ -86,4 +101,59 @@
 
 .sign-out-btn:active {
   transform: translateY(0);
+}
+
+/* hamburger button */
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 12px 16px;
+    min-height: 60px;
+    flex-wrap: wrap;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .navbar .links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 12px;
+    padding: 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .navbar .links.open {
+    display: flex;
+  }
+
+  .navbar .links a,
+  .navbar .links button,
+  .sign-out-btn {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .navbar .links .img {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+  }
+
+  .sign-out-btn {
+    padding: 10px 12px;
+  }
 }

@@ -1,22 +1,27 @@
 .video-bg {
     position: fixed;
-    top: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    z-index: -1;
 }
 
 .home-page {
-    position: absolute;
-    top: 0;
-    margin-inline: auto;
+    position: relative;
     width: 100%;
+    min-height: 100vh;
+    padding: 0 16px 32px;
+    box-sizing: border-box;
 }
 
 .welcome-box {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    padding: 24px 0;
+    box-sizing: border-box;
 }
 
 .welcome-content {
@@ -25,18 +30,41 @@
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.8);
-    border-radius: 10px;
-    width: 50%;
-    padding-block: 40px;
+    border-radius: 12px;
+    width: min(700px, 100%);
+    padding: 40px 24px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.welcome-content h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
 }
 
 .welcome-content p {
     margin-block: 20px 30px;
+    max-width: 600px;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.call-to-action {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.call-to-action a {
+    display: inline-flex;
 }
 
 .call-to-action button {
-    margin-inline: 10px;
-    color: var(--primary-purple)
+    margin-inline: 0;
+    color: var(--primary-purple);
+    min-width: 180px;
 }
 
 .call-to-action button:hover {
@@ -61,10 +89,16 @@
     align-items: center;
     background: rgba(0, 0, 0, 0.8);
     border-radius: 20px;
-    width: 90%;
+    width: min(1100px, 100%);
     margin: 0 auto;
-    padding-block: 80px;
+    padding: 64px 24px;
     margin-bottom: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.how-it-works h1 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
 }
 
 .how-it-works p {
@@ -72,9 +106,10 @@
 }
 
 .how-it-works .step-cards {
-    width: 70%;
+    width: 100%;
+    max-width: 900px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
 }
 
@@ -85,19 +120,28 @@
     align-items: center;
     border: 2px solid rgb(50, 50, 50);
     border-radius: 10px;
-    padding: 20px 10px;
+    padding: 20px 16px;
     text-align: center;
+    box-sizing: border-box;
 }
+
 .how-it-works .step:hover {
     transition: translate 0.2s ease;
     translate: 0 -3px;
 }
+
 .how-it-works .step * {
     pointer-events: none;
 }
 
+.how-it-works .step h4 {
+    font-size: 1rem;
+}
+
 .how-it-works .step p {
     margin-block: 10px 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
 .how-it-works .step .step-number {
@@ -113,3 +157,72 @@
     font-weight: 600;
 }
 
+/* Tablet */
+@media (max-width: 900px) {
+    .welcome-content {
+        width: 100%;
+        padding: 36px 20px;
+    }
+
+    .how-it-works .step-cards {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .home-page {
+        padding: 0 12px 24px;
+    }
+
+    .welcome-box {
+        min-height: 90vh;
+        padding: 16px 0;
+    }
+
+    .welcome-content {
+        padding: 28px 16px;
+        border-radius: 10px;
+    }
+
+    .welcome-content h1 {
+        font-size: 1.9rem;
+    }
+
+    .welcome-content p {
+        font-size: 0.95rem;
+        margin-block: 16px 24px;
+    }
+
+    .call-to-action {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .call-to-action a,
+    .call-to-action button {
+        width: 100%;
+    }
+
+    .call-to-action button {
+        min-width: 0;
+    }
+
+    .how-it-works {
+        padding: 40px 16px;
+        border-radius: 14px;
+    }
+
+    .how-it-works h1 {
+        font-size: 1.8rem;
+    }
+
+    .how-it-works p {
+        font-size: 0.95rem;
+    }
+
+    .how-it-works .step {
+        padding: 18px 14px;
+    }
+}

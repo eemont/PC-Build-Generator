@@ -7,6 +7,8 @@ export default function Nav() {
   const [session, setSession] = useState(null);
   const navigate = useNavigate();
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     async function loadSession() {
       const { data } = await supabase.auth.getSession();
@@ -65,7 +67,14 @@ export default function Nav() {
         <h2>PC Build Generator</h2>
         </Link>
 
-      <div className="links">
+        <button
+  className="menu-toggle"
+  onClick={() => setMenuOpen(!menuOpen)}
+>
+  ☰
+</button>
+
+      <div className={`links ${menuOpen ? "open" : ""}`}>
         <Link to="/">
           <div className="img" id="home"></div>
           <span>Home</span>
