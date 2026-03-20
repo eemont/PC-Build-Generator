@@ -275,14 +275,11 @@ export default function CustomBuild() {
                             </div>
 
                             <div className="col-compatibility">
-                                {!selected.compatible &&
-                                    <span>
-                                        <PartIssue
-                                            issues={ selected.issues }
-                                        ></PartIssue>
-                                    </span>
-                                    
-                                }
+                                <span>
+                                    <PartIssue
+                                        issues={ selected.issues }
+                                    ></PartIssue>
+                                </span>
                             </div>
 
                             <div className="col-price">
@@ -343,16 +340,24 @@ export default function CustomBuild() {
             </div>
 
             <div className="save-build-section">
-                <input
-                    type="text"
-                    className="build-name-input"
-                    placeholder="Name your custom build..."
-                    value={buildName}
-                    onChange={(e) => setBuildName(e.target.value)}
-                />
-                <button className="btn-save-build" onClick={handleSaveBuild}>
-                    Save Build
-                </button>
+                <p className="save-build-warning">
+                    { Object.values(selectedParts).filter(selected => selected.issues?.length > 0).length > 0 &&
+                        '*WARNING: Not all parts in this build may be compatible'
+                    }
+                </p>
+
+                <div className="save-build-input">
+                    <input
+                        type="text"
+                        className="build-name-input"
+                        placeholder="Name your custom build..."
+                        value={buildName}
+                        onChange={(e) => setBuildName(e.target.value)}
+                    />
+                    <button className="btn-save-build" onClick={handleSaveBuild}>
+                        Save Build
+                    </button>
+                </div>
             </div>
 
             {pickerOpen && (
@@ -416,11 +421,9 @@ export default function CustomBuild() {
                                             </span>
                                         </div>
                                         <div className="picker-item-compatibility">
-                                            { !available.compatible &&
-                                                <PartIssue
-                                                    issues={available.issues}
-                                                />
-                                            }
+                                            <PartIssue
+                                                issues={available.issues}
+                                            />
                                         </div>
                                         <div className="picker-item-price">
                                             ${available.part?.price?.toFixed(2)}

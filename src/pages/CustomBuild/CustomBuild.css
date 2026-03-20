@@ -487,10 +487,14 @@
     }
 }
 
+.save-build-warning {
+    color: rgb(250, 94, 94);
+}
 .save-build-section {
     display: flex;
     justify-content: flex-end;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-end;
     gap: 12px;
     margin-top: 24px;
 }

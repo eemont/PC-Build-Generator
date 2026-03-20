@@ -11,56 +11,59 @@ export default function PartIssue({ issues }) {
     const hasError = issues.filter(issue => issue.severity == 'error').length > 0;
 
     function handleTooltip() {
+        // cursor tracking
     }
 
-    return (
-        <div className="issue-container">
-            <div 
-                className="issue-image"
-                onMouseMove={handleTooltip}
-                onMouseEnter={() => setShowTooltip(true)}
-                onMouseLeave={() => setShowTooltip(false)}
-            >
-                {
-                hasError
-                    ? <img src={errorImage} alt="Error Image"></img>
-                    : <img src={warningImage} alt="Warning Image"></img>
-                }
-            </div>
-
-
-            { showTooltip &&
-                <div className="issue-tooltip">
+    if (issues.length > 0) {
+        return (
+            <div className="issue-container">
+                <div 
+                    className="issue-image"
+                    onMouseMove={handleTooltip}
+                    onMouseEnter={() => setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                >
                     {
-                    <ul className="issues">
-                        { 
-                        issues.map((issue, i) => {
-                            const found = COMPONENT_SLOTS.findIndex(slot => slot.key == issue.sourceSlot);
-                            const slot = COMPONENT_SLOTS[found];
-                            console.log(issue.val)
-                            return (
-                                <li key={i}>
-                                    {issue.severity == 'error'
-                                        ? <b>Error - </b>
-                                        : <b>Warning - </b>
-                                    }
-                                    { slot?.label }: {issue.message}
-                                    { issue.message.indexOf(issue.val) == -1 &&
-                                        <i> (
-                                            {issue.val
-                                                ? `Unknown value: ${issue.val}`
-                                                : 'Value is empty'
-                                            }
-                                        ) </i>
-                                    }
-                                </li>
-                            )
-                        })
-                        }
-                    </ul>
+                    hasError
+                        ? <img src={errorImage} alt="Error Image"></img>
+                        : <img src={warningImage} alt="Warning Image"></img>
                     }
                 </div>
-            }
-        </div>
-    )
+
+
+                { showTooltip &&
+                    <div className="issue-tooltip">
+                        {
+                        <ul className="issues">
+                            { 
+                            issues.map((issue, i) => {
+                                const found = COMPONENT_SLOTS.findIndex(slot => slot.key == issue.sourceSlot);
+                                const slot = COMPONENT_SLOTS[found];
+                                console.log(issue.val)
+                                return (
+                                    <li key={i}>
+                                        {issue.severity == 'error'
+                                            ? <b>Error - </b>
+                                            : <b>Warning - </b>
+                                        }
+                                        { slot?.label }: {issue.message}
+                                        { issue.message.indexOf(issue.val) == -1 &&
+                                            <i> (
+                                                {issue.val
+                                                    ? `Unknown value: ${issue.val}`
+                                                    : 'Value is empty'
+                                                }
+                                            ) </i>
+                                        }
+                                    </li>
+                                )
+                            })
+                            }
+                        </ul>
+                        }
+                    </div>
+                }
+            </div>
+        )
+    }
 }

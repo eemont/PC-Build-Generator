@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import PartIssue from "../../components/PartIssue/PartIssue";
 import "./SavedBuilds.css";
 
 export default function SavedBuilds() {
@@ -119,6 +121,7 @@ export default function SavedBuilds() {
                                 <div className="view-parts-head">
                                     <span>Component</span>
                                     <span>Part</span>
+                                    <span>Compatible</span>
                                     <span>Price</span>
                                 </div>
 
@@ -140,6 +143,11 @@ export default function SavedBuilds() {
                                                 {selected.part.brand} {selected.part.model}
                                             </span>
                                         </div>
+                                        <span className="view-part-compatibility">
+                                            <PartIssue 
+                                                issues={selected.issues}
+                                            />
+                                        </span>
                                         <span className="view-part-price">
                                             ${selected.part.price?.toFixed(2)}
                                         </span>
