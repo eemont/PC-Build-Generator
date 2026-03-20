@@ -18,8 +18,8 @@ export class CPUCooler extends PCPart {
     sockets = [];
     height = 0;      // millimeters
 
-    constructor({ brand, model, price, img = "", link = "", fanSpeed, noiseLevel, radiatorSize, sockets = [], height = 0 }) {
-        super(brand, model, price, img, link);
+    constructor({ attrs, fanSpeed, noiseLevel, radiatorSize, sockets = [], height = 0 }) {
+        super(attrs);
         this.fanSpeed = fanSpeed;
         this.noiseLevel = noiseLevel;
         this.radiatorSize = radiatorSize;
@@ -31,11 +31,7 @@ export class CPUCooler extends PCPart {
         const attrs = super.fromRow(row);
 
         return new CPUCooler({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            img: attrs.img,
-            link: attrs.link,
+            attrs,
             fanSpeed: {
                 min: row.fan_speed_min ?? 0,
                 max: row.fan_speed_max ?? 0
@@ -55,14 +51,28 @@ export class CPUCooler extends PCPart {
 
         switch(targetPartClass.name) {
             case 'CPU':
-                if (this.sockets != []) constraints.push({ field: "sockets", op: "in", val: this.sockets})
+                constraints.push(this.makeConstraint({ 
+                    dbField: "sockets", 
+                    domainField: 'sockets',
+                    op: "in", 
+                    val: this.sockets,
+                    isMissing: this.sockets?.length == 0
+                }));
                 break;
+
             // needed but currently not supported, case table does not store height
             // case Case:
             //     if (this.height > 0) constraints.push({ field: 'height', op: 'gte', val: this.height });
             //     break;
+
             case 'Motherboard':
-                if (this.sockets != []) constraints.push({ field: "socket", op: "in", val: this.sockets })
+                constraints.push(this.makeConstraint({ 
+                    dbField: "socket", 
+                    domainField: 'socket',
+                    op: "in", 
+                    val: this.sockets,
+                    isMissing: this.sockets?.length === 0
+                }));
                 break;
             default:
                 return [];

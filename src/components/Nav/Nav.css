@@ -28,7 +28,7 @@
 
 .navbar .brand .img#pc {   
     margin-right: 10px;
-    mask: url('src/assets/pc-tower.webp') center/contain;
+    mask: url('/public/assets/pc-tower.webp') center/contain;
 }
 
 .navbar .links {
@@ -41,17 +41,17 @@
     margin-right: 8px;
 }
 .navbar .links .img#home {
-    mask: url('src/assets/home.webp') center/contain;
+    mask: url('/public/assets/home.webp') center/contain;
 }
 .navbar .links .img#build {
-    mask: url('src/assets/build.webp') center/contain;
+    mask: url('/public/assets/build.webp') center/contain;
 }
 .navbar .links .img#save { 
-    mask: url('src/assets/save.webp') center/contain;
+    mask: url('/public/assets/save.webp') center/contain;
 }
 .navbar .links .img#join {
     background: rgb(255, 255, 255);
-    mask: url('src/assets/join.webp') center/contain;
+    mask: url('/public/assets/join.webp') center/contain;
 }
 
 .navbar .links button.join-now {

@@ -1,5 +1,5 @@
 .custom-build-page {
-    max-width: 1100px;
+    max-width: 1300px;
     margin: 0 auto;
     padding: 50px 24px 100px;
 }
@@ -30,12 +30,12 @@
     flex-direction: column;
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 12px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .parts-table-head {
     display: grid;
-    grid-template-columns: 170px 1fr 110px 80px;
+    grid-template-columns: 170px 1fr 110px 50px 80px;
     padding: 12px 20px;
     background: rgba(255, 255, 255, 0.04);
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
@@ -48,7 +48,7 @@
 
 .part-row {
     display: grid;
-    grid-template-columns: 170px 1fr 110px 80px;
+    grid-template-columns: 170px 1fr 210px 110px 50px 80px;
     align-items: center;
     padding: 16px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -71,6 +71,12 @@
     display: flex;
     align-items: center;
     gap: 10px;
+}
+.col-compatibility-msg {
+    font-size: 0.7rem;
+    text-align: right;
+    font-style: italic;
+    margin-right: 10px;
 }
 
 .slot-icon {
@@ -340,7 +346,7 @@
 
 .picker-item {
     display: grid;
-    grid-template-columns: 56px 1fr auto auto;
+    grid-template-columns: 56px 1fr 0.2fr 0.2fr 0.5fr;
     align-items: center;
     gap: 14px;
     padding: 12px 16px;
@@ -534,4 +540,53 @@
     .build-name-input, .btn-save-build {
         width: 100%;
     }
+}
+
+.build-notes-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 24px;
+}
+ 
+.build-notes-label {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: rgb(200, 200, 200);
+}
+ 
+.build-notes-hint {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: rgb(110, 110, 110);
+}
+ 
+.build-notes-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: #fff;
+    font-size: 0.92rem;
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+ 
+.build-notes-input::placeholder {
+    color: rgb(90, 90, 90);
+    font-style: italic;
+}
+ 
+.build-notes-input:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+    background: rgba(160, 85, 255, 0.04);
 }

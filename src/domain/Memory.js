@@ -7,8 +7,8 @@ export class Memory extends PCPart {
     
     formFactor = null;
 
-    constructor({ brand, model, price, img = "", link = "", memoryType, capacityGB, errorCorrection, formFactor = null }) {
-        super(brand, model, price, img, link);
+    constructor({ attrs, memoryType, capacityGB, errorCorrection, formFactor = null }) {
+        super(attrs);
         this.memoryType = memoryType;
         this.capacityGB = capacityGB;
         this.errorCorrection = errorCorrection;
@@ -20,11 +20,7 @@ export class Memory extends PCPart {
         const attrs = super.fromRow(row);
 
         return new Memory({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            img: attrs.img,
-            link: attrs.link,
+            attrs,
             memoryType: row.memory_type?.toLowerCase?.() ?? row.memory_type ?? null,
             capacityGB: row.capacity_gb ?? 0,
             errorCorrection: row.error_correction?.toLowerCase?.() ?? row.error_correction ?? null,
@@ -37,8 +33,21 @@ export class Memory extends PCPart {
 
         switch(targetPartClass.name) {
             case 'Motherboard':
-                if (this.memoryType != null) constraints.push({ field: "memory_types", op: 'eq', val: this.memoryType });
-                if (this.capacityGB > 0) constraints.push({ field: "max_ram", op: "gte", val: this.capacityGB});
+                constraints.push(this.makeConstraint({ 
+                    dbField: "memory_types", 
+                    domainField: 'memoryTypes',
+                    op: 'eq', 
+                    val: this.memoryType,
+                    isMissing: this.memoryType == null
+                }));
+                constraints.push(this.makeConstraint({ 
+                    dbField: "max_ram", 
+                    domainField: 'maxRam',
+                    op: "gte", 
+                    val: this.capacityGB,
+                    isMissing: this.capacityGB === 0
+                }));
+
                 // if (this.errorCorrection != null) {
                 //     if (this.errorCorrection.indexOf("non") > 0) {
                 //         constraints.push({ field: "supports_ecc", op: 'eq', val: false })

@@ -7,8 +7,8 @@ export class Case extends PCPart {
     formFactors = [];
     maxGPULength = 0;   // millimeters
 
-    constructor({ brand, model, price, img = "", link = "", type, internalBays, formFactors = null, maxGPULength = null }) {
-        super(brand, model, price, img, link);
+    constructor({ attrs, type, internalBays, formFactors = [], maxGPULength = 0 }) {
+        super(attrs);
         this.type = type;
         this.internalBays = internalBays;
         
@@ -20,14 +20,10 @@ export class Case extends PCPart {
         const attrs = super.fromRow(row);
 
         return new Case({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            img: attrs.img,
-            link: attrs.link,
+            attrs,
             type: row.type?.toLowerCase?.() ?? row.type ?? null,
             internalBays: row.internal_bays ?? 0,
-            formFactors: row.form_factors ?? null,
+            formFactors: row.form_factors ?? [],
             maxGPULength: row.max_gpu_length ?? 0
         });
     }
@@ -38,10 +34,22 @@ export class Case extends PCPart {
         switch(targetPartClass.name) {
             case 'Motherboard':
             case 'PowerSupply':
-                if (this.formFactors != null) constraints.push({ field: "form_factor", op: 'in', val: this.formFactors });
+                constraints.push(this.makeConstraint({ 
+                    dbField: "form_factor",
+                    domainField: 'formFactor',
+                    op: 'in', 
+                    val: this.formFactors,
+                    isMissing: this.formFactors.length === 0,
+                }));
                 break;
             case 'GPU':
-                if (this.maxGPULength > 0) constraints.push({ field: 'length', op: 'lte', val: this.maxGPULength }); 
+                constraints.push(this.makeConstraint({ 
+                    dbField: 'length', 
+                    domainField: 'length',
+                    op: 'lte', 
+                    val: this.maxGPULength,
+                    isMissing: this.maxGPULength === 0
+                }));
                 break;
             default:
                 return [];

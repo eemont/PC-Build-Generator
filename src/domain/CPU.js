@@ -9,8 +9,8 @@ export class CPU extends PCPart {
     sockets = null;
     memoryType = null;
 
-    constructor({ brand, model, price, img = "", link = "", cores, tdp, integratedGraphics, multithreading, sockets = null, memoryType = null }) {
-        super(brand, model, price, img, link);
+    constructor({ attrs, cores, tdp, integratedGraphics, multithreading, sockets = null, memoryType = null }) {
+        super(attrs);
         this.cores = cores;
         this.tdp = tdp;
         this.integratedGraphics = integratedGraphics;
@@ -23,11 +23,7 @@ export class CPU extends PCPart {
         const attrs = super.fromRow(row);
 
         return new CPU({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            img: attrs.img,
-            link: attrs.link,
+            attrs,
             cores: row.cores,
             tdp: row.tdp,
             integratedGraphics: row.integrated_graphics?.toLowerCase?.() ?? row.integrated_graphics ?? null,
@@ -42,10 +38,22 @@ export class CPU extends PCPart {
 
         switch(targetPartClass.name) {
             case 'CPUCooler':
-                if (this.sockets != null) constraints.push({ field: "sockets", op: "contains", val: [this.sockets] })
+                constraints.push(this.makeConstraint({ 
+                    dbField: "sockets", 
+                    domainField: 'sockets',
+                    op: "contains", 
+                    val: [this.sockets],
+                    isMissing: this.sockets == null
+                }));
                 break;
             case 'Motherboard':
-                if (this.sockets != null) constraints.push({ field: "socket", op: "eq", val: this.sockets })
+                constraints.push(this.makeConstraint({ 
+                    dbField: "socket", 
+                    domainField: 'socket',
+                    op: "eq", 
+                    val: this.sockets,
+                    isMissing: this.sockets == null
+                }));
                 break;
             default:
                 return [];
