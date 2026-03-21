@@ -363,13 +363,18 @@ export default function CustomBuild() {
                                     Choose {COMPONENT_SLOTS.find(s => s.key === pickerOpen)?.label}
                                 </h2>
 
-                                <label htmlFor="ignore-compatibility">Ignore Compatibility?</label>
-                                <input 
-                                    name="ignore-compatibility" 
-                                    type="checkbox" 
-                                    onChange={handleCheckboxChange} 
-                                    checked = {ignoreCompatibility}
-                                />
+                                <div className="separator"></div>
+
+                                <div className="ignore-compatibility-box">
+                                    <input
+                                        name="ignore-compatibility"
+                                        id="ignore-compatibility"
+                                        type="checkbox"
+                                        onChange={handleCheckboxChange}
+                                        checked = {ignoreCompatibility}
+                                    />
+                                    <label htmlFor="ignore-compatibility">Ignore Compatibility</label>
+                                </div>
                             </div>
 
                             <button className="picker-close" onClick={() => setPickerOpen(null)}>✕</button>
