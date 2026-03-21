@@ -11,8 +11,6 @@ export default function SavedBuilds() {
     });
     const [viewingBuild, setViewingBuild] = useState(null);
 
-    console.log(savedBuilds);
-
     const navigate = useNavigate();
 
     useEffect(() => {
