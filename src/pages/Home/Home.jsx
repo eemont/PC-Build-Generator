@@ -49,6 +49,13 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
+
+                <div className="home-faq-cta">
+                    <p>Have questions?</p>
+                    <Link to="/faq">
+                        <button className="faq-btn">View FAQ</button>
+                    </Link>
+                </div>
             </div>
         </div>
     )

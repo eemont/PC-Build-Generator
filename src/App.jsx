@@ -8,6 +8,7 @@ import Home from "./pages/Home/Home";
 import GenerateBuild from "./pages/GenerateBuild/GenerateBuild";
 import CustomBuild from "./pages/CustomBuild/CustomBuild";
 import SavedBuilds from "./pages/SavedBuilds/SavedBuilds";
+import FAQ from "./pages/FAQ/FAQ";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/reset" element={<Reset />} />
         <Route path="/build" element={<GenerateBuild />} />
         <Route path="/custom-build" element={<CustomBuild />} />
+        <Route path="/faq" element={<FAQ />} />
 
         <Route
           path="/saved"
