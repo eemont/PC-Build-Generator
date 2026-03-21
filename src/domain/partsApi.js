@@ -107,6 +107,7 @@ export function measurePartCompatibility(part, selectedParts) {
   
   for (const [slot, selected] of Object.entries(selectedParts)) {
     const constraints = selected.part.getCompatibilityFields(part.constructor);
+    console.log(selected);
 
     constraints.forEach(constraint => {
       const predicted = constraint.val;
@@ -124,7 +125,7 @@ export function measurePartCompatibility(part, selectedParts) {
         const handler = operatorHandler[constraint.op];
 
         failed = !handler.evaluate(actual, predicted);
-        
+
         // console.group(slot);
         // console.log('actual:', actual);
         // console.log(constraint.op)
