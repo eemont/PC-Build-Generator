@@ -39,7 +39,6 @@ export default function PartIssue({ issues }) {
                             issues.map((issue, i) => {
                                 const found = COMPONENT_SLOTS.findIndex(slot => slot.key == issue.sourceSlot);
                                 const slot = COMPONENT_SLOTS[found];
-                                console.log(issue.val)
                                 return (
                                     <li key={i}>
                                         {issue.severity == 'error'
@@ -50,8 +49,8 @@ export default function PartIssue({ issues }) {
                                         { issue.message.indexOf(issue.val) == -1 &&
                                             <i> (
                                                 {issue.val
-                                                    ? `Unknown value: ${issue.val}`
-                                                    : 'Value is empty'
+                                                    ? `Value unknown for: ${issue.val}`
+                                                    : 'Currently untracked'
                                                 }
                                             ) </i>
                                         }

@@ -137,9 +137,11 @@ export default function CustomBuild() {
 
     const selectPart = (slotKey, part) => {
 
-        let newSelectedParts = {
-            ...selectedParts,
-            [slotKey]: { part }
+        let newSelectedParts = {...selectedParts}
+        if (part != null) {
+            newSelectedParts[slotKey] = { part }
+        } else {
+            delete newSelectedParts[slotKey];
         }
 
         // Refresh compatibility issues
@@ -151,14 +153,6 @@ export default function CustomBuild() {
         setPickerOpen(null);
     };
     console.log(selectedParts);
-
-    const removePart = (slotKey) => {
-        setSelectedParts(prev => {
-            const copy = { ...prev };
-            delete copy[slotKey];
-            return copy;
-        });
-    };
 
     const totalPrice = Object.values(selectedParts).reduce((sum, selected) => sum + (selected.part.price || 0), 0);
     const partsCount = Object.keys(selectedParts).length;
@@ -190,7 +184,7 @@ export default function CustomBuild() {
             dateSaved: new Date().toLocaleDateString()
         };
 
-        const existingBuilds = JSON.parse(localStorage.getItem("savedBuilds") || "[]");
+        const existingBuilds = JSON.parse(localStorage.getItem("savedBuilds") || "[]"); 
 
         let updatedBuilds;
         if (editId) {
@@ -263,10 +257,10 @@ export default function CustomBuild() {
                             </div>
 
                             <div className="col-compatibility-msg">
-                                {!selected.compatible &&
+                                {selected && !selected?.compatible &&
                                     <p>
                                         {
-                                        selected.issues.filter(issue => issue.severity == 'error').length > 0
+                                        selected?.issues?.filter(issue => issue.severity == 'error')?.length > 0
                                             ? <span>This part has severe compatibility errors</span>
                                             : <span>This part may not be compatible</span>
                                         }
@@ -277,7 +271,7 @@ export default function CustomBuild() {
                             <div className="col-compatibility">
                                 <span>
                                     <PartIssue
-                                        issues={ selected.issues }
+                                        issues={ selected?.issues || [] }
                                     ></PartIssue>
                                 </span>
                             </div>
@@ -300,7 +294,7 @@ export default function CustomBuild() {
                                         </button>
                                         <button
                                             className="btn-remove"
-                                            onClick={() => removePart(slot.key)}
+                                            onClick={() => selectPart(slot.key, null)}
                                             title="Remove"
                                         >
                                             ✕
