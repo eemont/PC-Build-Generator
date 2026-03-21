@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "./lib/supabaseClient";
 
 export default function Auth() {
-  const [mode, setMode] = useState("signin"); // "signin" | "signup"
+  const [mode, setMode] = useState("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -69,14 +69,39 @@ export default function Auth() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}>
-      <div style={{ width: "100%", maxWidth: 420, border: "1px solid #ddd", borderRadius: 12, padding: 20 }}>
-        <h2 style={{ marginTop: 0 }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "grid",
+        placeItems: "center",
+        padding: "16px",
+        background: "#0f0f14",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "420px",
+          border: "1px solid #ddd",
+          borderRadius: "12px",
+          padding: "clamp(16px, 4vw, 24px)",
+          background: "#0f0f14",
+          boxSizing: "border-box",
+        }}
+      >
+        <h2
+          style={{
+            marginTop: 0,
+            marginBottom: "16px",
+            fontSize: "clamp(1.4rem, 4vw, 1.8rem)",
+            lineHeight: 1.2,
+          }}
+        >
           {mode === "signup" ? "Create an account" : "Sign in"}
         </h2>
 
         <form onSubmit={handleSubmit} style={{ display: "grid", gap: 12 }}>
-          <label style={{ display: "grid", gap: 6 }}>
+          <label style={{ display: "grid", gap: 6, fontSize: "0.95rem" }}>
             Email
             <input
               type="email"
@@ -84,11 +109,18 @@ export default function Auth() {
               autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={{ padding: 10, borderRadius: 8, border: "1px solid #ccc" }}
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: 8,
+                border: "1px solid #ccc",
+                fontSize: "16px",
+                boxSizing: "border-box",
+              }}
             />
           </label>
 
-          <label style={{ display: "grid", gap: 6 }}>
+          <label style={{ display: "grid", gap: 6, fontSize: "0.95rem" }}>
             Password
             <input
               type="password"
@@ -97,7 +129,14 @@ export default function Auth() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              style={{ padding: 10, borderRadius: 8, border: "1px solid #ccc" }}
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: 8,
+                border: "1px solid #ccc",
+                fontSize: "16px",
+                boxSizing: "border-box",
+              }}
             />
           </label>
 
@@ -105,13 +144,15 @@ export default function Auth() {
             type="submit"
             disabled={loading}
             style={{
-              padding: 10,
+              width: "100%",
+              padding: "12px",
               borderRadius: 8,
               border: "none",
               cursor: "pointer",
               background: "rgb(160, 85, 255)",
               color: "#fff",
-              fontWeight: "600",
+              fontWeight: 600,
+              fontSize: "1rem",
             }}
           >
             {loading ? "Please wait..." : mode === "signup" ? "Sign up" : "Sign in"}
@@ -123,12 +164,14 @@ export default function Auth() {
               onClick={handleResetPassword}
               disabled={loading}
               style={{
-                padding: 10,
+                width: "100%",
+                padding: "12px",
                 borderRadius: 8,
-                border: "none",
-                background: "rgb(160, 85, 255)",
+                border: "1px solid #ddd",
+                background: "#0f0f14",
                 color: "#fff",
                 cursor: "pointer",
+                fontSize: "1rem",
               }}
             >
               Forgot password?
@@ -136,7 +179,18 @@ export default function Auth() {
           )}
         </form>
 
-        {message && <p style={{ marginTop: 12 }}>{message}</p>}
+        {message && (
+          <p
+            style={{
+              marginTop: 12,
+              fontSize: "0.95rem",
+              lineHeight: 1.4,
+              wordBreak: "break-word",
+            }}
+          >
+            {message}
+          </p>
+        )}
 
         <hr style={{ margin: "16px 0" }} />
 
@@ -148,12 +202,13 @@ export default function Auth() {
           }}
           style={{
             width: "100%",
-            padding: 10,
+            padding: "12px",
             borderRadius: 8,
             border: "none",
             background: "rgb(160, 85, 255)",
             cursor: "pointer",
-            color: "#fff"
+            color: "#fff",
+            fontSize: "1rem",
           }}
         >
           {mode === "signup"
