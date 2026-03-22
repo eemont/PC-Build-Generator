@@ -28,10 +28,11 @@ export class Memory extends PCPart {
         });
     }
 
-    getCompatibilityFields(targetPartClass) {
+    getCompatibilityFields(targetPart) {
         const constraints = [];
+        const partClass = targetPart.constructor.name;
 
-        switch(targetPartClass.name) {
+        switch(partClass.name) {
             case 'Motherboard':
                 constraints.push(this.makeConstraint({ 
                     dbField: "memory_types", 

@@ -52,10 +52,11 @@ export class Motherboard extends PCPart {
         });
     }
 
-    getCompatibilityFields(targetPartClass) {
+    getCompatibilityFields(targetPart) {
         const constraints = []; 
+        const partClass = targetPart.constructor.name;
 
-        switch(targetPartClass.name) {
+        switch(partClass.name) {
             case 'Case':
                 constraints.push(this.makeConstraint({ 
                     dbField: 'form_factors', 

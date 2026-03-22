@@ -77,7 +77,7 @@ export async function findParts({
   // Handle queries added on for compatibility
   if (!ignoreCompatibility) {
      for (const [, selected] of Object.entries(selectedParts)) {
-      const constraints = selected?.part?.getCompatibilityFields(PartClass);
+      const constraints = selected?.part?.getCompatibilityFields(selected?.part);
       // console.log(`found constraints for ${selected.part.constructor.name}`, constraints);
 
       constraints?.forEach(constraint => {
@@ -106,7 +106,7 @@ export function measurePartCompatibility(part, selectedParts) {
   const issues = [];
   
   for (const [slot, selected] of Object.entries(selectedParts)) {
-    const constraints = selected.part.getCompatibilityFields(part.constructor);
+    const constraints = selected.part.getCompatibilityFields(part);
     console.log(selected);
 
     constraints.forEach(constraint => {

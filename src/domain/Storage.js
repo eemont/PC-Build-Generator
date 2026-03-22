@@ -31,10 +31,11 @@ export class Storage extends PCPart {
         });
     }
 
-    getCompatibilityFields(targetPartClass) {
+    getCompatibilityFields(targetPart) {
         const constraints = [];
+        const partClass = targetPart.constructor.name;
 
-        switch(targetPartClass.name) {
+        switch(partClass.name) {
             case 'Motherboard': {
                 const slotTypeArr = this.connectionType
                     ? this.connectionType.includes('m.2') 

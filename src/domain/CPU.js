@@ -33,10 +33,11 @@ export class CPU extends PCPart {
         });
     }
 
-    getCompatibilityFields(targetPartClass) {
+    getCompatibilityFields(targetPart) {
         const constraints = [];
+        const partClass = targetPart.constructor.name;
 
-        switch(targetPartClass.name) {
+        switch(partClass) {
             case 'CPUCooler':
                 constraints.push(this.makeConstraint({ 
                     dbField: "sockets", 

@@ -42,10 +42,11 @@ export class GPU extends PCPart {
         });
     }
 
-    getCompatibilityFields(targetPartClass) {
+    getCompatibilityFields(targetPart) {
         const constraints = [];
+        const partClass = targetPart.constructor.name;
 
-        switch(targetPartClass.name) {
+        switch(partClass.name) {
             case 'Case':
                 constraints.push(this.makeConstraint({ 
                     dbField: 'max_gpu_length', 
