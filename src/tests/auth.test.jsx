@@ -1,63 +1,89 @@
-import React from "react";
-import { describe, it, expect, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import Auth from "../Auth";
 
-// IMPORTANT: this must be imported BEFORE importing components that use supabase
-import "./mocks/mockSupabaseModule";
-import { supabaseMock } from "./mocks/mockSupabaseModule";
+vi.mock("../lib/supabaseClient", () => ({
+  supabase: {
+    auth: {
+      signInWithPassword: vi.fn(),
+      signUp: vi.fn(),
+      resetPasswordForEmail: vi.fn(),
+    },
+  },
+}));
 
-// Adjust import to your Auth component path:
-import Auth from "../Auth.jsx";
+import { supabase } from "../lib/supabaseClient";
 
 describe("Auth (Supabase)", () => {
   beforeEach(() => {
-    supabaseMock.auth.signInWithPassword.mockReset();
-    supabaseMock.auth.signUp.mockReset();
+    vi.clearAllMocks();
   });
 
-it("renders login UI (basic sanity)", () => {
-  render(<Auth />);
-  expect(screen.getByRole("heading", { name: /sign in/i })).toBeInTheDocument();
-});
+  it("renders login UI (basic sanity)", () => {
+    render(
+      <MemoryRouter>
+        <Auth />
+      </MemoryRouter>
+    );
 
+    expect(
+      screen.getByRole("heading", { name: /sign in/i })
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+  });
 
   it("submits login and calls supabase.auth.signInWithPassword", async () => {
-    const user = userEvent.setup();
+    supabase.auth.signInWithPassword.mockResolvedValue({ error: null });
 
-    supabaseMock.auth.signInWithPassword.mockResolvedValue({
-      data: { session: { user: { id: "user_1" } } },
-      error: null,
+    render(
+      <MemoryRouter>
+        <Auth />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: "test@example.com" },
     });
 
-    render(<Auth />);
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: "password123" },
+    });
 
-    // Adjust selectors to match your form fields:
-    await user.type(screen.getByLabelText(/email/i), "test.user01.pcbuild@gmail.com");
-    await user.type(screen.getByLabelText(/password/i), "PcBuild@2026!");
-    await user.click(screen.getByRole("button", { name: /sign in|login/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^sign in$/i }));
 
-    expect(supabaseMock.auth.signInWithPassword).toHaveBeenCalledWith({
-      email: "test.user01.pcbuild@gmail.com",
-      password: "PcBuild@2026!",
+    await waitFor(() => {
+      expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
+        email: "test@example.com",
+        password: "password123",
+      });
     });
   });
 
   it("shows an error message if login fails", async () => {
-    const user = userEvent.setup();
-
-    supabaseMock.auth.signInWithPassword.mockResolvedValue({
-      data: { session: null },
+    supabase.auth.signInWithPassword.mockResolvedValue({
       error: { message: "Invalid login credentials" },
     });
 
-    render(<Auth />);
+    render(
+      <MemoryRouter>
+        <Auth />
+      </MemoryRouter>
+    );
 
-    await user.type(screen.getByLabelText(/email/i), "test.user01.pcbuild@gmail.com");
-    await user.type(screen.getByLabelText(/password/i), "WrongPassword123!");
-    await user.click(screen.getByRole("button", { name: /sign in|login/i }));
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: "test@example.com" },
+    });
 
-    // Adjust to match how you display errors:
-    expect(await screen.findByText(/invalid login credentials/i)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: "wrongpass" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /^sign in$/i }));
+
+    expect(
+      await screen.findByText(/invalid login credentials/i)
+    ).toBeInTheDocument();
   });
 });

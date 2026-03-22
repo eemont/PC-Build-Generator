@@ -1,67 +1,114 @@
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabaseClient";
 import "./Nav.css";
 
-
 export default function Nav() {
+  const [session, setSession] = useState(null);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const links = document.querySelectorAll(".navbar .links a");
+  const [menuOpen, setMenuOpen] = useState(false);
 
-        const joinButton = document.querySelector(".navbar .links #join")
-        let computedStyles = window.getComputedStyle(joinButton);
-        const primaryPurple = computedStyles.getPropertyValue("--primary-purple");
+  useEffect(() => {
+    async function loadSession() {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
+    }
 
-        const h2 = document.querySelector(".navbar h2");
-        computedStyles = window.getComputedStyle(h2);
-        const grayText = computedStyles.getPropertyValue("color");
+    loadSession();
 
-        links.forEach(link => {
-            link.addEventListener('mouseenter', (e) => {
-                const img = e.target.querySelector('.img');
-                img.style.background = primaryPurple;
-            });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+    });
 
-            link.addEventListener('mouseleave', (e) => {
-                const img = e.target.querySelector('.img');
-                img.style.background = grayText;
-            })
-        });
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
-    }, []);
+  useEffect(() => {
+    const links = document.querySelectorAll(".navbar .links a, .navbar .links button");
+    const joinButton = document.querySelector(".navbar .links #join");
 
+    if (!joinButton) return;
 
-    return (
-            <nav className="navbar">
-                <Link to="/" className="brand">
-                    <div className="img" id="pc" />
-                    <h2>PC Build Generator</h2>
-                </Link>
-                <div className="links">
-                    <Link to="/">
-                        <div className="img" id="home" />
-                        <p>Home</p>
-                    </Link>
-                    <Link to="/build">
-                        <div className="img" id="build" />
-                        <p>Build Your PC</p>
-                    </Link>
-                    <Link to="/saved">
-                        <div className="img" id="save" />
-                        <p>Saved Builds</p>
-                    </Link>
-                    <Link to="/contact">
-                        <div className="img" id="contact" />
-                        <p>Contact Us</p>
-                    </Link>
-                    <Link to="/Auth">
-                        <button className='join-now'>
-                            <div className="img" id="join" />
-                            <p>Join Now</p>
-                        </button>
-                    </Link>
-                </div>
-            </nav>
-    )
+    let computedStyles = window.getComputedStyle(joinButton);
+    const primaryPurple = computedStyles.getPropertyValue("--primary-purple");
+
+    const h2 = document.querySelector(".navbar h2");
+    computedStyles = window.getComputedStyle(h2);
+    const grayText = computedStyles.getPropertyValue("color");
+
+    links.forEach((link) => {
+      link.addEventListener("mouseenter", (e) => {
+        const img = e.currentTarget.querySelector(".img");
+        if (img) img.style.background = primaryPurple;
+      });
+
+      link.addEventListener("mouseleave", (e) => {
+        const img = e.currentTarget.querySelector(".img");
+        if (img) img.style.background = grayText;
+      });
+    });
+  }, [session]);
+
+  async function handleSignOut() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error signing out:", error);
+      return;
+    }
+
+    navigate("/");
+  }
+
+  return (
+    <div className="navbar">
+        <Link to="/" className="brand">
+        <div className="img" id="pc"></div>
+        <h2>PC Build Generator</h2>
+        </Link>
+
+        <button
+  className="menu-toggle"
+  onClick={() => setMenuOpen(!menuOpen)}
+>
+  ☰
+</button>
+
+      <div className={`links ${menuOpen ? "open" : ""}`}>
+        <Link to="/">
+          <div className="img" id="home"></div>
+          <span>Home</span>
+        </Link>
+
+        <Link to="/build">
+          <div className="img" id="build"></div>
+          <span>Build Your PC</span>
+        </Link>
+
+        {session && (
+        <Link to="/saved">
+            <div className="img" id="save"></div>
+            <span>Saved Builds</span>
+        </Link>
+        )}
+
+        {session ? (
+            <button
+            id="join"
+            className="sign-out-btn"
+            type="button"
+            onClick={handleSignOut}
+            >
+            <div className="img" id="join"></div>
+            <span>Sign Out</span>
+            </button>
+        ) : (
+            <Link to="/login" id="join" className="join-now">
+            <div className="img" id="join"></div>
+            <span>Join Now</span>
+            </Link>
+        )}
+      </div>
+    </div>
+  );
 }

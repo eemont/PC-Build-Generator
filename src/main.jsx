@@ -1,28 +1,13 @@
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
-import './index.css'
-import App from './App.jsx'
-import Nav from './components/Nav/Nav.jsx'
-import Home from "./pages/Home/Home";
-import GenerateBuild from "./pages/GenerateBuild/GenerateBuild";
-import CustomBuild from "./pages/CustomBuild/CustomBuild";
-import SavedBuilds from "./pages/SavedBuilds/SavedBuilds";
-import Contact from "./pages/Contact/Contact";
-import Reset from "./reset";
+import "./index.css";
+import App from "./App.jsx";
+import Nav from "./components/Nav/Nav.jsx";
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Nav />
-
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/build" element={<GenerateBuild />} />
-      <Route path="/custom-build" element={<CustomBuild />} />
-      <Route path="/saved" element={<SavedBuilds />}/>
-      <Route path="/Auth" element={<App />} />
-      <Route path="/reset" element={<Reset />} />
-      <Route path="/contact" element={<Contact />} />
-    </Routes>
-  </BrowserRouter>,
-)
+    <App />
+  </BrowserRouter>
+);
