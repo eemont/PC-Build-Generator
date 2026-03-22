@@ -99,6 +99,7 @@ export default function GenerateBuild() {
                         name: `$${budget.toLocaleString()} Build`,
                         parts: selectedParts,
                         totalPrice,
+                        generatedBudget: budget,
                         dateSaved: new Date().toLocaleDateString(),
                     },
                 },

@@ -74,6 +74,7 @@ export default function CustomBuild() {
     const [buildName, setBuildName] = useState(editBuild ? editBuild.name : "");
     const [buildNotes, setBuildNotes] = useState(editBuild ? (editBuild.notes || "") : "");
     const editId = editBuild ? editBuild.id : null;
+    const generatedBudget = editBuild?.generatedBudget ?? null;
 
     const [pickerOpen, setPickerOpen] = useState(null);
     const [availableParts, setAvailableParts] = useState([]);
@@ -245,6 +246,35 @@ export default function CustomBuild() {
                 <div className="totals-info">
                     <span className="totals-count">{partsCount} of {COMPONENT_SLOTS.length} parts selected</span>
                 </div>
+
+                {generatedBudget && (
+                    <div className="budget-usage">
+                        <div className="budget-usage-labels">
+                            <span className="budget-usage-text">Budget Used</span>
+                            <span className="budget-usage-fraction">
+                                ${totalPrice.toFixed(2)}
+                                <span className="budget-usage-of"> / ${generatedBudget.toLocaleString()}</span>
+                            </span>
+                        </div>
+                        <div className="budget-bar-track">
+                            <div
+                                className="budget-bar-fill"
+                                style={{
+                                    width: `${Math.min((totalPrice / generatedBudget) * 100, 100)}%`,
+                                    background: totalPrice > generatedBudget
+                                        ? '#ff5555'
+                                        : totalPrice / generatedBudget > 0.9
+                                        ? '#f0a500'
+                                        : 'var(--primary-purple)',
+                                }}
+                            />
+                        </div>
+                        <span className="budget-usage-pct">
+                            {Math.round((totalPrice / generatedBudget) * 100)}% used
+                        </span>
+                    </div>
+                )}
+
                 <div className="totals-price">
                     <span className="totals-label">Estimated Total</span>
                     <span className="totals-value">${totalPrice.toFixed(2)}</span>
