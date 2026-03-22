@@ -296,9 +296,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 24px;
+    padding: 20px 20px; /* ✅ consistent spacing */
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     flex-shrink: 0;
+    position: relative;
 }
 
 .picker-header h2 {
@@ -307,24 +308,32 @@
     color: #fff;
 }
 
+/* 🔥 FIXED CLOSE BUTTON */
 .picker-close {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    border-radius: 10px;
+
     color: rgb(150, 150, 150);
     font-size: 1rem;
+
     cursor: pointer;
     transition: all 0.15s;
-    padding: 0;
+
+    flex-shrink: 0; /* ✅ prevents squishing */
 }
+
 .picker-close:hover {
     border-color: #ff5555;
     color: #ff5555;
+    background: rgba(255, 85, 85, 0.08);
 }
 
 .picker-list {
@@ -611,4 +620,174 @@
     outline: none;
     border-color: var(--primary-purple);
     background: rgba(160, 85, 255, 0.04);
+}
+
+@media (max-width: 768px) {
+    .selected-part-info {
+        align-items: flex-start;
+    }
+
+    .part-thumb {
+        width: 52px;
+        height: 52px;
+    }
+
+    .part-details {
+        gap: 4px;
+    }
+
+    .part-brand-model {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        line-height: 1.35;
+    }
+
+    .part-specs {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        line-height: 1.35;
+    }
+
+    .col-selection {
+        width: 100%;
+    }
+
+    .btn-pick {
+        width: 100%;
+        text-align: center;
+        padding: 12px 16px;
+    }
+
+    .action-buttons {
+        gap: 8px;
+    }
+
+    .btn-change,
+    .btn-remove {
+        width: 40px;
+        height: 40px;
+        font-size: 0.95rem;
+    }
+
+    .picker-item {
+        grid-template-columns: 52px 1fr;
+        grid-template-areas:
+            "image info"
+            "image meta";
+        align-items: start;
+        gap: 10px 12px;
+        padding: 14px 12px;
+    }
+
+    .picker-item-img {
+        grid-area: image;
+        width: 52px;
+        height: 52px;
+    }
+
+    .picker-item-info {
+        grid-area: info;
+    }
+
+    .picker-item-name {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        line-height: 1.35;
+    }
+
+    .picker-item-specs {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        line-height: 1.35;
+    }
+
+    .picker-item-meta {
+        grid-area: meta;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .picker-item-price {
+        font-size: 0.9rem;
+    }
+
+    .btn-add-part {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        padding: 8px 14px;
+    }
+}
+
+
+
+
+@media (max-width: 500px) {
+    .part-row {
+        padding: 14px;
+    }
+
+    .selected-part-info {
+        gap: 10px;
+    }
+
+    .part-thumb {
+        width: 48px;
+        height: 48px;
+    }
+
+    .picker-modal {
+        width: 100%;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-radius: 0;
+    }
+
+@media (max-width: 500px) {
+    .picker-header {
+        padding: 32px 50px;
+    }
+
+    .picker-close {
+        width: 42px;
+        height: 42px;
+        font-size: 1.1rem;
+        
+    }
+}
+
+    .picker-list {
+        padding: 8px;
+        padding-left: 32px;
+    }
+
+    .picker-item {
+        padding: 12px 10px;
+    }
+
+    .picker-item-meta {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .btn-add-part {
+        font-size: 0.75rem;
+        padding: 1px 2px;
+        /* border-width: 2px 32px; */
+    }
+
+    .picker-item.selected .btn-add-part {
+        font-size: 0.75rem;
+        padding: 1px 2px;
+        border-width: 2px 32px;
+    }
 }
