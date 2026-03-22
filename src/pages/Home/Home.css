@@ -5,6 +5,7 @@
     height: 100%;
     object-fit: cover;
     z-index: -1;
+    pointer-events: none;
 }
 
 .home-page {
@@ -225,14 +226,4 @@
     .how-it-works .step {
         padding: 18px 14px;
     }
-
-    .video-bg {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-    pointer-events: none;
-}
 }
