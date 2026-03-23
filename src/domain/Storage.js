@@ -21,17 +21,29 @@ export class Storage extends PCPart {
     static fromRow(row) {
         const attrs = super.fromRow(row);
 
+        // Handle capacity conversion from bytes to GB
+        let capacity = 0;
+        if (row.capacity && typeof row.capacity === 'object' && row.capacity.total) {
+            capacity = Math.round(row.capacity.total / (1000 * 1000 * 1000)); // Convert bytes to GB
+        } else if (typeof row.capacity === 'number') {
+            capacity = row.capacity;
+        }
+
         return new Storage({
             brand: attrs.brand,
             model: attrs.model,
             price: attrs.price,
             img: attrs.img,
             link: attrs.link,
-            type: row.type?.toLowerCase?.() ?? row.type ?? null,
-            capacity: row.capacity ?? 0,
-            formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? null,
-            connectionType: row.connection_type?.toLowerCase?.() ?? row.connection_type ?? null,
+            type: row.storage_type?.toLowerCase?.() ?? row.storage_type ?? null,
+            capacity: capacity,
+            formFactor: row.form_factor ?? null, // Preserve original case
+            connectionType: row.interface?.toLowerCase?.() ?? row.interface ?? null,
             nvme: row.nvme ?? null
         });
+    }
+
+    static decode(row) {
+        return this.fromRow(row);
     }
 }

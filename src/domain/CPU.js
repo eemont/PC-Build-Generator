@@ -36,4 +36,8 @@ export class CPU extends PCPart {
             memoryType: row.memory_type?.toLowerCase?.() ?? row.memory_type ?? null
         });
     }
+
+    static decode(row) {
+        return this.fromRow(row);
+    }
 }

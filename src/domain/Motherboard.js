@@ -35,6 +35,14 @@ export class Motherboard extends PCPart {
     static fromRow(row) {
         const attrs = super.fromRow(row);
 
+        // Handle max RAM conversion from bytes to GB
+        let maxRam = 0;
+        if (row.max_ram && typeof row.max_ram === 'object' && row.max_ram.total) {
+            maxRam = Math.round(row.max_ram.total / (1024 * 1024 * 1024)); // Convert bytes to GB
+        } else if (typeof row.max_ram === 'number') {
+            maxRam = row.max_ram;
+        }
+
         return new Motherboard({
             brand: attrs.brand,
             model: attrs.model,
@@ -44,7 +52,7 @@ export class Motherboard extends PCPart {
             socket: row.socket?.toLowerCase?.() ?? row.socket ?? "",
             formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? "",
             ramSlots: row.ram_slots ?? 0,
-            maxRam: row.max_ram ?? 0,
+            maxRam: maxRam,
             memoryTypes: row.memory_types ?? null,
             chipsets: row.chipsets ?? null,
             m2Slots: row.m2_slots ?? 0,
@@ -54,5 +62,9 @@ export class Motherboard extends PCPart {
             supportsECC: row.supports_ecc ?? false,
             maxMemorySpeed: row.max_memory_speed ?? 0
         });
+    }
+
+    static decode(row) {
+        return this.fromRow(row);
     }
 }
