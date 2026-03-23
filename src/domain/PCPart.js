@@ -1,4 +1,4 @@
-import { operatorHandler } from "./partsApi";
+import { operatorHandler } from "../utils/operatorHandler";
 
 export class PCPart {
     id = null;

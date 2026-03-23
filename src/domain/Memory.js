@@ -19,10 +19,19 @@ export class Memory extends PCPart {
     static fromRow(row) {
         const attrs = super.fromRow(row);
 
+        // Handle capacity conversion from bytes to GB
+        let capacityGB = 0;
+        if (row.module_size && typeof row.module_size === 'object' && row.module_size.total) {
+            const moduleCapacityGB = Math.round(row.module_size.total / (1024 * 1024 * 1024)); // Convert bytes to GB
+            capacityGB = (row.number_of_modules || 1) * moduleCapacityGB;
+        } else if (row.capacity_gb) {
+            capacityGB = row.capacity_gb;
+        }
+
         return new Memory({
             attrs,
             memoryType: row.memory_type?.toLowerCase?.() ?? row.memory_type ?? null,
-            capacityGB: row.capacity_gb ?? 0,
+            capacityGB,
             errorCorrection: row.error_correction?.toLowerCase?.() ?? row.error_correction ?? null,
             formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? null
         });
