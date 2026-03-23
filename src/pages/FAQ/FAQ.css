@@ -1,0 +1,131 @@
+.faq-page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+}
+
+.faq-header {
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.faq-back {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    font-size: 0.88rem;
+    color: rgb(140, 140, 140);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.faq-back:hover {
+    color: var(--primary-purple);
+}
+
+.faq-header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+}
+
+.faq-subtitle {
+    color: rgb(150, 150, 150);
+    font-size: 1rem;
+}
+
+/* Accordion items */
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faq-item {
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.faq-item[open] {
+    border-color: rgba(160, 85, 255, 0.35);
+    background: rgba(160, 85, 255, 0.04);
+}
+
+.faq-question {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgb(220, 220, 220);
+    cursor: pointer;
+    user-select: none;
+    gap: 12px;
+}
+
+.faq-question::-webkit-details-marker {
+    display: none;
+}
+
+.faq-question::after {
+    content: "+";
+    flex-shrink: 0;
+    font-size: 1.3rem;
+    color: var(--primary-purple);
+    transition: transform 0.2s;
+}
+
+.faq-item[open] .faq-question::after {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    padding: 0 22px 20px;
+    color: rgb(160, 160, 160);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Footer CTA */
+.faq-footer {
+    margin-top: 60px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.faq-footer p {
+    color: rgb(140, 140, 140);
+    font-size: 0.95rem;
+}
+
+.faq-footer button {
+    background: var(--primary-purple);
+    color: white;
+    border: none;
+    padding: 10px 28px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.faq-footer button:hover {
+    translate: 0 -2px;
+    box-shadow: 0 6px 20px rgba(160, 85, 255, 0.35);
+}
