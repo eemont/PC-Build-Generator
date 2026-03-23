@@ -85,6 +85,11 @@ export default function Nav() {
           <span>Build Your PC</span>
         </Link>
 
+        <Link to="/contact">
+          <div className="img" id="contact"></div>
+          <span>Contact Us</span>
+        </Link>
+
         {session && (
         <Link to="/saved">
             <div className="img" id="save"></div>
