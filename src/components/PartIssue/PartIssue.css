@@ -1,0 +1,29 @@
+.issue-container {
+    position: relative;
+}
+
+.issue-image {
+    display: flex;
+    /* justify-content: center; */
+    /* outline: solid red; */
+}
+.issue-image img {
+    width: 40%;
+    max-width: 80px;
+}
+
+.issue-tooltip {
+    background: #18181D;
+    border: 0.5px solid #c89dff;
+    border-radius: 30px;
+    position: absolute;
+    pointer-events: none;
+    left: -400px;
+    min-width: 450px;
+    width: 100%;
+    z-index: 1000;
+}
+
+.issue-tooltip .issues {
+    width: 80%;
+}

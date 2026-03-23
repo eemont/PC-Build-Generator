@@ -27,8 +27,9 @@
   flex-shrink: 0;
 }
 
-.navbar .brand .img#pc {
-  mask: url("src/assets/pc-tower.webp") center/contain no-repeat;
+.navbar .brand .img#pc {   
+    margin-right: 10px;
+    mask: url('/assets/pc-tower.webp') center/contain;
 }
 
 .navbar .links {
@@ -54,20 +55,19 @@
 }
 
 .navbar .links .img#home {
-  mask: url("src/assets/home.webp") center/contain no-repeat;
+    mask: url('/assets/home.webp') center/contain;
 }
 
 .navbar .links .img#build {
-  mask: url("src/assets/build.webp") center/contain no-repeat;
+    mask: url('/assets/build.webp') center/contain;
 }
-
-.navbar .links .img#save {
-  mask: url("src/assets/save.webp") center/contain no-repeat;
+.navbar .links .img#save { 
+    mask: url('/assets/save.webp') center/contain;
 }
 
 .navbar .links .img#join {
-  background: rgb(255, 255, 255);
-  mask: url("src/assets/join.webp") center/contain no-repeat;
+    background: rgb(255, 255, 255);
+    mask: url('/assets/join.webp') center/contain;
 }
 
 .navbar .links button.join-now {
