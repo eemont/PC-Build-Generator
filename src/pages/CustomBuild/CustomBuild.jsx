@@ -1,18 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { findParts } from "../../domain/partsApi";
-import "./CustomBuild.css";
+import { partMap } from "../../domain/partMap";
+import { measurePartCompatibility } from "../../domain/partsApi";
 
-const COMPONENT_SLOTS = [
-    { key: 'cpu',       label: 'CPU',          partKey: 'cpu'                 },
-    { key: 'cooler',    label: 'CPU Cooler',    partKey: 'cpu-cooler'          },
-    { key: 'mobo',      label: 'Motherboard',   partKey: 'motherboard'         },
-    { key: 'memory',    label: 'Memory',        partKey: 'memory'              },
-    { key: 'storage',   label: 'Storage',       partKey: 'internal-hard-drive' },
-    { key: 'gpu',       label: 'GPU',           partKey: 'video-card'          },
-    { key: 'case',      label: 'Case',          partKey: 'case'                },
-    { key: 'psu',       label: 'Power Supply',  partKey: 'power-supply'        },
-];
+import { COMPONENT_SLOTS } from "../../utils/componentSlots";
+import PartIssue from "../../components/PartIssue/PartIssue";
+import "./CustomBuild.css";
 
 function formatPartSpecs(part, slotKey) {
     switch (slotKey) {
@@ -70,7 +64,11 @@ export default function CustomBuild() {
     const location = useLocation();
     const editBuild = location.state?.editBuild || null;
 
-    const [selectedParts, setSelectedParts] = useState(editBuild ? editBuild.parts : {});    
+    const [selectedParts, setSelectedParts] = useState(() => {
+        return editBuild 
+            ? reinitializeParts(editBuild.parts) 
+            : {}
+    });    
     const [buildName, setBuildName] = useState(editBuild ? editBuild.name : "");
     const [buildNotes, setBuildNotes] = useState(editBuild ? (editBuild.notes || "") : "");
     const editId = editBuild ? editBuild.id : null;
@@ -80,15 +78,38 @@ export default function CustomBuild() {
     const [availableParts, setAvailableParts] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const [ignoreCompatibility, setIgnoreCompatibility] = useState(false);
+    
     const navigate = useNavigate();
 
-    const openPicker = useCallback(async (slot) => {
-        setPickerOpen(slot.key);
+    function reinitializeParts(parts) {
+        const result = {};
+        for (const [key, val] of Object.entries(parts)) {
+            const foundIndex = COMPONENT_SLOTS.findIndex(slot => slot.key == key);
+            const partKey = COMPONENT_SLOTS[foundIndex].partKey;
+            const PartClass = partMap[partKey].class;
+
+            const attrs = {...val.part}
+            const partReformatted = new PartClass({attrs, ...val.part});
+
+            result[key] = {
+                ...val,
+                part: partReformatted
+            };
+        }
+        return result;
+    }
+
+    const fetchParts = async (slot, ignoreCompatibility) => {
         setLoading(true);
         setAvailableParts([]);
-
         try {
-            const parts = await findParts(slot.partKey, 100);
+            const parts = await findParts({
+                partType: slot.partKey, 
+                selectedParts, 
+                ignoreCompatibility,
+                limit: 100
+            });
             if (Array.isArray(parts)) {
                 setAvailableParts(parts);
             }
@@ -97,22 +118,44 @@ export default function CustomBuild() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    };
+
+    // Re-fetch parts when changing compatibility preference
+    const handleCheckboxChange = async () => {
+        const newIgnoreCompatibility = !ignoreCompatibility;
+        setIgnoreCompatibility(newIgnoreCompatibility);
+
+        const slotIndex = COMPONENT_SLOTS.findIndex(slot => slot.key == pickerOpen);
+        const slot = COMPONENT_SLOTS[slotIndex];
+        await fetchParts(slot, newIgnoreCompatibility);
+    };
+
+    // Fetch parts when picker opens
+    const openPicker = useCallback(async (slot) => {
+        setPickerOpen(slot.key);
+        await fetchParts(slot, ignoreCompatibility);        
+    }, [selectedParts, ignoreCompatibility]);
 
     const selectPart = (slotKey, part) => {
-        setSelectedParts(prev => ({ ...prev, [slotKey]: part }));
+
+        let newSelectedParts = {...selectedParts}
+        if (part != null) {
+            newSelectedParts[slotKey] = { part }
+        } else {
+            delete newSelectedParts[slotKey];
+        }
+
+        // Refresh compatibility issues
+        for (const [slotKey, selected] of Object.entries(newSelectedParts)) {
+            newSelectedParts[slotKey] = measurePartCompatibility(selected.part, newSelectedParts)
+        }
+
+        setSelectedParts(newSelectedParts);
         setPickerOpen(null);
     };
+    console.log(selectedParts);
 
-    const removePart = (slotKey) => {
-        setSelectedParts(prev => {
-            const copy = { ...prev };
-            delete copy[slotKey];
-            return copy;
-        });
-    };
-
-    const totalPrice = Object.values(selectedParts).reduce((sum, part) => sum + (part.price || 0), 0);
+    const totalPrice = Object.values(selectedParts).reduce((sum, selected) => sum + (selected.part.price || 0), 0);
     const partsCount = Object.keys(selectedParts).length;
 
     useEffect(() => {
@@ -142,7 +185,7 @@ export default function CustomBuild() {
             dateSaved: new Date().toLocaleDateString()
         };
 
-        const existingBuilds = JSON.parse(localStorage.getItem("savedBuilds") || "[]");
+        const existingBuilds = JSON.parse(localStorage.getItem("savedBuilds") || "[]"); 
 
         let updatedBuilds;
         if (editId) {
@@ -167,13 +210,16 @@ export default function CustomBuild() {
                 <div className="parts-table-head">
                     <span className="col-component">Component</span>
                     <span className="col-selection">Selection</span>
+                    <span className="col-selection">Compatible</span>
                     <span className="col-price">Price</span>
                     <span className="col-actions"></span>
                 </div>
 
                 {COMPONENT_SLOTS.map((slot) => {
-                    const part = selectedParts[slot.key];
+                    const selected = selectedParts[slot.key]
+                    const part = selectedParts[slot.key]?.part;
                     const hasPart = !!part;
+
                     return (
                         <div key={slot.key} className={`part-row ${hasPart ? 'filled' : ''}`}>
                             <div className="col-component">
@@ -211,6 +257,26 @@ export default function CustomBuild() {
                                 )}
                             </div>
 
+                            <div className="col-compatibility-msg">
+                                {selected && !selected?.compatible &&
+                                    <p>
+                                        {
+                                        selected?.issues?.filter(issue => issue.severity == 'error')?.length > 0
+                                            ? <span>This part has severe compatibility errors</span>
+                                            : <span>This part may not be compatible</span>
+                                        }
+                                    </p>
+                                }
+                            </div>
+
+                            <div className="col-compatibility">
+                                <span>
+                                    <PartIssue
+                                        issues={ selected?.issues || [] }
+                                    ></PartIssue>
+                                </span>
+                            </div>
+
                             <div className="col-price">
                                 {hasPart && (
                                     <span className="part-price-value">${part.price?.toFixed(2)}</span>
@@ -229,7 +295,7 @@ export default function CustomBuild() {
                                         </button>
                                         <button
                                             className="btn-remove"
-                                            onClick={() => removePart(slot.key)}
+                                            onClick={() => selectPart(slot.key, null)}
                                             title="Remove"
                                         >
                                             ✕
@@ -298,25 +364,49 @@ export default function CustomBuild() {
             </div>
 
             <div className="save-build-section">
-                <input
-                    type="text"
-                    className="build-name-input"
-                    placeholder="Name your custom build..."
-                    value={buildName}
-                    onChange={(e) => setBuildName(e.target.value)}
-                />
-                <button className="btn-save-build" onClick={handleSaveBuild}>
-                    Save Build
-                </button>
+                <p className="save-build-warning">
+                    { Object.values(selectedParts).filter(selected => selected.issues?.length > 0).length > 0 &&
+                        '*WARNING: Not all parts in this build may be compatible'
+                    }
+                </p>
+
+                <div className="save-build-input">
+                    <input
+                        type="text"
+                        className="build-name-input"
+                        placeholder="Name your custom build..."
+                        value={buildName}
+                        onChange={(e) => setBuildName(e.target.value)}
+                    />
+                    <button className="btn-save-build" onClick={handleSaveBuild}>
+                        Save Build
+                    </button>
+                </div>
             </div>
 
             {pickerOpen && (
                 <div className="picker-overlay" onClick={() => setPickerOpen(null)}>
                     <div className="picker-modal" onClick={(e) => e.stopPropagation()}>
                         <div className="picker-header">
-                            <h2>
-                                Choose {COMPONENT_SLOTS.find(s => s.key === pickerOpen)?.label}
-                            </h2>
+                            <div className="left">
+                                <h2>
+                                    Choose {COMPONENT_SLOTS.find(s => s.key === pickerOpen)?.label}
+                                </h2>
+
+                                <div className="separator"></div>
+
+                                <div className="ignore-compatibility-box">
+                                    <input
+                                        name="ignore-compatibility"
+                                        id="ignore-compatibility"
+                                        type="checkbox"
+                                        onChange={handleCheckboxChange}
+                                        checked = {ignoreCompatibility}
+                                    />
+                                    <label htmlFor="ignore-compatibility">Ignore Compatibility</label>
+                                </div>
+                            </div>
+
                             <button className="picker-close" onClick={() => setPickerOpen(null)}>✕</button>
                         </div>
 
@@ -332,20 +422,19 @@ export default function CustomBuild() {
                                 <div className="picker-empty">No parts found.</div>
                             )}
 
-                            {!loading && availableParts.map((part, i) => {
-                                const isSelected = selectedParts[pickerOpen]?.model === part.model
-                                    && selectedParts[pickerOpen]?.brand === part.brand;
+                            {!loading && availableParts.map((available, i) => {
+                                const isSelected = selectedParts[pickerOpen]?.part?.id === available.part.id
                                 return (
                                     <div
-                                        key={`${part.brand}-${part.model}-${i}`}
+                                        key={`${available.part.brand}-${available.part.model}-${i}`}
                                         className={`picker-item ${isSelected ? 'selected' : ''}`}
-                                        onClick={() => selectPart(pickerOpen, part)}
+                                        onClick={() => selectPart(pickerOpen, available.part)}
                                     >
                                         <div className="picker-item-img">
-                                            {(part.img || part.imageUrl) ? (
+                                            {(available.part.img || available.part.imageUrl) ? (
                                                 <img
-                                                    src={part.img || part.imageUrl}
-                                                    alt={part.model}
+                                                    src={available.part.img || available.part.imageUrl}
+                                                    alt={available.part.model}
                                                     onError={(e) => e.target.style.display = 'none'}
                                                 />
                                             ) : (
@@ -354,14 +443,19 @@ export default function CustomBuild() {
                                         </div>
                                         <div className="picker-item-info">
                                             <span className="picker-item-name">
-                                                {part.brand} {part.model}
+                                                {available.part.brand} {available.part.model}
                                             </span>
                                             <span className="picker-item-specs">
-                                                {formatPartSpecs(part, pickerOpen)}
+                                                {formatPartSpecs(available.part, pickerOpen)}
                                             </span>
                                         </div>
+                                        <div className="picker-item-compatibility">
+                                            <PartIssue
+                                                issues={available.issues}
+                                            />
+                                        </div>
                                         <div className="picker-item-price">
-                                            ${part.price?.toFixed(2)}
+                                            ${available.part?.price?.toFixed(2)}
                                         </div>
                                         <button className="btn-add-part">
                                             {isSelected ? '✓ Selected' : 'Add'}

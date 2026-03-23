@@ -8,8 +8,8 @@ export class Storage extends PCPart {
 
     nvme = null;
 
-    constructor({ brand, model, price, img = "", link = "", type, capacity, formFactor, connectionType, nvme = null }) {
-        super(brand, model, price, img, link);
+    constructor({ attrs, type, capacity, formFactor, connectionType, nvme = null }) {
+        super(attrs);
         this.type = type;
         this.capacity = capacity;
         this.formFactor = formFactor;
@@ -22,16 +22,40 @@ export class Storage extends PCPart {
         const attrs = super.fromRow(row);
 
         return new Storage({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            img: attrs.img,
-            link: attrs.link,
+            attrs,
             type: row.type?.toLowerCase?.() ?? row.type ?? null,
             capacity: row.capacity ?? 0,
             formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? null,
             connectionType: row.connection_type?.toLowerCase?.() ?? row.connection_type ?? null,
             nvme: row.nvme ?? null
         });
+    }
+
+    getCompatibilityFields(targetPart) {
+        const constraints = [];
+        const partClass = targetPart.constructor.name;
+
+        switch(partClass.name) {
+            case 'Motherboard': {
+                const slotTypeArr = this.connectionType
+                    ? this.connectionType.includes('m.2') 
+                        ? ['m2_slots', 'm2Slots'] 
+                        : ['sata_ports', 'sataPorts']
+                    : [null, 'port'];
+
+                constraints.push(this.makeConstraint({
+                    dbField: slotTypeArr?.[0],
+                    domainField: slotTypeArr?.[1],
+                    op: 'gte',
+                    val: 0,
+                    isMissing: slotTypeArr?.[0] == null
+                }));
+                break;
+            }
+            default:
+                return [];
+        }
+
+        return constraints;
     }
 }

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import PartIssue from "../../components/PartIssue/PartIssue";
 import "./SavedBuilds.css";
 
 export default function SavedBuilds() {
@@ -71,13 +73,13 @@ export default function SavedBuilds() {
                             <div className="saved-build-price">${build.totalPrice.toFixed(2)}</div>
 
                             <div className="saved-parts-list">
-                                {Object.entries(build.parts).map(([slotKey, part]) => (
+                                {Object.entries(build.parts).map(([slotKey, selected]) => (
                                     <div key={slotKey} className="saved-part-row">
                                         <div className="saved-part-info">
                                             <span className="part-category">{partLabels[slotKey] || slotKey}</span>
-                                            <span className="part-name">{part.brand} {part.model}</span>
+                                            <span className="part-name">{selected.part.brand} {selected.part.model}</span>
                                         </div>
-                                        <span className="part-price">${part.price?.toFixed(2)}</span>
+                                        <span className="part-price">${selected.part.price?.toFixed(2)}</span>
                                     </div>
                                 ))}
                             </div>
@@ -119,29 +121,35 @@ export default function SavedBuilds() {
                                 <div className="view-parts-head">
                                     <span>Component</span>
                                     <span>Part</span>
+                                    <span>Compatible</span>
                                     <span>Price</span>
                                 </div>
 
-                                {Object.entries(viewingBuild.parts).map(([slotKey, part]) => (
+                                {Object.entries(viewingBuild.parts).map(([slotKey, selected]) => (
                                     <div key={slotKey} className="view-part-row">
                                         <span className="view-part-category">
                                             {partLabels[slotKey] || slotKey}
                                         </span>
                                         <div className="view-part-info">
-                                            {part.img && (
+                                            {selected.part.img && (
                                                 <img
                                                     className="view-part-thumb"
-                                                    src={part.img}
-                                                    alt={part.model}
+                                                    src={selected.part.img}
+                                                    alt={selected.part.model}
                                                     onError={(e) => e.target.style.display = "none"}
                                                 />
                                             )}
                                             <span className="view-part-name">
-                                                {part.brand} {part.model}
+                                                {selected.part.brand} {selected.part.model}
                                             </span>
                                         </div>
+                                        <span className="view-part-compatibility">
+                                            <PartIssue 
+                                                issues={selected.issues}
+                                            />
+                                        </span>
                                         <span className="view-part-price">
-                                            ${part.price?.toFixed(2)}
+                                            ${selected.part.price?.toFixed(2)}
                                         </span>
                                     </div>
                                 ))}

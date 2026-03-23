@@ -11,6 +11,7 @@ import SavedBuilds from "./pages/SavedBuilds/SavedBuilds";
 import FAQ from "./pages/FAQ/FAQ";
 
 export default function App() {
+
   return (
     <AuthProvider>
       <Routes>

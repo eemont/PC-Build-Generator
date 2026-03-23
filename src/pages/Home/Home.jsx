@@ -1,15 +1,22 @@
 import { Link } from "react-router-dom"
 
 import "./Home.css"
-import pcVideo from "../../assets/pc.mp4"
+import pcVideo from "/assets/pc.mp4"
 
 export default function Home() {
 
     return (
         <div>
-            <video width="100%" height="100%" autoPlay loop muted className="video-bg">
-                <source src={pcVideo} type="video/mp4" />
-            </video>
+<video
+    autoPlay
+    loop
+    muted
+    playsInline
+    preload="auto"
+    className="video-bg"
+>
+    <source src={pcVideo} type="video/mp4" />
+</video>
             
             <div className="home-page">
                 <div className="welcome-box">
