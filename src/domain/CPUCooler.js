@@ -32,16 +32,38 @@ export class CPUCooler extends PCPart {
     static fromRow(row) {
         const attrs = super.fromRow(row);
 
-        return new CPUCooler({
-            attrs,
-            fanSpeed: {
+        // Handle fan speed - can be object with min/max or direct values
+        let fanSpeed = { min: 0, max: 0 };
+        if (row.fan_rpm && typeof row.fan_rpm === 'object') {
+            fanSpeed = {
+                min: row.fan_rpm.min ?? 0,
+                max: row.fan_rpm.max ?? 0
+            };
+        } else {
+            fanSpeed = {
                 min: row.fan_speed_min ?? 0,
                 max: row.fan_speed_max ?? 0
-            },
-            noiseLevel: {
+            };
+        }
+
+        // Handle noise level - can be object with min/max or direct values
+        let noiseLevel = { min: 0, max: 0 };
+        if (row.decibels && typeof row.decibels === 'object') {
+            noiseLevel = {
+                min: row.decibels.min ?? 0,
+                max: row.decibels.max ?? 0
+            };
+        } else {
+            noiseLevel = {
                 min: row.noise_level_min ?? 0,
                 max: row.noise_level_max ?? 0
-            },
+            };
+        }
+
+        return new CPUCooler({
+            attrs,
+            fanSpeed,
+            noiseLevel,
             radiatorSize: row.radiator_size ?? 0,
             sockets: row.sockets ?? [],
             height: row.height ?? 0,
