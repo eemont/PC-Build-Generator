@@ -8,8 +8,8 @@ export class Storage extends PCPart {
 
     nvme = null;
 
-    constructor({ brand, model, price, img = "", link = "", type, capacity, formFactor, connectionType, nvme = null }) {
-        super(brand, model, price, img, link);
+    constructor({ attrs, type, capacity, formFactor, connectionType, nvme = null }) {
+        super(attrs);
         this.type = type;
         this.capacity = capacity;
         this.formFactor = formFactor;
@@ -30,20 +30,40 @@ export class Storage extends PCPart {
         }
 
         return new Storage({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            img: attrs.img,
-            link: attrs.link,
-            type: row.storage_type?.toLowerCase?.() ?? row.storage_type ?? null,
-            capacity: capacity,
-            formFactor: row.form_factor ?? null, // Preserve original case
-            connectionType: row.interface?.toLowerCase?.() ?? row.interface ?? null,
+            attrs,
+            type: row.type?.toLowerCase?.() ?? row.type ?? null,
+            capacity,
+            formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? null,
+            connectionType: row.connection_type?.toLowerCase?.() ?? row.connection_type ?? null,
             nvme: row.nvme ?? null
         });
     }
 
-    static decode(row) {
-        return this.fromRow(row);
+    getCompatibilityFields(targetPart) {
+        const constraints = [];
+        const partClass = targetPart.constructor.name;
+
+        switch(partClass.name) {
+            case 'Motherboard': {
+                const slotTypeArr = this.connectionType
+                    ? this.connectionType.includes('m.2') 
+                        ? ['m2_slots', 'm2Slots'] 
+                        : ['sata_ports', 'sataPorts']
+                    : [null, 'port'];
+
+                constraints.push(this.makeConstraint({
+                    dbField: slotTypeArr?.[0],
+                    domainField: slotTypeArr?.[1],
+                    op: 'gte',
+                    val: 0,
+                    isMissing: slotTypeArr?.[0] == null
+                }));
+                break;
+            }
+            default:
+                return [];
+        }
+
+        return constraints;
     }
 }

@@ -17,14 +17,16 @@ export class CPUCooler extends PCPart {
 
     sockets = [];
     height = 0;      // millimeters
+    waterCooled = false;
 
-    constructor({ brand, model, price, img = "", link = "", fanSpeed, noiseLevel, radiatorSize, sockets = [], height = 0 }) {
-        super(brand, model, price, img, link);
+    constructor({ attrs, fanSpeed, noiseLevel, radiatorSize, sockets = [], height = 0, waterCooled = false }) {
+        super(attrs);
         this.fanSpeed = fanSpeed;
         this.noiseLevel = noiseLevel;
         this.radiatorSize = radiatorSize;
         this.sockets = sockets;
         this.height = height;
+        this.waterCooled = waterCooled;
     }
 
     static fromRow(row) {
@@ -59,20 +61,64 @@ export class CPUCooler extends PCPart {
         }
 
         return new CPUCooler({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            img: attrs.img,
-            link: attrs.link,
-            fanSpeed: fanSpeed,
-            noiseLevel: noiseLevel,
+            attrs,
+            fanSpeed,
+            noiseLevel,
             radiatorSize: row.radiator_size ?? 0,
             sockets: row.sockets ?? [],
-            height: row.height ?? 0
+            height: row.height ?? 0,
+            waterCooled: row.water_cooled ?? false
         });
     }
 
-    static decode(row) {
-        return this.fromRow(row);
+    getCompatibilityFields(targetPart) {
+        const constraints = [];
+        const partClass = targetPart.constructor.name;
+
+        switch(partClass) {
+            case 'CPU':
+                constraints.push(this.makeConstraint({ 
+                    dbField: "sockets", 
+                    domainField: 'sockets',
+                    op: "in", 
+                    val: this.sockets,
+                    isMissing: this.sockets?.length == 0
+                }));
+                break;
+
+            case 'Case':
+                if (this.waterCooled) {
+                    constraints.push(this.makeConstraint({ 
+                        dbField: 'max_supported_radiator_length', 
+                        domainField: 'maxSupportedRadiatorLength',
+                        op: 'gte', 
+                        val: this.radiatorSize,
+                        isMissing: this.radiatorSize == 0 || this.radiatorSize == null
+                    }));
+                } else {
+                    constraints.push(this.makeConstraint({ 
+                        dbField: 'max_cpu_cooler_height', 
+                        domainField: 'maxCPUCoolerHeight',
+                        op: 'gte', 
+                        val: this.height,
+                        isMissing: this.height == 0 || this.height == null
+                    }));
+                }
+                break;
+
+            case 'Motherboard':
+                constraints.push(this.makeConstraint({ 
+                    dbField: "socket", 
+                    domainField: 'socket',
+                    op: "in", 
+                    val: this.sockets,
+                    isMissing: this.sockets?.length === 0
+                }));
+                break;
+            default:
+                return [];
+        }
+
+        return constraints;
     }
 }

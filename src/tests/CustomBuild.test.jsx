@@ -39,7 +39,13 @@ describe('CustomBuild Component', () => {
             editBuild: {
                 id: '999',
                 name: 'Upgraded Workstation',
-                parts: { cpu: { brand: 'Intel', model: 'Core i9', price: 500 } }
+                parts: { 
+                    cpu: {
+                        part: { brand: 'Intel', model: 'Core i9', price: 500 },
+                        compatible: true,
+                        issues: []
+                    } 
+                }
             }
         };
 

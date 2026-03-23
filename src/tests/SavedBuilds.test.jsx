@@ -37,7 +37,13 @@ describe('SavedBuilds Component', () => {
             name: 'My Gaming Rig',
             totalPrice: 1500,
             dateSaved: '10/24/2025',
-            parts: { cpu: { brand: 'AMD', model: 'Ryzen 5', price: 200 } }
+            parts: { 
+                cpu: { 
+                    part: { brand: 'AMD', model: 'Ryzen 5', price: 200 },
+                    compatible: true,
+                    issues: []
+                } 
+            }
         }];
         localStorage.setItem('savedBuilds', JSON.stringify(mockBuilds));
 

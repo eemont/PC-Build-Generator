@@ -19,7 +19,7 @@ describe("Supabase decode mapping", () => {
       multithreading: true,
     };
 
-    const decoded = CPU.decode(cpuRow);
+    const decoded = CPU.fromRow(cpuRow);
 
     expect(decoded).toBeInstanceOf(CPU);
     expect(decoded.brand).toBe("amd");
@@ -43,7 +43,7 @@ describe("Supabase decode mapping", () => {
       length: 242,
     };
 
-    const decoded = GPU.decode(gpuRow);
+    const decoded = GPU.fromRow(gpuRow);
 
     expect(decoded).toBeInstanceOf(GPU);
     expect(decoded.brand).toBe("msi");
@@ -63,11 +63,11 @@ describe("Supabase decode mapping", () => {
       price: 109.99,
       number_of_modules: 2,
       module_size: { total: 17179869184 }, // 16 GB per module in bytes
-      module_type: "DDR5",
+      memory_type: "DDR5",
       error_correction: "Non-ECC",
     };
 
-    const decoded = Memory.decode(memoryRow);
+    const decoded = Memory.fromRow(memoryRow);
 
     expect(decoded).toBeInstanceOf(Memory);
     expect(decoded.brand).toBe("corsair");
@@ -83,13 +83,13 @@ describe("Supabase decode mapping", () => {
       brand: "Samsung",
       model: "990 Pro",
       price: 149.99,
-      storage_type: "SSD",
+      type: "SSD",
       capacity: { total: 2000000000000 },
       form_factor: "M.2-2280",
-      interface: "PCIe 4.0 x4",
+      connection_type: "PCIe 4.0 x4",
     };
 
-    const decoded = Storage.decode(storageRow);
+    const decoded = Storage.fromRow(storageRow);
 
     expect(decoded).toBeInstanceOf(Storage);
     expect(decoded.brand).toBe("samsung");
@@ -97,7 +97,7 @@ describe("Supabase decode mapping", () => {
     expect(decoded.price).toBe(149.99);
     expect(decoded.type).toBe("ssd");
     expect(decoded.capacity).toBe(2000);
-    expect(decoded.formFactor).toBe("M.2-2280");
+    expect(decoded.formFactor).toBe("m.2-2280");
     expect(decoded.connectionType).toBe("pcie 4.0 x4");
   });
 
@@ -111,7 +111,7 @@ describe("Supabase decode mapping", () => {
       radiator_size: 120,
     };
 
-    const decoded = CPUCooler.decode(coolerRow);
+    const decoded = CPUCooler.fromRow(coolerRow);
 
     expect(decoded).toBeInstanceOf(CPUCooler);
     expect(decoded.brand).toBe("cooler master");
@@ -133,7 +133,7 @@ describe("Supabase decode mapping", () => {
       ram_slots: 4,
     };
 
-    const decoded = Motherboard.decode(motherboardRow);
+    const decoded = Motherboard.fromRow(motherboardRow);
 
     expect(decoded).toBeInstanceOf(Motherboard);
     expect(decoded.brand).toBe("asus");

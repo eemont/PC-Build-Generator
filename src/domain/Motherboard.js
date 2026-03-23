@@ -15,8 +15,8 @@ export class Motherboard extends PCPart {
     supportsECC = false;
     maxMemorySpeed = 0;
 
-    constructor({ brand, model, price, img = "", link = "", socket, formFactor, ramSlots, maxRam, memoryTypes = null, chipsets = null, m2Slots = null, sataPorts = null, u2Ports = null, pcieX16Slots = null, supportsECC = false, maxMemorySpeed = null }) {
-        super(brand, model, price, img, link);
+    constructor({ attrs, socket, formFactor, ramSlots, maxRam, memoryTypes = null, chipsets = null, m2Slots = null, sataPorts = null, u2Ports = null, pcieX16Slots = null, supportsECC = false, maxMemorySpeed = null }) {
+        super(attrs);
         this.socket = socket;
         this.formFactor = formFactor;
         this.ramSlots = ramSlots;
@@ -44,15 +44,11 @@ export class Motherboard extends PCPart {
         }
 
         return new Motherboard({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            img: attrs.img,
-            link: attrs.link,
-            socket: row.socket?.toLowerCase?.() ?? row.socket ?? "",
-            formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? "",
+            attrs,
+            socket: row.socket?.toLowerCase?.() ?? row.socket ?? null,
+            formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? null,
             ramSlots: row.ram_slots ?? 0,
-            maxRam: maxRam,
+            maxRam,
             memoryTypes: row.memory_types ?? null,
             chipsets: row.chipsets ?? null,
             m2Slots: row.m2_slots ?? 0,
@@ -64,7 +60,80 @@ export class Motherboard extends PCPart {
         });
     }
 
-    static decode(row) {
-        return this.fromRow(row);
+    getCompatibilityFields(targetPart) {
+        const constraints = []; 
+        const partClass = targetPart.constructor.name;
+
+        switch(partClass.name) {
+            case 'Case':
+                constraints.push(this.makeConstraint({ 
+                    dbField: 'form_factors', 
+                    domainField: 'formFactors',
+                    op: "contains", 
+                    val: [this.formFactor],
+                    isMissing: this.formFactor == null
+                }));
+                break;
+            case 'CPU':
+                constraints.push(this.makeConstraint({
+                    dbField: 'sockets',
+                    domainField: 'sockets',
+                    op: 'eq',
+                    val: this.socket,
+                    isMissing: this.socket == null
+                }));
+                break;
+            case 'CPUCooler':
+                constraints.push(this.makeConstraint({
+                    dbField: 'sockets',
+                    domainField: 'sockets',
+                    op: 'contains',
+                    val: [this.socket],
+                    isMissing: this.socket == null
+                }));
+                break;
+            case 'Memory':
+                constraints.push(this.makeConstraint({
+                    dbField: 'memory_type',
+                    domainField: 'memoryType',
+                    op: 'eq',
+                    val: this.memoryTypes,
+                    isMissing: this.memoryTypes == null
+                }));
+                constraints.push(this.makeConstraint({
+                    dbField: 'capacity_gb',
+                    domainField: 'capacityGB',
+                    op: 'lte',
+                    val: this.maxRam,
+                    isMissing: this.maxRam === 0
+                }));
+                break;
+
+            // need to refactor to fit these
+            case 'Storage':
+                if (this.m2Slots === 0) {
+                    constraints.push(this.makeConstraint({
+                        dbField: 'connection_type',
+                        domainField: 'connectionType',
+                        op: 'notLike',
+                        val: 'm.2',
+                        isMissing: true
+                    }));
+                }
+                if (this.sataPorts === 0) {
+                    constraints.push(this.makeConstraint({
+                        dbField: 'connection_type',
+                        domainField: 'connectionType',
+                        op: 'notLike',
+                        val: 'sata',
+                        isMissing: true
+                    }));
+                }
+                break;
+            default:
+                return [];
+        }
+
+        return constraints;
     }
 }

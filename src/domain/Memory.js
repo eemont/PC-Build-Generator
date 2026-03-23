@@ -7,8 +7,8 @@ export class Memory extends PCPart {
     
     formFactor = null;
 
-    constructor({ brand, model, price, img = "", link = "", memoryType, capacityGB, errorCorrection, formFactor = null }) {
-        super(brand, model, price, img, link);
+    constructor({ attrs, memoryType, capacityGB, errorCorrection, formFactor = null }) {
+        super(attrs);
         this.memoryType = memoryType;
         this.capacityGB = capacityGB;
         this.errorCorrection = errorCorrection;
@@ -29,19 +29,47 @@ export class Memory extends PCPart {
         }
 
         return new Memory({
-            brand: attrs.brand,
-            model: attrs.model,
-            price: attrs.price,
-            img: attrs.img,
-            link: attrs.link,
-            memoryType: row.module_type?.toLowerCase?.() ?? row.module_type ?? null,
-            capacityGB: capacityGB,
+            attrs,
+            memoryType: row.memory_type?.toLowerCase?.() ?? row.memory_type ?? null,
+            capacityGB,
             errorCorrection: row.error_correction?.toLowerCase?.() ?? row.error_correction ?? null,
             formFactor: row.form_factor?.toLowerCase?.() ?? row.form_factor ?? null
         });
     }
 
-    static decode(row) {
-        return this.fromRow(row);
+    getCompatibilityFields(targetPart) {
+        const constraints = [];
+        const partClass = targetPart.constructor.name;
+
+        switch(partClass.name) {
+            case 'Motherboard':
+                constraints.push(this.makeConstraint({ 
+                    dbField: "memory_types", 
+                    domainField: 'memoryTypes',
+                    op: 'eq', 
+                    val: this.memoryType,
+                    isMissing: this.memoryType == null
+                }));
+                constraints.push(this.makeConstraint({ 
+                    dbField: "max_ram", 
+                    domainField: 'maxRam',
+                    op: "gte", 
+                    val: this.capacityGB,
+                    isMissing: this.capacityGB === 0
+                }));
+
+                // if (this.errorCorrection != null) {
+                //     if (this.errorCorrection.indexOf("non") > 0) {
+                //         constraints.push({ field: "supports_ecc", op: 'eq', val: false })
+                //     } else {
+                //         constraints.push({ field: "supports_ecc", op: 'eq', val: true })
+                //     }
+                // }
+                break;
+            default:
+                return [];
+        }
+
+        return constraints;
     }
 }
