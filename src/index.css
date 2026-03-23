@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -23,8 +27,15 @@ a {
   text-decoration: none;
 }
 
+html {
+  width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
+  width: 100%;
+  overflow-x: hidden;
   /* display: flex; */
   /* place-items: center; */
   /* min-width: 320px; */

@@ -10,6 +10,7 @@ import CustomBuild from "./pages/CustomBuild/CustomBuild";
 import SavedBuilds from "./pages/SavedBuilds/SavedBuilds";
 
 export default function App() {
+
   return (
     <AuthProvider>
       <Routes>

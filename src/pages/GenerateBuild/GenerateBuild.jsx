@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./GenerateBuild.css";
 import { validateBudget } from "../../utils/validateBudget";
 import { useCases, presetBuilds } from "../../data/Presetbuilds";
-import { findParts } from "../../domain/partsApi";
+import { findParts, measurePartCompatibility } from "../../domain/partsApi";
 
 // ─── Budget allocation for a balanced gaming PC ───────────────────────────────
 // GPU:     35–50%  → 38%  (most impactful for gaming)
@@ -45,7 +45,7 @@ const SLOT_TO_PART_TYPE = {
  * Falls back to the cheapest available part so no slot is left empty.
  */
 function pickBestPart(parts, budget) {
-    const valid = parts.filter((p) => p.price > 0);
+    const valid = parts.filter((p) => p.part.price > 0);
     if (valid.length === 0) return null;
 
     const sorted = [...valid].sort((a, b) => b.price - a.price);
@@ -79,11 +79,33 @@ export default function GenerateBuild() {
                 const slotBudget = budget * fraction;
                 const partType = SLOT_TO_PART_TYPE[slotKey];
 
-                const parts = await findParts(partType, 100);
+                const fetchParts = async (ignoreCompatibility = false) => {
+                    const parts = await findParts({
+                        partType, 
+                        limit: 100,
+                        selectedParts,
+                        ignoreCompatibility,
+                        additionalFilters: [
+                            { field: 'price', op: 'lte', val: slotBudget },
+                            { field: 'price', op: 'order', val: true }
+                        ]
+                    });
+                    return parts;
+                }
+
+                let parts = await fetchParts();
+                if (parts.length == 0) {
+                    parts = await fetchParts(true);
+                }
+                
                 const best = pickBestPart(parts, slotBudget);
 
                 if (best) {
                     selectedParts[slotKey] = best;
+            
+                    for (const [slotKey, selected] of Object.entries(selectedParts)) {
+                        selectedParts[slotKey] = measurePartCompatibility(selected.part, selectedParts)
+                    }
                 }
             }
 

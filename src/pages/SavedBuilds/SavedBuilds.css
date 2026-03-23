@@ -185,6 +185,19 @@
     translate: 0 -1px;
 }
 
+.btn-view {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgb(200, 200, 200);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn-view:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.25);
+    translate: 0 -1px;
+}
+
 .btn-edit {
     background: rgba(160, 85, 255, 0.1);
     color: var(--primary-purple);
@@ -337,7 +350,7 @@
 
 .view-parts-head {
     display: grid;
-    grid-template-columns: 120px 1fr 80px;
+    grid-template-columns: 120px 1fr 100px 80px;
     padding: 10px 8px;
     font-size: 0.68rem;
     font-weight: 600;
@@ -350,7 +363,7 @@
 
 .view-part-row {
     display: grid;
-    grid-template-columns: 120px 1fr 80px;
+    grid-template-columns: 120px 1fr 100px 80px;
     align-items: center;
     gap: 12px;
     padding: 12px 8px;
