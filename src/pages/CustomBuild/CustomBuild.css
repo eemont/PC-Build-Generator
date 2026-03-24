@@ -750,6 +750,7 @@
         max-height: 100dvh;
         border-radius: 0;
     }
+}
 
 @media (max-width: 500px) {
     .picker-header {
@@ -762,7 +763,7 @@
         font-size: 1.1rem;
         
     }
-}
+
 
     .picker-list {
         padding: 8px;
