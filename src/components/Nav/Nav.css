@@ -70,6 +70,10 @@
     mask: url('/assets/join.webp') center/contain;
 }
 
+.navbar .links .img#contact { 
+    mask: url('/assets/contact.png') center/contain;
+}
+
 .navbar .links button.join-now {
   border: none;
   cursor: pointer;
