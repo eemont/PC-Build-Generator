@@ -285,7 +285,7 @@ export default function CustomBuild() {
                             <div className="col-compatibility">
                                 <span>
                                     <PartIssue
-                                        issues={ selected.issues || [] }
+                                        issues={ selected?.issues || [] }
                                     ></PartIssue>
                                 </span>
                             </div>
@@ -464,7 +464,7 @@ export default function CustomBuild() {
                                         </div>
                                         <div className="picker-item-compatibility">
                                             <PartIssue
-                                                issues={available.issues}
+                                                issues={available?.issues}
                                             />
                                         </div>
                                         <div className="picker-item-price">
