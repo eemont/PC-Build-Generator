@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { findParts } from "../../domain/partsApi";
 import { partMap } from "../../domain/partMap";
 import { measurePartCompatibility } from "../../domain/partsApi";
+import { AuthContext } from "../../context/AuthContext";
+import { saveBuild } from "../../lib/buildsApi";
 
 import { COMPONENT_SLOTS } from "../../utils/componentSlots";
 import PartIssue from "../../components/PartIssue/PartIssue";
@@ -75,9 +77,12 @@ export default function CustomBuild() {
     const editId = editBuild ? editBuild.id : null;
     const generatedBudget = editBuild?.generatedBudget ?? null;
 
+    const { session } = useContext(AuthContext);
+
     const [pickerOpen, setPickerOpen] = useState(null);
     const [availableParts, setAvailableParts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [saving, setSaving] = useState(false);
 
     const [ignoreCompatibility, setIgnoreCompatibility] = useState(false);
     
@@ -172,7 +177,7 @@ export default function CustomBuild() {
         return () => window.removeEventListener('keydown', handleKey);
     }, []);
 
-    const handleSaveBuild = () => {
+    const handleSaveBuild = async () => {
         if (!buildName.trim()) {
             alert("Please provide a name for your build.");
             return;
@@ -181,27 +186,29 @@ export default function CustomBuild() {
             alert("Please add at least one part before saving.");
             return;
         }
-
-        const newBuild = {
-            id: editId || crypto.randomUUID(),
-            name: buildName,
-            notes: buildNotes.trim(),
-            totalPrice: totalPrice,
-            parts: selectedParts,
-            dateSaved: new Date().toLocaleDateString()
-        };
-
-        const existingBuilds = JSON.parse(localStorage.getItem("savedBuilds") || "[]"); 
-
-        let updatedBuilds;
-        if (editId) {
-            updatedBuilds = existingBuilds.map(b => b.id === editId ? newBuild : b);
-        } else {
-            updatedBuilds = [...existingBuilds, newBuild];
+        if (!session?.user) {
+            alert("You must be logged in to save a build.");
+            return;
         }
 
-        localStorage.setItem("savedBuilds", JSON.stringify(updatedBuilds));
-        navigate("/saved");
+        setSaving(true);
+        try {
+            await saveBuild({
+                buildId: editId,
+                userId: session.user.id,
+                name: buildName,
+                notes: buildNotes.trim(),
+                totalPrice,
+                generatedBudget,
+                selectedParts,
+            });
+            navigate("/saved");
+        } catch (err) {
+            console.error("Failed to save build:", err);
+            alert("Failed to save build. Please try again.");
+        } finally {
+            setSaving(false);
+        }
     };
 
     return (
@@ -384,8 +391,8 @@ export default function CustomBuild() {
                         value={buildName}
                         onChange={(e) => setBuildName(e.target.value)}
                     />
-                    <button className="btn-save-build" onClick={handleSaveBuild}>
-                        Save Build
+                    <button className="btn-save-build" onClick={handleSaveBuild} disabled={saving}>
+                        {saving ? "Saving..." : "Save Build"}
                     </button>
                 </div>
             </div>

@@ -1,17 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import PartIssue from "../../components/PartIssue/PartIssue";
+import { AuthContext } from "../../context/AuthContext";
+import { getUserBuilds, deleteBuild } from "../../lib/buildsApi";
 import "./SavedBuilds.css";
 
 export default function SavedBuilds() {
-    const [savedBuilds, setSavedBuilds] = useState(() => {
-        const saved = localStorage.getItem("savedBuilds");
-        return saved ? JSON.parse(saved) : [];
-    });
+    const { session } = useContext(AuthContext);
+    const [savedBuilds, setSavedBuilds] = useState([]);
+    const [loadingBuilds, setLoadingBuilds] = useState(true);
     const [viewingBuild, setViewingBuild] = useState(null);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!session?.user) {
+            setLoadingBuilds(false);
+            return;
+        }
+        setLoadingBuilds(true);
+        getUserBuilds(session.user.id)
+            .then(setSavedBuilds)
+            .catch(console.error)
+            .finally(() => setLoadingBuilds(false));
+    }, [session]);
 
     useEffect(() => {
         const handleKey = (e) => {
@@ -21,11 +34,15 @@ export default function SavedBuilds() {
         return () => window.removeEventListener("keydown", handleKey);
     }, []);
 
-    const handleDelete = (id) => {
-        if (window.confirm("Are you sure you want to delete this build?")) {
-            const updatedBuilds = savedBuilds.filter(build => build.id !== id);
-            setSavedBuilds(updatedBuilds);
-            localStorage.setItem("savedBuilds", JSON.stringify(updatedBuilds));
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this build?")) return;
+        try {
+            await deleteBuild(id, session.user.id);
+            setSavedBuilds(prev => prev.filter(b => b.id !== id));
+            if (viewingBuild?.id === id) setViewingBuild(null);
+        } catch (err) {
+            console.error("Failed to delete build:", err);
+            alert("Failed to delete build. Please try again.");
         }
     };
 
@@ -54,7 +71,9 @@ export default function SavedBuilds() {
                 <p className="saved-subtitle">Review and manage your custom configurations.</p>
             </div>
 
-            {savedBuilds.length === 0 ? (
+            {loadingBuilds ? (
+                <div className="empty-state"><p>Loading your builds...</p></div>
+            ) : savedBuilds.length === 0 ? (
                 <div className="empty-state">
                     <p>You haven't saved any builds yet.</p>
                     <Link to="/custom-build">

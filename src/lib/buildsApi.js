@@ -34,7 +34,6 @@ function partsToIds(selectedParts) {
 }
 
 function rowToSelectedParts(row) {
-  console.log(row);
   const slots = [
     { key: 'cpu',     data: row.cpu_part,     Class: CPU },
     { key: 'cooler',  data: row.cooler_part,  Class: CPUCooler },
