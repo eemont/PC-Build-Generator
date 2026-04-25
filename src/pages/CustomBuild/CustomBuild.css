@@ -73,9 +73,10 @@
     gap: 10px;
 }
 .col-compatibility-msg {
+    color: gray;
+    font-weight: 200;
     font-size: 0.7rem;
     text-align: right;
-    font-style: italic;
     margin-right: 10px;
 }
 

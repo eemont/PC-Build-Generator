@@ -287,8 +287,8 @@ export default function CustomBuild() {
                                     <p>
                                         {
                                         selected?.issues?.filter(issue => issue.severity === 'error')?.length > 0
-                                            ? <span>This part has severe compatibility errors</span>
-                                            : <span>This part may not be compatible</span>
+                                            ? <span>Severe compatibility errors</span>
+                                            : <span>May not be compatible</span>
                                         }
                                     </p>
                                 }
