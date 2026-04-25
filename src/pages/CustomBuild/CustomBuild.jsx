@@ -281,9 +281,9 @@ export default function CustomBuild() {
                                 {selected && !selected?.compatible &&
                                     <p>
                                         {
-                                        selected?.issues?.filter(issue => issue.severity == 'error')?.length > 0
-                                            ? <span>This part has severe compatibility errors</span>
-                                            : <span>This part may not be compatible</span>
+                                        selected?.issues?.filter(issue => issue.severity === 'error')?.length > 0
+                                            ? <span>Severe compatibility errors</span>
+                                            : <span>May not be compatible</span>
                                         }
                                     </p>
                                 }

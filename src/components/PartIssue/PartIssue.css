@@ -14,8 +14,9 @@
 
 .issue-tooltip {
     background: #18181D;
-    border: 0.5px solid #c89dff;
-    border-radius: 30px;
+    border-bottom: 5px solid #c89dff;
+    /* border-radius: 30px; */
+    font-size: 0.9rem;
     position: absolute;
     pointer-events: none;
     left: -400px;
@@ -25,5 +26,6 @@
 }
 
 .issue-tooltip .issues {
-    width: 80%;
+    width: 90%;
+    line-height: 18px;
 }
