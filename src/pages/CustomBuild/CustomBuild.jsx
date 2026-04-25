@@ -71,6 +71,21 @@ export default function CustomBuild() {
             ? reinitializeParts(editBuild.parts) 
             : {}
     });    
+
+    // Calculate compatibility percentage: parts w/out errors (can have warnings) / total
+    const compatibleParts = Object.values(selectedParts).filter(part =>
+        part.compatible || part.issues.filter(issue => issue.severity != "error").length > 0
+    ).length;
+    const totalParts = Object.values(selectedParts).length;
+    const compatibilityPercentage = Number.isNaN(compatibleParts / totalParts)
+            ? 0
+            : compatibleParts / totalParts;
+    
+    const compatibilityWheel = document.querySelector(".compatibility-wheel");
+    if (compatibilityWheel) {
+        compatibilityWheel.style.setProperty("--angle", `${compatibilityPercentage*360}deg`);
+    }
+
     const [buildName, setBuildName] = useState(editBuild ? editBuild.name : "");
     const [buildNotes, setBuildNotes] = useState(editBuild ? (editBuild.notes || "") : "");
     const editId = editBuild ? editBuild.id : null;
@@ -82,7 +97,6 @@ export default function CustomBuild() {
     const [availableParts, setAvailableParts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
-
     const [ignoreCompatibility, setIgnoreCompatibility] = useState(false);
     
     const navigate = useNavigate();
@@ -158,7 +172,6 @@ export default function CustomBuild() {
         setSelectedParts(newSelectedParts);
         setPickerOpen(null);
     };
-    console.log(selectedParts);
 
     const totalPrice = Object.values(selectedParts).reduce((sum, selected) => sum + (selected.part.price || 0), 0);
     const partsCount = Object.keys(selectedParts).length;
@@ -347,6 +360,15 @@ export default function CustomBuild() {
                         </span>
                     </div>
                 )}
+
+                {/* Compatibility Wheel */}
+                <div className="compatibility-wheel-wrapper">
+                    <div className="compatibility-wheel"></div>
+                    <div className="compatibility-text">
+                        <p className="compatibility-percentage">{(compatibilityPercentage*100).toFixed(2)}%</p>
+                        <p>compatible</p>
+                    </div>
+                </div>
 
                 <div className="totals-price">
                     <span className="totals-label">Estimated Total</span>
