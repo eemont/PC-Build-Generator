@@ -70,21 +70,26 @@ export default function CustomBuild() {
         return editBuild 
             ? reinitializeParts(editBuild.parts) 
             : {}
-    });    
+    });  
+    
+    const [ compatPercent, setCompatPercent ] = useState(0);
 
     // Calculate compatibility percentage: parts w/out errors (can have warnings) / total
-    const compatibleParts = Object.values(selectedParts).filter(part =>
-        part.compatible || part.issues.filter(issue => issue.severity != "error").length > 0
-    ).length;
-    const totalParts = Object.values(selectedParts).length;
-    const compatibilityPercentage = Number.isNaN(compatibleParts / totalParts)
-            ? 0
-            : compatibleParts / totalParts;
-    
-    const compatibilityWheel = document.querySelector(".compatibility-wheel");
-    if (compatibilityWheel) {
-        compatibilityWheel.style.setProperty("--angle", `${compatibilityPercentage*360}deg`);
-    }
+    useEffect(() => {
+        const compatibleParts = Object.values(selectedParts).filter(part =>
+            part.compatible || part.issues.filter(issue => issue.severity == "error").length == 0
+        );
+        const totalParts = Object.values(selectedParts).length;
+        const compatibilityPercentage = Number.isNaN(compatibleParts.length / totalParts)
+                ? 0
+                : compatibleParts.length / totalParts;
+        setCompatPercent(compatibilityPercentage);
+        
+        const compatibilityWheel = document.querySelector(".compatibility-wheel");
+        if (compatibilityWheel) {
+            compatibilityWheel.style.setProperty("--angle", `${compatibilityPercentage*360}deg`);
+        }
+    }, [selectedParts]);
 
     const [buildName, setBuildName] = useState(editBuild ? editBuild.name : "");
     const [buildNotes, setBuildNotes] = useState(editBuild ? (editBuild.notes || "") : "");
@@ -365,7 +370,7 @@ export default function CustomBuild() {
                 <div className="compatibility-wheel-wrapper">
                     <div className="compatibility-wheel"></div>
                     <div className="compatibility-text">
-                        <p className="compatibility-percentage">{(compatibilityPercentage*100).toFixed(2)}%</p>
+                        <p className="compatibility-percentage">{(compatPercent*100).toFixed(2)}%</p>
                         <p>compatible</p>
                     </div>
                 </div>
