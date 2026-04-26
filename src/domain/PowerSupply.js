@@ -1,6 +1,8 @@
 import { PCPart } from "./PCPart.js";
 
 export class PowerSupply extends PCPart {
+    static partType = 'power-supply';
+
     formFactor = null;
     efficiencyRating = null;
     wattage = 0;
@@ -51,10 +53,9 @@ export class PowerSupply extends PCPart {
 
     getCompatibilityFields(targetPart) {
         const constraints = [];
-        const partClass = targetPart.constructor.name;
 
-        switch(partClass.name) {
-            case 'Case':
+        switch(targetPart.constructor.partType) {
+            case 'case':
                 constraints.push(this.makeConstraint({ 
                     dbField: "form_factors", 
                     domainField: 'formFactors',
@@ -65,7 +66,7 @@ export class PowerSupply extends PCPart {
                 break;
 
             // need to refactor
-            case 'GPU':
+            case 'video-card':
                 if (this.connectors.pcie8 == 0) {
                     constraints.push(this.makeConstraint({ 
                         dbField: 'external_power', 

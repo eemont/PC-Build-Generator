@@ -71,7 +71,6 @@ export function measurePartCompatibility(part, selectedParts) {
             (part, field) => part[field],
             part
           );
-
       
       if (actual != null) {
         let failed = false;

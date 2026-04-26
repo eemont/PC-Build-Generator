@@ -1,7 +1,8 @@
 import { PCPart } from "./PCPart.js";
 
 export class CPUCooler extends PCPart {
-    
+    static partType = 'cpu-cooler'; 
+
     // RPM
     fanSpeed = {
         min: 0,
@@ -73,10 +74,9 @@ export class CPUCooler extends PCPart {
 
     getCompatibilityFields(targetPart) {
         const constraints = [];
-        const partClass = targetPart.constructor.name;
 
-        switch(partClass) {
-            case 'CPU':
+        switch(targetPart.constructor.partType) {
+            case 'cpu':
                 constraints.push(this.makeConstraint({ 
                     dbField: "sockets", 
                     domainField: 'sockets',
@@ -86,7 +86,7 @@ export class CPUCooler extends PCPart {
                 }));
                 break;
 
-            case 'Case':
+            case 'case':
                 if (this.waterCooled) {
                     constraints.push(this.makeConstraint({ 
                         dbField: 'max_supported_radiator_length', 
@@ -106,7 +106,7 @@ export class CPUCooler extends PCPart {
                 }
                 break;
 
-            case 'Motherboard':
+            case 'motherboard':
                 constraints.push(this.makeConstraint({ 
                     dbField: "socket", 
                     domainField: 'socket',
