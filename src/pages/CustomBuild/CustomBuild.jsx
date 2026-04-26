@@ -72,6 +72,8 @@ export default function CustomBuild() {
             ? reinitializeParts(editBuild.parts) 
             : {}
     });    
+    console.log('selected parts:', selectedParts);
+
     const [buildName, setBuildName] = useState(editBuild ? editBuild.name : "");
     const [buildNotes, setBuildNotes] = useState(editBuild ? (editBuild.notes || "") : "");
     const editId = editBuild ? editBuild.id : null;
