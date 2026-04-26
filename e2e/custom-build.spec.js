@@ -1,25 +1,24 @@
+// e2e/custom-build.spec.js
 import { test, expect } from '@playwright/test';
 
 test.describe('Custom Build Compatibility Logic', () => {
 
   test('Scenario 2: Renders and resolves PartIssue warning on incompatible selection', async ({ page }) => {
-    await page.goto('/custom');
+    await page.goto('/custom-build'); 
 
-    const cpuSlot = page.locator('.component-slot').filter({ hasText: 'CPU' });
-    const moboSlot = page.locator('.component-slot').filter({ hasText: 'MOTHERBOARD' });
+    await page.getByRole('button', { name: '+ Pick CPU', exact: true }).click();
+    await page.locator('.picker-item').filter({ hasText: /Ryzen 5/i }).first().click();
 
-    await cpuSlot.locator('select')
+    await page.getByRole('button', { name: '+ Pick Motherboard', exact: true }).click();
+    await page.locator('.picker-item').filter({ hasText: /Z790/i }).first().click();
 
-    await moboSlot.locator('select').selectOption({ label: 'ASUS Prime Z790-P' }); 
+    const warningText = page.locator('.col-compatibility-msg').filter({ hasText: /severe compatibility errors/i });
+    await expect(warningText).toBeVisible();
 
-    const warningBanner = page.locator('.part-issue'); 
-    await expect(warningBanner).toBeVisible();
-    await expect(warningBanner).toContainText(/Socket Mismatch/i);
-
+    await page.getByRole('button', { name: '✎' }).nth(1).click(); 
+    await page.locator('.picker-item').filter({ hasText: /B650/i }).first().click(); 
     
-    await moboSlot.locator('select').selectOption({ label: 'MSI PRO B650-P' }); 
-
-    await expect(warningBanner).toBeHidden();
+    await expect(warningText).toBeHidden();
   });
 
 });
