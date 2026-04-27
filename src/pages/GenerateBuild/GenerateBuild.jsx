@@ -5,53 +5,7 @@ import "./GenerateBuild.css";
 import { validateBudget } from "../../utils/validateBudget";
 import { useCases, presetBuilds } from "../../data/Presetbuilds";
 import { findParts, measurePartCompatibility } from "../../domain/partsApi";
-
-// ─── Budget allocation for a balanced gaming PC ───────────────────────────────
-// GPU:     35–50%  → 38%  (most impactful for gaming)
-// CPU:     15–25%  → 20%
-// Mobo:    10–15%  → 12%
-// RAM:     10–15%  shared with storage  → 7.5% each
-// Storage: 10–15%  shared with RAM      → 7.5%
-// Case:    5–10%   → 6.5%
-// PSU:     5–10%   → 6.5%
-// Cooler:  remainder → 2%
-// ─────────────────────────────────────────────────────────────────────────────
-const BUDGET_ALLOCATION = {
-    gpu:     0.50,   // aims for 50%, pickBestPart steps down from there
-    cpu:     0.17,
-    mobo:    0.10,
-    memory:  0.065,
-    storage: 0.065,
-    case:    0.04,
-    psu:     0.04,
-    cooler:  0.02,
-};
-
-// CustomBuild slot key → partsApi partType
-const SLOT_TO_PART_TYPE = {
-    gpu:     "video-card",
-    cpu:     "cpu",
-    mobo:    "motherboard",
-    memory:  "memory",
-    storage: "internal-hard-drive",
-    case:    "case",
-    psu:     "power-supply",
-    cooler:  "cpu-cooler",
-};
-
-/**
- * Pick the most expensive part that still fits within `budget`.
- * Zero-price parts are excluded to guard against DB/catalogue errors.
- * Falls back to the cheapest available part so no slot is left empty.
- */
-function pickBestPart(parts, budget) {
-    const valid = parts.filter((p) => p.part.price > 0);
-    if (valid.length === 0) return null;
-
-    const sorted = [...valid].sort((a, b) => b.price - a.price);
-    const withinBudget = sorted.find((p) => p.price <= budget);
-    return withinBudget ?? sorted[sorted.length - 1];
-}
+import { generateSmartBuild } from "../../domain/buildGenerator";
 
 export default function GenerateBuild() {
 
@@ -73,51 +27,12 @@ export default function GenerateBuild() {
         setResult({ success: true, message: "" });
 
         try {
-            const selectedParts = {};
-
-            for (const [slotKey, fraction] of Object.entries(BUDGET_ALLOCATION)) {
-                const slotBudget = budget * fraction;
-                const partType = SLOT_TO_PART_TYPE[slotKey];
-
-                const fetchParts = async (ignoreCompatibility = false) => {
-                    const parts = await findParts({
-                        partType, 
-                        limit: 100,
-                        selectedParts,
-                        ignoreCompatibility,
-                        additionalFilters: [
-                            { field: 'price', op: 'lte', val: slotBudget },
-                            { field: 'price', op: 'order', val: true }
-                        ]
-                    });
-                    return parts;
-                }
-
-                let parts = await fetchParts();
-                if (parts.length == 0) {
-                    parts = await fetchParts(true);
-                }
-                
-                const best = pickBestPart(parts, slotBudget);
-
-                if (best) {
-                    selectedParts[slotKey] = best;
-            
-                    for (const [slotKey, selected] of Object.entries(selectedParts)) {
-                        selectedParts[slotKey] = measurePartCompatibility(selected.part, selectedParts)
-                    }
-                }
-            }
-
-            const totalPrice = Object.values(selectedParts).reduce(
-                (sum, p) => sum + (p.price ?? 0),
-                0
-            );
+            const { parts: selectedParts, totalPrice } = await generateSmartBuild(budget, findParts, measurePartCompatibility);
 
             navigate("/custom-build", {
                 state: {
                     editBuild: {
-                        id: null, // null → treated as a new build when saved
+                        id: null,
                         name: `$${budget.toLocaleString()} Build`,
                         parts: selectedParts,
                         totalPrice,
