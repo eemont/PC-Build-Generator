@@ -29,6 +29,10 @@ export default function GenerateBuild() {
         try {
             const { parts: selectedParts, totalPrice } = await generateSmartBuild(budget, findParts, measurePartCompatibility);
 
+            if (Object.keys(selectedParts).length === 0) {
+                throw new Error("Database failed to return any parts.");
+            }
+
             navigate("/custom-build", {
                 state: {
                     editBuild: {

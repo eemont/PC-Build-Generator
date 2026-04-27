@@ -28,5 +28,15 @@ playwright
 # .env
 .env
 .env.*
+<<<<<<< HEAD
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+=======
 .vercel
 .env*.local
+>>>>>>> 1f5bfadc14198b97fff8b900421aefbcf56e5250
