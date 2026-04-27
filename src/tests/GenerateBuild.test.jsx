@@ -3,6 +3,13 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 const mockFindParts = vi.hoisted(() => vi.fn());
+const mockMeasureCompatibility = vi.hoisted(() => vi.fn());
+
+const mockGenerateSmartBuild = vi.hoisted(() => vi.fn());
+
+vi.mock('../domain/buildGenerator', () => ({
+    generateSmartBuild: mockGenerateSmartBuild,
+}));
 
 vi.mock('react-router-dom', async () => {
     const actual = await vi.importActual('react-router-dom');
@@ -14,6 +21,7 @@ vi.mock('../domain/partsApi', async (importOriginal) => {
     return {
         ...actual,
         findParts: mockFindParts,
+        measurePartCompatibility: mockMeasureCompatibility,
     };
 });
 
