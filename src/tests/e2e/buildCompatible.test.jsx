@@ -94,9 +94,8 @@ test.describe("E2E Test - Create Compatible PC Build", () => {
         const saveBuild = await page.locator("button.btn-save-build");
         await saveBuild.click();
 
-        expect(page).toHaveURL("/saved");
+        await expect(page).toHaveURL("/saved");
         const createdBuild = await page.getByRole("header", { level: 2, name });
-        console.log(createdBuild);
-        expect(createdBuild).toBeDefined();
+        await expect(createdBuild).toBeDefined();
     });
 });

@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "test:ci": "vitest run src/tests/ci",
-    "test:e2e": "playwright test --headed --ui",
+    "test:e2e": "playwright test --headed",
     "test:watch": "vitest"
   },
   "dependencies": {
