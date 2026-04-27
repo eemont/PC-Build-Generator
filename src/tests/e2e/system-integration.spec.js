@@ -63,7 +63,7 @@ test.describe('System Integration Tests', () => {
     expect(hardReloadTracker).toBe(false);
   });
 
-  test('Security Integration: Multi-User Data Isolation', async ({ page, browser }) => {
+  test('Security Integration: Multi-User Data Isolation', async ({ page }) => {
     const uniqueBuildName = `Top Secret Build ${Date.now()}`;
 
     // --- USER A FLOW ---
