@@ -1,6 +1,8 @@
 import { PCPart } from "./PCPart.js";
 
 export class Motherboard extends PCPart {
+    static partType = 'motherboard';
+
     socket = "";
     formFactor = "";
     ramSlots = 0;

@@ -1,6 +1,8 @@
 import { PCPart } from "./PCPart.js";
 
 export class Storage extends PCPart {
+    static partType = 'storage';
+
     type = null;
     capacity = 0;
     formFactor = null;
@@ -41,10 +43,9 @@ export class Storage extends PCPart {
 
     getCompatibilityFields(targetPart) {
         const constraints = [];
-        const partClass = targetPart.constructor.name;
 
-        switch(partClass.name) {
-            case 'Motherboard': {
+        switch(targetPart.constructor.partType) {
+            case 'motherboard': {
                 const slotTypeArr = this.connectionType
                     ? this.connectionType.includes('m.2') 
                         ? ['m2_slots', 'm2Slots'] 

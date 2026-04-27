@@ -1,6 +1,8 @@
 import { PCPart } from "./PCPart.js";
 
 export class GPU extends PCPart {
+    static partType = 'video-card';
+
     chipset = null;
     vram = 0;               // GB
     coreClock = 0.09;       // ghz
@@ -68,10 +70,9 @@ export class GPU extends PCPart {
 
     getCompatibilityFields(targetPart) {
         const constraints = [];
-        const partClass = targetPart.constructor.name;
 
-        switch(partClass.name) {
-            case 'Case':
+        switch(targetPart.constructor.partType) {
+            case 'case':
                 constraints.push(this.makeConstraint({ 
                     dbField: 'max_gpu_length', 
                     domainField: 'maxGPULength',
@@ -83,7 +84,7 @@ export class GPU extends PCPart {
 
             // may need to rethink GPU tables:
             // - store interface counts instead of string to make matching easier
-            case 'Motherboard':
+            case 'motherboard':
                 if (this._interface == 'pcie x16') {
                     constraints.push(this.makeConstraint({ 
                         dbField: "pcie_x16_slots", 
@@ -102,7 +103,7 @@ export class GPU extends PCPart {
                     }));
                 }
                 break;
-            case 'PowerSupply': {
+            case 'power-supply': {
                 constraints.push(this.makeConstraint({ 
                     dbField: 'wattage', 
                     domainField: 'wattage',

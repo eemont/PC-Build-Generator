@@ -1,6 +1,8 @@
 import { PCPart } from "./PCPart.js";
 
 export class Memory extends PCPart {
+    static partType = 'memory';
+
     memoryType = null;
     capacityGB = 0;
     errorCorrection = null;
@@ -39,10 +41,9 @@ export class Memory extends PCPart {
 
     getCompatibilityFields(targetPart) {
         const constraints = [];
-        const partClass = targetPart.constructor.name;
 
-        switch(partClass.name) {
-            case 'Motherboard':
+        switch(targetPart.constructor.partType) {
+            case 'motherboard':
                 constraints.push(this.makeConstraint({ 
                     dbField: "memory_types", 
                     domainField: 'memoryTypes',

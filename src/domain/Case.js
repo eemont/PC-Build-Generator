@@ -1,6 +1,8 @@
 import { PCPart } from "./PCPart.js";
 
 export class Case extends PCPart {
+    static partType = 'case';
+
     type = null;
     internalBays = 0;
 
@@ -42,10 +44,9 @@ export class Case extends PCPart {
 
     getCompatibilityFields(targetPart) {
         const constraints = [];
-        const partClass = targetPart.constructor.name;
 
-        switch(partClass) {
-            case 'CPUCooler':
+        switch(targetPart.constructor.partType) {
+            case 'cpu-cooler':
                 if (targetPart.waterCooled) {
                     constraints.push(this.makeConstraint({
                         dbField: 'radiator_size',
@@ -64,8 +65,8 @@ export class Case extends PCPart {
                     }))
                 }
                 break;
-            case 'Motherboard':
-            case 'PowerSupply':
+            case 'motherboard':
+            case 'power-supply':
                 constraints.push(this.makeConstraint({ 
                     dbField: "form_factor",
                     domainField: 'formFactor',
@@ -74,7 +75,7 @@ export class Case extends PCPart {
                     isMissing: this.formFactors.length === 0,
                 }));
                 break;
-            case 'GPU':
+            case 'video-card':
                 constraints.push(this.makeConstraint({ 
                     dbField: 'length', 
                     domainField: 'length',
