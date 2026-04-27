@@ -64,7 +64,7 @@ export class Motherboard extends PCPart {
         const constraints = []; 
         const partClass = targetPart.constructor.name;
 
-        switch(partClass.name) {
+        switch(partClass) {
             case 'Case':
                 constraints.push(this.makeConstraint({ 
                     dbField: 'form_factors', 
