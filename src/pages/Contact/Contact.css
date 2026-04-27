@@ -69,7 +69,8 @@
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select { 
     padding: 12px;
     border-radius: 8px;
     border: 1px solid rgb(80, 80, 80);
@@ -80,8 +81,14 @@
     transition: border-color 0.2s;
 }
 
+.form-group select option {
+    background: rgb(20, 20, 25);
+    color: white;
+}
+
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: var(--primary-purple);
 }

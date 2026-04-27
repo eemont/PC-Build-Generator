@@ -64,6 +64,7 @@ describe("Contact (Supabase)", () => {
           name: "Test User",
           email: "test@example.com",
           subject: "Bug Report",
+          category: "bug",
           message: "The page is broken.",
         },
       ]);

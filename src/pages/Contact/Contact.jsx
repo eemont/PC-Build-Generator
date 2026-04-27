@@ -3,19 +3,17 @@ import { supabase } from "../../lib/supabaseClient";
 import "./Contact.css";
 
 export default function Contact() {
-    // 1. Set up state for our form fields
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         subject: "",
+        category: "bug",
         message: ""
     });
 
-    // 2. Set up state for UI feedback
     const [status, setStatus] = useState("idle"); // 'idle', 'loading', 'success', 'error'
     const [errorMessage, setErrorMessage] = useState("");
 
-    // 3. Handle input changes
     const handleChange = (e) => {
         const { id, value } = e.target;
         setFormData(prev => ({
@@ -24,20 +22,17 @@ export default function Contact() {
         }));
     };
 
-    // 4. Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setStatus("loading");
         setErrorMessage("");
 
-        // Basic validation
-        if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+        if (!formData.name || !formData.email || !formData.subject || !formData.category || !formData.message) {
             setErrorMessage("Please fill out all fields.");
             setStatus("error");
             return;
         }
 
-        // Send to Supabase
         const { error } = await supabase
             .from('contact_messages')
             .insert([
@@ -45,6 +40,7 @@ export default function Contact() {
                     name: formData.name, 
                     email: formData.email, 
                     subject: formData.subject, 
+                    category: formData.category,
                     message: formData.message 
                 }
             ]);
@@ -55,8 +51,7 @@ export default function Contact() {
             setStatus("error");
         } else {
             setStatus("success");
-            // Clear the form
-            setFormData({ name: "", email: "", subject: "", message: "" });
+            setFormData({ name: "", email: "", subject: "", category: "bug", message: "" });
         }
     };
 
@@ -113,6 +108,23 @@ export default function Contact() {
                                     disabled={status === "loading"}
                                 />
                             </div>
+
+                            {/* Added Category Dropdown */}
+                            <div className="form-group">
+                                <label htmlFor="category">Category</label>
+                                <select 
+                                    id="category" 
+                                    value={formData.category}
+                                    onChange={handleChange}
+                                    disabled={status === "loading"}
+                                    style={{ padding: "10px", borderRadius: "5px", border: "1px solid #ccc", width: "100%", backgroundColor: "white" }}
+                                >
+                                    <option value="bug">Bug Report</option>
+                                    <option value="feature">Feature Request</option>
+                                    <option value="general">General Inquiry</option>
+                                </select>
+                            </div>
+
                             <div className="form-group">
                                 <label htmlFor="subject">Subject</label>
                                 <input 
