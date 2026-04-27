@@ -63,16 +63,16 @@ export default function Nav() {
   return (
     <div className="navbar">
         <Link to="/" className="brand">
-        <div className="img" id="pc"></div>
-        <h2>PC Build Generator</h2>
+          <div className="img" id="pc"></div>
+          <h2>PC Build Generator</h2>
         </Link>
 
         <button
-  className="menu-toggle"
-  onClick={() => setMenuOpen(!menuOpen)}
->
-  ☰
-</button>
+          className="menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
 
       <div className={`links ${menuOpen ? "open" : ""}`}>
         <Link to="/">
@@ -99,18 +99,18 @@ export default function Nav() {
 
         {session ? (
             <button
-            id="join"
-            className="sign-out-btn"
-            type="button"
-            onClick={handleSignOut}
+              id="join"
+              className="sign-out-btn"
+              type="button"
+              onClick={handleSignOut}
             >
-            <div className="img" id="join"></div>
-            <span>Sign Out</span>
+              <div className="img" id="join"></div>
+              <span>Sign Out</span>
             </button>
         ) : (
             <Link to="/login" id="join" className="join-now">
-            <div className="img" id="join"></div>
-            <span>Join Now</span>
+              <div className="img" id="join"></div>
+              <span>Join Now</span>
             </Link>
         )}
       </div>

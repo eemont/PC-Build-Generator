@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import App from "../App";
+import App from "../../App";
 
-vi.mock("../lib/supabaseClient", () => {
+vi.mock("../../lib/supabaseClient", () => {
   return {
     supabase: {
       auth: {
@@ -14,7 +14,7 @@ vi.mock("../lib/supabaseClient", () => {
   };
 });
 
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseClient";
 
 describe("Session handling", () => {
   beforeEach(() => {

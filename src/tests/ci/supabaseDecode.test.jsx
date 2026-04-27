@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
 
-import { CPU } from "../domain/CPU";
-import { GPU } from "../domain/GPU";
-import { Memory } from "../domain/Memory";
-import { Storage } from "../domain/Storage";
-import { CPUCooler } from "../domain/CPUCooler";
-import { Motherboard } from "../domain/Motherboard";
+import { CPU } from "../../domain/CPU";
+import { GPU } from "../../domain/GPU";
+import { Memory } from "../../domain/Memory";
+import { Storage } from "../../domain/Storage";
+import { CPUCooler } from "../../domain/CPUCooler";
+import { Motherboard } from "../../domain/Motherboard";
 
 describe("Supabase decode mapping", () => {
   it("B-01: CPU part row from Supabase maps correctly into app model", () => {

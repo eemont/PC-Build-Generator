@@ -1,5 +1,5 @@
 import { expect, test, describe } from "vitest"
-import { validateBudget } from "../utils/validateBudget.js"
+import { validateBudget } from "../../utils/validateBudget.js"
 
 describe("Validate Budget", () => {
     test.each([300, 1000, 1200.50, 10000])("Valid budget passes: %s", (val) => {

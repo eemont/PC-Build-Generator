@@ -65,7 +65,6 @@ function formatPartSpecs(part, slotKey) {
 export default function CustomBuild() {
     const location = useLocation();
     const editBuild = location.state?.editBuild || null;
-    // console.log(editBuild);
 
     const [selectedParts, setSelectedParts] = useState(() => {
         return editBuild 

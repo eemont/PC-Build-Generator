@@ -1,7 +1,7 @@
 import { it, describe } from "vitest"
-import { findParts } from "../domain/partsApi"
+import { findParts } from "../../domain/partsApi.js"
 
-import { mockSelectedParts } from "./mocks/mockSelectedParts.js";
+import { mockSelectedParts } from "../mocks/mockSelectedParts.js";
 
 
 describe("Test compatibility between parts", () => {
