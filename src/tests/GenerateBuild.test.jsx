@@ -33,7 +33,7 @@ describe('GenerateBuild - Build Generation Flow', () => {
     });
 
     it('disables the button and shows Generating... while the API is loading', async () => {
-        mockFindParts.mockImplementation(() => new Promise(() => {}));
+        mockGenerateSmartBuild.mockImplementation(() => new Promise(() => {}));
 
         render(
             <MemoryRouter>
@@ -51,7 +51,7 @@ describe('GenerateBuild - Build Generation Flow', () => {
     });
 
     it('shows an error message and does not navigate if the API fails', async () => {
-        mockFindParts.mockRejectedValue(new Error('Network error'));
+        mockGenerateSmartBuild.mockRejectedValue(new Error('Network error'));
 
         render(
             <MemoryRouter>
