@@ -3,7 +3,14 @@ import { vi } from "vitest";
 // Create a single mock supabase object
 export const supabaseMock = {
   auth: {
-    getSession: vi.fn(),
+    getSession: vi.fn().mockResolvedValue({
+        data: {
+            session: {
+                user: { id: "11948775-23ab-416f-ad09-76f62ecec1f2" }
+            }
+        },
+        error: null
+    }),
     onAuthStateChange: vi.fn(),
     signInWithPassword: vi.fn(),
     signUp: vi.fn(),

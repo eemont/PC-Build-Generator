@@ -7,7 +7,7 @@ import { getUserBuilds, deleteBuild } from "../../lib/buildsApi";
 import "./SavedBuilds.css";
 
 export default function SavedBuilds() {
-    const { session } = useContext(AuthContext);
+    const { session } = useContext(AuthContext) || {};
     const [savedBuilds, setSavedBuilds] = useState([]);
     const [loadingBuilds, setLoadingBuilds] = useState(true);
     const [viewingBuild, setViewingBuild] = useState(null);
@@ -15,11 +15,8 @@ export default function SavedBuilds() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!session?.user) {
-            setLoadingBuilds(false);
-            return;
-        }
-        setLoadingBuilds(true);
+        if (!session?.user) return;
+
         getUserBuilds(session.user.id)
             .then(setSavedBuilds)
             .catch(console.error)

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { COMPONENT_SLOTS } from "../../utils/componentSlots";
-
-import errorImage from "/assets/error.webp";
-import warningImage from "/assets/warning.webp";
 import "./PartIssue.css";
+
+const errorImage = "/assets/error.webp";
+const warningImage = "/assets/warning.webp";
 
 export default function PartIssue({ issues }) {
     const [ showTooltip, setShowTooltip ] = useState(false);
