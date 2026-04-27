@@ -9,6 +9,9 @@ export default function Nav() {
 
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const ADMIN_EMAILS = ["dylantran341@gmail.com"];
+  const isAdmin = session && ADMIN_EMAILS.includes(session.user.email);
+
   useEffect(() => {
     async function loadSession() {
       const { data } = await supabase.auth.getSession();
@@ -95,6 +98,13 @@ export default function Nav() {
             <div className="img" id="save"></div>
             <span>Saved Builds</span>
         </Link>
+        )}
+
+        {isAdmin && (
+          <Link to="/admin/triage">
+              <div className="img" id="build"></div>
+              <span>Triage</span>
+          </Link>
         )}
 
         {session ? (

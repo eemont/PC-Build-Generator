@@ -10,6 +10,7 @@ import CustomBuild from "./pages/CustomBuild/CustomBuild";
 import SavedBuilds from "./pages/SavedBuilds/SavedBuilds";
 import FAQ from "./pages/FAQ/FAQ";
 import Contact from "./pages/Contact/Contact";
+import Triage from "./pages/Admin/Triage";
 
 export default function App() {
 
@@ -29,6 +30,15 @@ export default function App() {
           element={
             <ProtectedRoute>
               <SavedBuilds />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/triage"
+          element={
+            <ProtectedRoute>
+              <Triage />
             </ProtectedRoute>
           }
         />
