@@ -9,9 +9,13 @@ vi.mock('react-router-dom', async () => {
     return { ...actual, useNavigate: () => vi.fn() };
 });
 
-vi.mock('../domain/partsApi', () => ({
-    findParts: mockFindParts,
-}));
+vi.mock('../domain/partsApi', async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+        ...actual,
+        findParts: mockFindParts,
+    };
+});
 
 import GenerateBuild from '../pages/GenerateBuild/GenerateBuild.jsx';
 
