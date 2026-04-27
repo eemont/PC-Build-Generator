@@ -35,6 +35,7 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+<<<<<<< HEAD
         run: npm run test
       
       - name: Install Playwright Browsers (CI)
@@ -53,3 +54,6 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+=======
+        run: npm run test:ci
+>>>>>>> 1f5bfadc14198b97fff8b900421aefbcf56e5250

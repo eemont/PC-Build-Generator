@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { COMPONENT_SLOTS } from "../../utils/componentSlots";
+
 import "./PartIssue.css";
 
 const errorImage = "/assets/error.webp";

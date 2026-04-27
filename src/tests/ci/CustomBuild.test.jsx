@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import CustomBuild from '../pages/CustomBuild/CustomBuild.jsx';
+import CustomBuild from '../../pages/CustomBuild/CustomBuild.jsx';
 
 const mockNavigate = vi.fn();
 let mockLocationState = null; 

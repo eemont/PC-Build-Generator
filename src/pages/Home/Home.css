@@ -187,6 +187,8 @@
     background: var(--primary-purple);
     color: white;
     translate: 0 -2px;
+}
+
 /* Tablet */
 @media (max-width: 900px) {
     .welcome-content {
@@ -198,8 +200,6 @@
         grid-template-columns: 1fr;
         max-width: 600px;
     }
-}
-
 }
 
 /* Mobile */

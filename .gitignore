@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+test-results
+playwright
 
 # Editor directories and files
 .vscode/*
@@ -26,6 +28,7 @@ dist-ssr
 # .env
 .env
 .env.*
+<<<<<<< HEAD
 
 # Playwright
 /test-results/
@@ -33,3 +36,7 @@ dist-ssr
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+=======
+.vercel
+.env*.local
+>>>>>>> 1f5bfadc14198b97fff8b900421aefbcf56e5250

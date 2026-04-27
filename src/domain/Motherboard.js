@@ -1,6 +1,8 @@
 import { PCPart } from "./PCPart.js";
 
 export class Motherboard extends PCPart {
+    static partType = 'motherboard';
+
     socket = "";
     formFactor = "";
     ramSlots = 0;
@@ -64,7 +66,7 @@ export class Motherboard extends PCPart {
         const constraints = []; 
         const partClass = targetPart.constructor.name;
 
-        switch(partClass.name) {
+        switch(partClass) {
             case 'Case':
                 constraints.push(this.makeConstraint({ 
                     dbField: 'form_factors', 

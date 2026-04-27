@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import Auth from "../Auth";
+import Auth from "../../Auth";
 
-vi.mock("../lib/supabaseClient", () => ({
+vi.mock("../../lib/supabaseClient", () => ({
   supabase: {
     auth: {
       signInWithPassword: vi.fn(),
@@ -13,7 +13,7 @@ vi.mock("../lib/supabaseClient", () => ({
   },
 }));
 
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseClient";
 
 describe("Auth (Supabase)", () => {
   beforeEach(() => {

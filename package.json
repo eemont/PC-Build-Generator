@@ -7,11 +7,18 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+<<<<<<< HEAD
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test"
+=======
+    "test:ci": "vitest run src/tests/ci",
+    "test:e2e": "playwright test --headed",
+    "test:watch": "vitest"
+>>>>>>> 1f5bfadc14198b97fff8b900421aefbcf56e5250
   },
   "dependencies": {
+    "@playwright/test": "^1.59.1",
     "@supabase/supabase-js": "^2.93.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

@@ -73,9 +73,10 @@
     gap: 10px;
 }
 .col-compatibility-msg {
+    color: gray;
+    font-weight: 200;
     font-size: 0.7rem;
     text-align: right;
-    font-style: italic;
     margin-right: 10px;
 }
 
@@ -851,4 +852,38 @@
         max-width: 100%;
         margin: 0;
     }
+}
+
+.compatibility-wheel-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.compatibility-wheel-wrapper h3 {
+    margin: 0;
+    padding: 0;
+}
+.compatibility-wheel-wrapper p:not(.compatibility-percentage) {
+    font-weight: 300;
+    color: gray;
+    font-size: 0.8rem;
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+.compatibility-wheel {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 6px solid rgb(57, 53, 81);
+    background: conic-gradient(
+        from 0deg, 
+        var(--primary-purple) var(--angle),
+        transparent 0
+    );
+    transition: --angle 0.5s ease;
 }

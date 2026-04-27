@@ -1,6 +1,8 @@
 import { PCPart } from "./PCPart.js";
 
 export class CPU extends PCPart {
+    static partType = 'cpu';
+
     cores = 0;
     tdp = 0;                        // watts
     integratedGraphics = null;
@@ -35,10 +37,9 @@ export class CPU extends PCPart {
 
     getCompatibilityFields(targetPart) {
         const constraints = [];
-        const partClass = targetPart.constructor.name;
 
-        switch(partClass) {
-            case 'CPUCooler':
+        switch(targetPart.constructor.partType) {
+            case 'cpu-cooler':
                 constraints.push(this.makeConstraint({ 
                     dbField: "sockets", 
                     domainField: 'sockets',
@@ -47,7 +48,7 @@ export class CPU extends PCPart {
                     isMissing: this.sockets == null
                 }));
                 break;
-            case 'Motherboard':
+            case 'motherboard':
                 constraints.push(this.makeConstraint({ 
                     dbField: "socket", 
                     domainField: 'socket',
