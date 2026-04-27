@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+test-results
+playwright
 
 # Editor directories and files
 .vscode/*
@@ -26,3 +28,5 @@ dist-ssr
 # .env
 .env
 .env.*
+.vercel
+.env*.local
