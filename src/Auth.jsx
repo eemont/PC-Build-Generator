@@ -142,7 +142,6 @@ export default function Auth() {
 
           <button
             type="submit"
-            role="sign-in"
             disabled={loading}
             style={{
               width: "100%",
