@@ -11,7 +11,7 @@ vi.mock("../../lib/buildsApi", () => ({
     deleteBuild: vi.fn()
 }));
 
-import { getUserBuilds, deleteBuild } from '../lib/buildsApi';
+import { getUserBuilds, deleteBuild } from '../../lib/buildsApi';
 
 const mockSession = {
     user: { id: "11948775-23ab-416f-ad09-76f62ecec1f2" }
@@ -21,11 +21,6 @@ vi.mock('react-router-dom', async () => {
     const actual = await vi.importActual('react-router-dom');
     return { ...actual, useNavigate: () => mockNavigate };
 });
-
-vi.mock('../lib/buildsApi', () => ({
-    getUserBuilds: vi.fn(),
-    deleteBuild: vi.fn(),
-}));
 
 function renderWithAuth(session = null) {
     return render(
