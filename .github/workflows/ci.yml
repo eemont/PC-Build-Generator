@@ -22,9 +22,6 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Install coverage provider
-        run: npm install -D @vitest/coverage-v8
-
       - name: Run ESLint
         run: npm run lint
 
@@ -48,7 +45,7 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        run: npx vitest run --coverage --reporter=verbose
+        run: npx vitest run src/tests/ci --coverage.enabled --coverage.provider=v8 --coverage.reporter=json-summary --coverage.reporter=text --reporter=verbose
 
       - name: Upload coverage report
         if: always()
