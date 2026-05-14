@@ -18,7 +18,6 @@ vi.mock('react-router-dom', async () => {
 describe('CustomBuild Component', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        localStorage.clear();
         mockLocationState = null; 
         vi.stubGlobal('alert', vi.fn()); 
     });
