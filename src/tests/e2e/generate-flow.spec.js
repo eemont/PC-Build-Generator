@@ -38,6 +38,7 @@ test.describe('Generate Build Flow & Validation', () => {
     await expect(page).toHaveURL(/.*build/);
 
     await page.locator('#budget').fill('1500');
+    await page.waitForTimeout(1000);
     await page.getByRole('button', { name: 'Generate', exact: true }).click();
 
     await expect(page.locator('.parts-table')).toBeVisible(); 

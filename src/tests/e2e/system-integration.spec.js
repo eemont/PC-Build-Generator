@@ -92,8 +92,8 @@ test.describe('System Integration Tests', () => {
     await expect(page).toHaveURL(/.*login/); 
 
     // --- USER B FLOW ---
-    await page.getByLabel('Email').fill('dylantran341@gmail.com');
-    await page.getByLabel('Password').fill('dylandev');
+    await page.getByLabel('Email').fill('jamesruiz21@yahoo.com');
+    await page.getByLabel('Password').fill('Apples123$');
     await page.getByRole('button', { name: 'Sign in', exact: true }).click();
     
     await expect(page.getByRole('button', { name: 'Sign Out' })).toBeVisible();
