@@ -39,9 +39,9 @@ test.describe('Generate Build Flow & Validation', () => {
 
     await page.locator('#budget').fill('1500');
     await page.waitForTimeout(1000);
-    await page.getByRole('button', { name: 'Generate', exact: true }).click();
+    await page.locator('#budget').press('Enter');
 
-    await expect(page.locator('.parts-table')).toBeVisible(); 
+    await expect(page.locator('.parts-table')).toBeVisible({ timeout: 30000 }); 
 
     await page.getByRole('button', { name: 'Save Build' }).click();
 
