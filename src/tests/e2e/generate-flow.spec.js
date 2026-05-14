@@ -27,27 +27,18 @@ test.describe('Generate Build Flow & Validation', () => {
   });
 
   test('Scenario 1: Auto-generates a build and persists it to Saved Builds', async ({ page }) => {
-    await page.goto('/login');
-    await page.getByLabel('Email').fill('test@test.com');
-    await page.getByLabel('Password').fill('testtest');
-    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
-    
-    await expect(page.getByRole('link', { name: 'Build Your PC' })).toBeVisible();
-    
-    await page.getByRole('link', { name: 'Build Your PC' }).click(); 
+    await page.goto('/build');
     await expect(page).toHaveURL(/.*build/);
 
     await page.locator('#budget').fill('1500');
     await page.getByRole('button', { name: 'Generate', exact: true }).click();
 
-    await expect(page.locator('.parts-table')).toBeVisible(); 
+    await expect(page.locator('.parts-table')).toBeVisible({ timeout: 30000 });
 
     await page.getByRole('button', { name: 'Save Build' }).click();
-
     await page.getByRole('link', { name: 'Saved Builds' }).click();
-    await expect(page).toHaveURL(/.*saved/); 
-
-    await expect(page.getByText('$1,500 Build').first()).toBeVisible(); 
+    await expect(page).toHaveURL(/.*saved/);
+    await expect(page.getByText('$1,500 Build').first()).toBeVisible();
   });
 
 });

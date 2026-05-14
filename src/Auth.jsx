@@ -26,7 +26,7 @@ export default function Auth() {
         if (error) throw error;
 
         setMessage(
-          "Account created! If email confirmation is enabled, check your email to confirm."
+          "Account created!"
         );
       } else {
         const { error } = await supabase.auth.signInWithPassword({

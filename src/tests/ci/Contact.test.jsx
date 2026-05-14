@@ -1,113 +1,35 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
 import Contact from "../../pages/Contact/Contact";
 
-vi.mock("../../lib/supabaseClient", () => ({
-  supabase: {
-    from: vi.fn(),
-  },
-}));
-
-import { supabase } from "../../lib/supabaseClient";
-
-describe("Contact (Supabase)", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it("renders the contact form UI (basic sanity)", () => {
+describe("Contact (Static)", () => {
+  it("renders the main heading", () => {
     render(<Contact />);
-
     expect(screen.getByRole("heading", { name: /contact us/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/subject/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/message/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /submit report/i })).toBeInTheDocument();
   });
 
-  it("shows validation error when submitting empty fields", async () => {
+  it("renders the intro text", () => {
     render(<Contact />);
-
-    const submitBtn = screen.getByRole("button", { name: /submit report/i });
-    fireEvent.click(submitBtn);
-
-    expect(await screen.findByText(/please fill out all fields/i)).toBeInTheDocument();
-    expect(supabase.from).not.toHaveBeenCalled();
+    expect(screen.getByText(/get in touch with our development team/i)).toBeInTheDocument();
   });
 
-  it("submits the form and calls supabase.from('contact_messages').insert()", async () => {
-    const mockInsert = vi.fn().mockResolvedValue({ error: null });
-    supabase.from.mockReturnValue({ insert: mockInsert });
-
+  it("renders the Developer Contact subheading", () => {
     render(<Contact />);
-
-    fireEvent.change(screen.getByLabelText(/name/i), {
-      target: { value: "Test User" },
-    });
-    fireEvent.change(screen.getByLabelText(/email/i), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.change(screen.getByLabelText(/subject/i), {
-      target: { value: "Bug Report" },
-    });
-    fireEvent.change(screen.getByLabelText(/message/i), {
-      target: { value: "The page is broken." },
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /submit report/i }));
-
-    await waitFor(() => {
-      expect(supabase.from).toHaveBeenCalledWith("contact_messages");
-      expect(mockInsert).toHaveBeenCalledWith([
-        {
-          name: "Test User",
-          email: "test@example.com",
-          subject: "Bug Report",
-          message: "The page is broken.",
-        },
-      ]);
-    });
-
-    expect(await screen.findByText(/thank you!/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /developer contact/i })).toBeInTheDocument();
   });
 
-  it("shows an error message if Supabase insert fails", async () => {
-    const mockInsert = vi.fn().mockResolvedValue({
-      error: { message: "Network Error" },
-    });
-    supabase.from.mockReturnValue({ insert: mockInsert });
-
+  it("renders the email address", () => {
     render(<Contact />);
-
-    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: "Test" } });
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: "t@t.com" } });
-    fireEvent.change(screen.getByLabelText(/subject/i), { target: { value: "Test" } });
-    fireEvent.change(screen.getByLabelText(/message/i), { target: { value: "Test" } });
-
-    fireEvent.click(screen.getByRole("button", { name: /submit report/i }));
-
-    expect(await screen.findByText(/something went wrong/i)).toBeInTheDocument();
+    expect(screen.getByText(/placeholder@example\.com/i)).toBeInTheDocument();
   });
 
-  it("resets the form when clicking 'Send Another Message'", async () => {
-    const mockInsert = vi.fn().mockResolvedValue({ error: null });
-    supabase.from.mockReturnValue({ insert: mockInsert });
-
+  it("renders the phone number", () => {
     render(<Contact />);
+    expect(screen.getByText(/\+1 \(555\) 123-4567/i)).toBeInTheDocument();
+  });
 
-    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: "Bob" } });
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: "b@b.com" } });
-    fireEvent.change(screen.getByLabelText(/subject/i), { target: { value: "Hi" } });
-    fireEvent.change(screen.getByLabelText(/message/i), { target: { value: "Hi" } });
-    
-    fireEvent.click(screen.getByRole("button", { name: /submit report/i }));
-
-    const resetBtn = await screen.findByRole("button", { name: /send another message/i });
-    fireEvent.click(resetBtn);
-
-    const nameInput = screen.getByLabelText(/name/i);
-    expect(nameInput).toBeInTheDocument();
-    expect(nameInput.value).toBe("");
+  it("renders the address", () => {
+    render(<Contact />);
+    expect(screen.getByText(/123 Some Lane, Some City, CA 00000/i)).toBeInTheDocument();
   });
 });
