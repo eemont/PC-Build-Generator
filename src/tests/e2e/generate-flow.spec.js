@@ -27,6 +27,7 @@ test.describe('Generate Build Flow & Validation', () => {
   });
 
   test('Scenario 1: Auto-generates a build and persists it to Saved Builds', async ({ page }) => {
+    test.setTimeout(60000);
     await page.goto('/login');
     await page.getByLabel('Email').fill('test@test.com');
     await page.getByLabel('Password').fill('testtest');
@@ -38,10 +39,10 @@ test.describe('Generate Build Flow & Validation', () => {
     await expect(page).toHaveURL(/.*build/);
 
     await page.locator('#budget').fill('1500');
-    await page.waitForTimeout(1000);
-    await page.locator('#budget').press('Enter');
-
-    await expect(page.locator('.parts-table')).toBeVisible({ timeout: 30000 }); 
+    await page.waitForTimeout(2000);
+    await page.getByRole('button', { name: 'Generate', exact: true }).waitFor({ state: 'visible', timeout: 15000 });
+    await page.getByRole('button', { name: 'Generate', exact: true }).click();
+    await expect(page.locator('.parts-table')).toBeVisible(); 
 
     await page.getByRole('button', { name: 'Save Build' }).click();
 
